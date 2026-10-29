@@ -7,6 +7,11 @@
 <meta name="description" content="Free tool that splits comic CBZ or PDF files into panels and packs them for e-ink readers. Runs entirely in your browser; files never leave your device.">
 <meta name="theme-color" content="#f5c518">
 <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTQiIGZpbGw9IiNmZmY2ZDEiLz48cGF0aCBkPSJNMTcgMTNjLTMgMTkgNiAzNiAyNyA0MSA2IDEgMTEtMSAxNC02LTEyIDEtMjUtNS0zMC0xOS0yLTYtNS0xMC01LTE2eiIgZmlsbD0iI2Y3Y2YyZSIgc3Ryb2tlPSIjOWE3NDEwIiBzdHJva2Utd2lkdGg9IjIuNCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjxwYXRoIGQ9Ik0xNy41IDEzLjUwMGw1LjUwMC0uNS0uNS03LTUuNTAwIDF6IiBmaWxsPSIjN2E1ZjFkIiBzdHJva2U9IiM1YTQ1MTAiIHN0cm9rZS13aWR0aD0iMS42IiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PHBhdGggZD0iTTI0IDIyYzIgOSA3IDE3IDE1IDIyIiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYzYTgiIHN0cm9rZS13aWR0aD0iMi40IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48cGF0aCBkPSJNNTIgNTBjMi0xIDQtMyA2LTQtMiA0LTUgNy04IDh6IiBmaWxsPSIjNWE0NTEwIi8+PC9zdmc+Cg==" type="image/svg+xml">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Banana Comics">
 <style>
   :root{color-scheme:light dark;--bg:#fffbea;--surface:rgba(255,253,244,.86);--field:rgba(255,255,255,.78);--fg:#2b2615;--mut:#74694a;--card:#faf1c9;--line:#eadfae;--acc:#f2c21b;--onacc:#3a2d00;--head:#8a6a00;--shadow:0 1px 2px rgba(80,60,0,.07),0 10px 28px rgba(80,60,0,.08);--bgfade:.7}
   @media (prefers-color-scheme:dark){:root{--bg:#15130b;--surface:rgba(34,29,15,.84);--field:rgba(0,0,0,.28);--fg:#f1ead0;--mut:#b3a77c;--card:#2a2412;--line:#4a4122;--acc:#f2c94c;--onacc:#2e2400;--head:#f2c94c;--shadow:0 1px 2px rgba(0,0,0,.4),0 10px 28px rgba(0,0,0,.35);--bgfade:.4}}
@@ -270,7 +275,7 @@
 <div class="top">
   <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTQiIGZpbGw9IiNmZmY2ZDEiLz48cGF0aCBkPSJNMTcgMTNjLTMgMTkgNiAzNiAyNyA0MSA2IDEgMTEtMSAxNC02LTEyIDEtMjUtNS0zMC0xOS0yLTYtNS0xMC01LTE2eiIgZmlsbD0iI2Y3Y2YyZSIgc3Ryb2tlPSIjOWE3NDEwIiBzdHJva2Utd2lkdGg9IjIuNCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjxwYXRoIGQ9Ik0xNy41IDEzLjUwMGw1LjUwMC0uNS0uNS03LTUuNTAwIDF6IiBmaWxsPSIjN2E1ZjFkIiBzdHJva2U9IiM1YTQ1MTAiIHN0cm9rZS13aWR0aD0iMS42IiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PHBhdGggZD0iTTI0IDIyYzIgOSA3IDE3IDE1IDIyIiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYzYTgiIHN0cm9rZS13aWR0aD0iMi40IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48cGF0aCBkPSJNNTIgNTBjMi0xIDQtMyA2LTQtMiA0LTUgNy04IDh6IiBmaWxsPSIjNWE0NTEwIi8+PC9zdmc+Cg==" alt="">
   <div class="topT"><h1>Banana Comic Converter</h1><small>Comic and manga CBZ / PDF &rarr; panel-by-panel pages for e-ink readers. Private: everything runs in your browser.</small></div>
-  <div class="topBtns"><a class="kofi" id="kofi" href="https://ko-fi.com/curseofthebanana" target="_blank" rel="noopener noreferrer" title="Buy me a coffee on Ko-fi">&#9749; Buy me a coffee</a><button type="button" class="btn2" id="helpOpen" data-help="start">How to use</button><button type="button" class="btn2" id="tipsOpen" data-help="tips">Tips and fixes</button></div>
+  <div class="topBtns"><a class="kofi" id="kofi" href="https://ko-fi.com/curseofthebanana" target="_blank" rel="noopener noreferrer" title="Buy me a coffee on Ko-fi">&#9749; Buy me a coffee</a><button type="button" class="btn2" id="helpOpen" data-help="start">How to use</button><button type="button" class="btn2" id="tipsOpen" data-help="tips">Tips and fixes</button><button type="button" class="btn2" id="installOpen" hidden>&#128242; Install as app</button></div>
 </div>
 
 <section class="step" id="stFiles"><div class="stH" data-help="Files"><span class="num">1</span><span class="stitle">Add your comics</span><span class="ssum" id="sumFiles"></span></div>
@@ -3481,6 +3486,71 @@ $('cfgDel').addEventListener('click', () => {
 });
 cfgRefresh();
 updateSummaries();
+</script>
+<!-- Install as an app (PWA): works offline and opens like an app; files still never leave the device. -->
+<style>
+  #installBox{position:fixed;inset:0;z-index:9999;display:flex;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.35);padding:12px}
+  #installBox[hidden]{display:none}
+  #installBox .ib{max-width:460px;width:100%;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:18px 18px 14px}
+  #installBox h3{margin:0 0 6px;color:var(--head);font-size:1.15em}
+  #installBox p{margin:6px 0;line-height:1.4}
+  #installBox ol{margin:6px 0 10px 20px;padding:0;line-height:1.5}
+  #installBox .ibBtns{display:flex;gap:8px;justify-content:flex-end;margin-top:10px}
+  #installBox .ibBtns button{width:auto;margin:0}
+  #installBox .ibOs{font-weight:700;margin-top:10px}
+</style>
+<div id="installBox" hidden role="dialog" aria-modal="true" aria-labelledby="ibTitle">
+  <div class="ib">
+    <h3 id="ibTitle">&#127820; Install Banana Comic Converter</h3>
+    <p>Add it to your home screen: it opens like an app and works offline. Your files still never leave your device.</p>
+    <div id="ibAndroid"><p class="ibOs">Android (Chrome, Edge, Samsung Internet)</p>
+      <ol><li>Tap <b>Install</b> below, or open the browser menu <b>&#8942;</b>.</li><li>Choose <b>Install app</b> or <b>Add to Home screen</b>.</li></ol></div>
+    <div id="ibIos"><p class="ibOs">iPhone and iPad (Safari)</p>
+      <ol><li>Tap the <b>Share</b> button (the square with an arrow).</li><li>Scroll down and tap <b>Add to Home Screen</b>, then <b>Add</b>.</li></ol>
+      <p><small>Chrome and Edge on iPhone have the same Share option (iOS 16.4 or newer). If your browser doesn't, open this page in Safari.</small></p></div>
+    <div id="ibDesktop"><p class="ibOs">Computer (Chrome, Edge)</p>
+      <ol><li>Click the install icon at the right of the address bar, or open the browser menu.</li><li>Choose <b>Install Banana Comic Converter</b>.</li></ol></div>
+    <div class="ibBtns"><button type="button" class="btn2" id="ibLater">Not now</button><button type="button" id="ibInstall" hidden>Install</button></div>
+  </div>
+</div>
+<script>
+(function(){
+  const standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+  if('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')){
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  }
+  if(standalone) return;   // already installed
+  const ua = navigator.userAgent;
+  const ios = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  const android = /Android/.test(ua);
+  const box = document.getElementById('installBox'), btn = document.getElementById('installOpen'), inst = document.getElementById('ibInstall');
+  const KEY = 'bananaInstallLater';
+  const later = () => { try { return localStorage.getItem(KEY) === '1'; } catch(e){ return false; } };
+  let prompt = null;
+  document.getElementById('ibAndroid').hidden = !android;
+  document.getElementById('ibIos').hidden = !ios;
+  document.getElementById('ibDesktop').hidden = ios || android;
+  const show = () => { inst.hidden = !prompt; box.hidden = false; };
+  const hide = () => { box.hidden = true; };
+  btn.addEventListener('click', show);
+  document.getElementById('ibLater').addEventListener('click', () => { try { localStorage.setItem(KEY, '1'); } catch(e){} hide(); });
+  box.addEventListener('click', e => { if(e.target === box) hide(); });
+  document.addEventListener('keydown', e => { if(e.key === 'Escape' && !box.hidden) hide(); });
+  inst.addEventListener('click', async () => {
+    if(!prompt) return;
+    prompt.prompt();
+    await prompt.userChoice.catch(() => {});
+    prompt = null; hide(); btn.hidden = true;
+  });
+  // Chrome, Edge and Samsung Internet offer their own install prompt; keep it for the Install button.
+  window.addEventListener('beforeinstallprompt', e => {
+    e.preventDefault(); prompt = e; btn.hidden = false;
+    if(!later()) setTimeout(show, 3000);
+  });
+  window.addEventListener('appinstalled', () => { hide(); btn.hidden = true; });
+  // Safari on iPhone and iPad has no install prompt: show the steps instead.
+  if(ios){ btn.hidden = false; if(!later()) setTimeout(show, 4000); }
+})();
 </script>
 </body>
 </html>
