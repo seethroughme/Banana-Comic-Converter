@@ -1589,7 +1589,7 @@ function chapterOf(path){
   return {key: 'book', title: 'Start'};
 }
 function rankOf(name){
-  if(/cover/i.test(name)) return 0;
+  if(/(^|[^a-z])cover/i.test(name)) return 0;   // "cover.jpg", "00_cover", not "discover"
   if(/credit|scanlat|thank|^ms\d+\./i.test(name)) return 2;
   return 1;
 }
@@ -1761,7 +1761,9 @@ function buildXtch(mode, chapters, md, rtl, bw){
   const P = s => bw ? s.xtg : s.xth;
   const title = md.title + (mode.suffix ? ' - ' + (mode.mixed ? 'mixed' : (mode.land ? 'landscape' : 'portrait')) : '');
   const scr = mode.screens, n = scr.length, W = mode.rot ? mode.H : mode.W, H = mode.rot ? mode.W : mode.H;
-  const str = (t, len) => { const b = new Uint8Array(len); b.set(enc.encode(t).subarray(0, len - 1)); return b; };
+  if(n > 65535) throw new Error('Too many screens for one XTCH/XTC file (' + n + '). Use "Split into parts".');
+  // Fixed-size text field: cut before a character that doesn't fit, never in the middle of one (Greek, Japanese ...).
+  const str = (t, len) => { const b = new Uint8Array(len), e = enc.encode(t); let n = Math.min(e.length, len - 1); if(n < e.length) while(n > 0 && (e[n] & 0xC0) === 0x80) n--; b.set(e.subarray(0, n)); return b; };
   const spans = [];
   scr.forEach((s, i) => { const l = spans[spans.length - 1]; if(l && l.ci === s.chap) l.end = i; else spans.push({ci: s.chap, start: i, end: i}); });
   const metaOff = 56, chapOff = metaOff + 256, idxOff = chapOff + 96 * spans.length, dataOff = idxOff + 16 * n;
