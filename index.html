@@ -558,7 +558,7 @@
     <li><b>Spoiler blur</b>A toggle and slider hide artwork and text but keep panel outlines visible in the editor, reviews and previews.</li>
     <li><b>Smart halves and thirds</b>Picks halves or thirds for each page, keeps bubbles whole and uses the full screen width. Preview it and change the zoom page by page.</li>
     <li><b>Colour or black and white</b>Black and white by default for e-ink devices. Keep colour for phones and colour readers.</li>
-    <li><b>Progress saving</b>Your edits, hidden pages and zoom choices are kept in this browser, so you can pick up later, even after converting.</li>
+    <li><b>Progress saving</b>Your edits, hidden pages and zoom choices are kept in this browser, so you can pick up later, even after converting. <i>This needs your browser to allow site storage for this page (not blocked, and not a private window).</i></li>
     <li><b>Faster and easier</b>Parallel processing on multi-core computers, four guided steps, bigger preview thumbnails and a G shortcut for black gutters in the editor.</li>
   </ul>
   <div class="nbar"><button type="button" class="btn2" id="newClose">Got it</button></div>
@@ -3392,7 +3392,7 @@ function progUI(){
   if(h) parts.push(`${h} hidden`);
   if(m) parts.push('page order or zoom changes');
   $('progRow').hidden = !(parts.length || PROG.db === null && files.length);
-  $('progMsg').textContent = PROG.db === null ? 'Saving edits is not available in this browser.' : (PROG.note ? PROG.note + ' ' : '') + (parts.length ? 'Saved in this browser: ' + parts.join(', ') + '.' : '');
+  $('progMsg').textContent = PROG.db === null ? 'Saving edits is not available: your browser is blocking site storage for this page (or this is a private window). Allow site data for this page to turn it on.' : (PROG.note ? PROG.note + ' ' : '') + (parts.length ? 'Saved in this browser: ' + parts.join(', ') + '. Needs browser site storage to be allowed.' : '');
   $('progForget').hidden = PROG.db === null || !parts.length;
 }
 async function progRestore(){
