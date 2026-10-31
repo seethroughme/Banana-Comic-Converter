@@ -214,7 +214,7 @@
   kbd{font:600 .8em ui-monospace,Menlo,monospace;background:var(--card);border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:0 5px}
   .sw{display:inline-block;width:.9em;height:.9em;border-radius:3px;vertical-align:-1px;margin-right:4px;border:1.5px dashed}
   /* ---- pages ---- */
-  #pgGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:8px;margin:10px 0;max-height:420px;overflow:auto;padding:2px}
+  #pgGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(101px,1fr));gap:8px;margin:10px 0;max-height:420px;overflow:auto;padding:2px}
   .pgT{position:relative;border:2px solid var(--line);border-radius:8px;background:var(--card);padding:3px;cursor:grab;text-align:center;font-size:.72rem;color:var(--mut);user-select:none}
   .pgT canvas{display:block;width:100%;height:auto;aspect-ratio:3/4;object-fit:contain;background:#fff;border-radius:4px}
   .pgT.sel{border-color:var(--acc)}
@@ -229,7 +229,7 @@
   #rvDlg[open]{display:block;height:92vh;width:min(1100px,97vw)}
   .rvHead{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:6px}
   .rvHead .btn2{margin:0 0 0 auto}
-  #rvGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:10px}
+  #rvGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-top:10px}
   .rvT{position:relative;border:2px solid var(--line);border-radius:8px;background:var(--card);padding:4px;font-size:.75rem;color:var(--mut);cursor:pointer}
   .rvT canvas{display:block;width:100%;height:auto;background:#fff;border-radius:4px;min-height:80px}
   .rvT.flag{border-color:#b45309}.rvT.edt{border-color:var(--acc)}
@@ -263,6 +263,18 @@
   #stOutput .f.col1>span:first-child,#stOutput .f.col1>label:first-child,#stPanels .f.col1>span:first-child{font-weight:600}
   #stDevice .f>label,#stDevice .f>span:first-child{font-weight:600}
   [hidden]{display:none!important}
+  .blurRow{display:flex;align-items:center;gap:10px;margin:8px 0}
+  .blurRow input[type=range],.rvHead input[type=range]{flex:1;min-width:80px;accent-color:var(--acc)}
+  body.spoil #pgGrid canvas{filter:blur(var(--pgb,3px))}
+  #cutDlg[open]{display:block;height:auto;max-height:92vh;width:min(900px,96vw)}
+  #cutDlg .btn2.on{background:var(--acc);color:var(--onacc);border-color:var(--acc)}
+  #cutDlg .seg{display:flex;gap:6px;border:0;background:none}
+  #cgDlg[open]{display:block;height:92vh;width:min(1100px,97vw)}
+  #cgGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-top:10px}
+  .cgB{display:flex;gap:3px;margin-top:4px}
+  .cgB button{flex:1;margin:0;padding:3px 0;min-height:0;font-size:.72rem;width:auto}
+  .cgB button.on{background:var(--acc);color:var(--onacc);border-color:var(--acc)}
+  .rvT canvas.cgC{cursor:pointer}
 </style>
 </head>
 <body>
@@ -284,6 +296,7 @@
   <input type="file" id="pick" accept=".cbz,.zip,.pdf,application/pdf" multiple hidden>
   <ul id="flist"></ul>
   <div><button type="button" class="btn2" id="fclear" hidden>Clear all</button> <small id="dropMsg"></small></div>
+  <div id="progRow" hidden style="margin-top:6px"><small id="progMsg"></small> <button type="button" class="btn2 sm" id="progForget" title="Delete the saved edits for the selected files">Forget saved edits</button></div>
 <details class="sec" id="secPages"><summary><span class="stitle">Pages</span><span class="ssum" id="sumPages"></span></summary>
 <div class="secBody">
   <div class="f" id="pgFileRow" hidden><label for="pgFile">File</label><select id="pgFile"></select></div>
@@ -293,9 +306,13 @@
     <button type="button" class="btn2" id="pgWhole">Keep whole</button><button type="button" class="btn2" id="pgEdit">Edit panels</button>
   </div>
   <div id="pgBar2" style="margin-top:6px;display:flex;flex-wrap:wrap;gap:6px;align-items:center">
+    <label class="opt"><input type="checkbox" id="pgBlur"><span>Spoiler blur</span></label><input type="range" id="pgBlurAmt" min="1" max="100" value="45" aria-label="Blur strength" title="Blur strength" style="max-width:130px;flex:1">
     <button type="button" class="btn2" id="pgScan">Find blank pages</button><button type="button" class="btn2" id="pgSelBad">Select blank / odd</button>
     <button type="button" class="btn2" id="pgSelNone">Clear selection</button><button type="button" class="btn2" id="pgReset">Reset this file</button>
   </div>
+  <div id="pgCutRow" hidden style="margin-top:8px"><b style="font-size:.88rem">Zoom for selected pages</b>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px"><button type="button" class="btn2" data-cut="">Auto</button><button type="button" class="btn2" data-cut="n">No zoom</button><button type="button" class="btn2" data-cut="2">Halves</button><button type="button" class="btn2" data-cut="3">Thirds</button><button type="button" class="btn2" id="pgSelAll">Select all</button><button type="button" class="btn2" id="pgCutPrev">Preview cuts</button></div>
+    <small>Only for Smart halves and thirds. Auto picks the best cut for each page. No zoom keeps the page whole; Halves or Thirds force that many parts.</small></div>
   <small id="pgMsg" style="display:block;margin-top:6px"></small>
   <div id="pgGrid" role="list"></div>
   <small>Click pages to select them (Shift for a range), drag to reorder. Hidden pages are left out of the output. Thumbnails load as you scroll.</small>
@@ -307,36 +324,42 @@
   <div class="f"><label for="preset">Which reader do you have?</label>
     <select id="preset">
       <optgroup label="Xteink">
-        <option value="480,800" selected>Xteink X4 / X4 Pro (480&times;800)</option>
-        <option value="528,792">Xteink X3 (528&times;792)</option>
+        <option selected value="480,800" data-col="bw">Xteink X4 / X4 Pro (480&times;800)</option>
+        <option value="528,792" data-col="bw">Xteink X3 (528&times;792)</option>
       </optgroup>
       <optgroup label="Kindle">
-        <option value="1072,1448">Kindle 6" basic (1072&times;1448)</option>
-        <option value="1236,1648">Kindle Paperwhite 6.8" (1236&times;1648)</option>
-        <option value="1264,1680">Kindle Oasis 7" (1264&times;1680)</option>
-        <option value="1860,2480">Kindle Scribe 10.2" (1860&times;2480)</option>
+        <option value="1072,1448" data-col="bw">Kindle 6" basic (1072&times;1448)</option>
+        <option value="1236,1648" data-col="bw">Kindle Paperwhite 6.8" (1236&times;1648)</option>
+        <option value="1264,1680" data-col="bw">Kindle Oasis 7" (1264&times;1680)</option>
+        <option value="1264,1680" data-col="color">Kindle Colorsoft 7" (1264&times;1680, colour)</option>
+        <option value="1860,2480" data-col="bw">Kindle Scribe 10.2" (1860&times;2480)</option>
       </optgroup>
       <optgroup label="Kobo">
-        <option value="1072,1448">Kobo Clara (1072&times;1448)</option>
-        <option value="1264,1680">Kobo Libra 2 (1264&times;1680)</option>
-        <option value="1440,1920">Kobo Sage 8" (1440&times;1920)</option>
-        <option value="1404,1872">Kobo Elipsa 10.3" (1404&times;1872)</option>
+        <option value="1072,1448" data-col="bw">Kobo Clara BW (1072&times;1448)</option>
+        <option value="1072,1448" data-col="color">Kobo Clara Colour (1072&times;1448, colour)</option>
+        <option value="1264,1680" data-col="bw">Kobo Libra 2 (1264&times;1680)</option>
+        <option value="1264,1680" data-col="color">Kobo Libra Colour (1264&times;1680, colour)</option>
+        <option value="1440,1920" data-col="bw">Kobo Sage 8" (1440&times;1920)</option>
+        <option value="1404,1872" data-col="bw">Kobo Elipsa 10.3" (1404&times;1872)</option>
       </optgroup>
       <optgroup label="Boox">
-        <option value="1072,1448">Boox Go 6 (1072&times;1448)</option>
-        <option value="824,1648">Boox Palma (824&times;1648)</option>
-        <option value="1404,1872">Boox Note Air 10.3" (1404&times;1872)</option>
-        <option value="1860,2480">Boox Tab Ultra (1860&times;2480)</option>
+        <option value="1072,1448" data-col="bw">Boox Go 6 (1072&times;1448)</option>
+        <option value="824,1648" data-col="bw">Boox Palma (824&times;1648)</option>
+        <option value="1404,1872" data-col="bw">Boox Note Air 10.3" (1404&times;1872)</option>
+        <option value="1860,2480" data-col="bw">Boox Tab Ultra (1860&times;2480)</option>
+        <option value="1264,1680" data-col="color">Boox Go Color 7 (1264&times;1680, colour)</option>
+        <option value="1860,2480" data-col="color">Boox Tab Ultra C (1860&times;2480, colour)</option>
       </optgroup>
-      <optgroup label="Other">
-        <option value="758,1024">Older 6" e-ink (758&times;1024)</option>
+      <optgroup label="Phone, tablet and other">
+        <option value="1080,1920" data-col="color">Phone or tablet screen (1080&times;1920, colour)</option>
+        <option value="758,1024" data-col="bw">Older 6" e-ink (758&times;1024)</option>
         <option value="">Custom (enter size)</option>
       </optgroup>
     </select></div>
 
   <div class="f" id="sizeRow"><span>Screen size (portrait W &times; H)</span><span class="inl"><input type="number" id="cw" value="480" min="200"> &times; <input type="number" id="ch" value="800" min="200"></span></div>
 
-  <small id="presetNote">Sizes are typical specs. If your reader differs, pick Custom and type its screen size.</small>
+  <small id="presetNote">Sizes and screen types are typical specs. If your reader differs, pick Custom and type its screen size.</small>
   <div class="f"><span>Which way do you read?</span>
     <div class="seg"><label><input type="radio" name="dir" value="rtl" checked><span>Right-to-left (manga)</span></label><label><input type="radio" name="dir" value="ltr"><span>Left-to-right (western)</span></label></div>
     <button type="button" class="btn2" id="dirTest">Not sure? Test it on your comic</button></div>
@@ -356,11 +379,14 @@
   <small>Sets screen size, portrait, file type and a safe split size in one go.</small>
 
   <div class="f col1"><span>File format</span>
-    <div class="opts"><label class="opt"><input type="checkbox" id="fX" checked><span>XTCH</span></label><label class="opt"><input type="checkbox" id="fXtc"><span>XTC (black &amp; white)</span></label><label class="opt"><input type="checkbox" id="fEpub"><span>EPUB</span></label><label class="opt"><input type="checkbox" id="fCbz"><span>CBZ</span></label></div></div>
-  <small>XTCH and XTC are for Xteink readers (XTC is black and white and much smaller). EPUB and CBZ open on Kindle, Kobo, Boox and most reading apps.</small>
+    <div class="opts"><label class="opt"><input type="checkbox" id="fX" checked><span>XTCH</span></label><label class="opt"><input type="checkbox" id="fXtc"><span>XTC (black &amp; white)</span></label><label class="opt"><input type="checkbox" id="fEpub"><span>EPUB</span></label><label class="opt"><input type="checkbox" id="fCbz"><span>CBZ</span></label><label class="opt"><input type="checkbox" id="fPdf"><span>PDF (webtoon scroll)</span></label></div></div>
+  <small>XTCH and XTC are for Xteink readers (XTC is black and white and much smaller). EPUB and CBZ open on Kindle, Kobo, Boox and most reading apps. <b>PDF (webtoon scroll)</b> stacks panels into one continuous strip for scrolling on a phone; it ignores orientation.</small>
   <div class="f col1"><span>Screen orientation <small>(you get one file for each you tick)</small></span>
     <div class="opts"><label class="opt"><input type="checkbox" id="oPort" checked><span>Portrait</span></label><label class="opt"><input type="checkbox" id="oLand" checked><span>Landscape</span></label><label class="opt"><input type="checkbox" id="oMix"><span>Mixed</span></label></div></div>
   <small>Portrait means the reader is held upright. Landscape means turned sideways, which makes panels larger.</small>
+  <div class="f col1" id="colorRow"><span>Colour or black and white <small>(for EPUB, CBZ and PDF)</small></span>
+    <div class="seg"><label><input type="radio" name="colorOut" id="colorBw" value="bw" checked><span>Black and white</span></label><label><input type="radio" name="colorOut" id="colorCol" value="color"><span>Colour</span></label></div></div>
+  <small id="colorNote"></small>
   <small id="outNames"></small>
   <div style="margin:8px 0"><button type="button" class="btn2" id="estBtn">Estimate file size</button></div>
   <div id="estBox" class="help" hidden></div>
@@ -369,7 +395,13 @@
 <section class="step" id="stPanels"><div class="stH" data-help="Panels"><span class="num">4</span><span class="stitle">Choose how pages are cut</span><span class="ssum" id="sumPanels"></span></div>
 <div class="stBody">
   <div class="f col1"><span>Cutting method</span>
-    <div class="seg"><label><input type="radio" name="cmode" id="modeSmart" checked><span>Smart panels (recommended)</span></label><label><input type="radio" name="cmode" id="modeSimple"><span>Simple halves or thirds</span></label></div></div>
+    <div class="seg"><label><input type="radio" name="cmode" id="modeSmart" checked><span>Smart panels (recommended)</span></label><label><input type="radio" name="cmode" id="modeAuto"><span>Smart halves and thirds</span></label><label><input type="radio" name="cmode" id="modeSimple"><span>Fixed halves or thirds</span></label></div></div>
+  <div id="autoOpts" hidden>
+    <div class="edBtns"><button type="button" class="btn2" id="cutOpen" disabled>Preview and adjust cuts</button><button type="button" class="btn2" id="cgOpen" disabled>Review all pages (grid)</button></div>
+    <small>Preview shows where every page will be cut. For any page you can switch between Auto, No zoom, Halves and Thirds.</small>
+    <small><b>Smart halves and thirds</b> looks at every page and picks the best cut for it: halves or thirds, placed in the white gaps between panels so speech bubbles and artwork are not sliced. Each part is sized to fill the full screen width for the orientation you chose. If there is no clean gap, neighbouring parts overlap a little so nothing is lost.</small>
+    <small><b>Landscape:</b> tall pages become top-to-bottom bands. <b>Portrait:</b> normal pages stay whole, wide double-page spreads are cut left and right (right first for manga). <b>Mixed:</b> each page goes to whichever screen suits it: clean bands on a landscape screen, otherwise the whole page upright.</small>
+  </div>
   <div id="simpleOpts" hidden>
     <small>Quick conversion with no panel detection, no reordering and no zoom rules. Every page is cut into equal parts that overlap a little, in reading order. The other Panels settings are ignored.</small>
     <div class="f"><label for="spN">Parts per page</label><select id="spN"><option value="2" selected>2 (halves)</option><option value="3">3 (thirds)</option></select></div>
@@ -388,6 +420,10 @@
 <details class="sec" id="secOutMore"><summary><span class="stitle">Output details</span><span class="ssum" id="sumOutMore"></span></summary>
 <div class="secBody">
   <div class="f"><label for="splitParts">Split into parts <small>(for devices that run out of memory)</small></label><select id="splitParts"><option value="0" selected>Off (one file)</option><option value="100">About 100 screens per file</option><option value="150">About 150 screens per file</option><option value="200">About 200 screens per file</option><option value="300">About 300 screens per file</option><option value="500">About 500 screens per file</option></select></div>
+  <label class="chk"><input type="checkbox" id="parOn" checked><span>Use parallel processing <small>(faster on multi-core computers; turn off if the page runs out of memory)</small></span></label>
+  <div class="f"><label for="pdfMode">Webtoon PDF content</label><select id="pdfMode"><option value="panels" selected>Extracted panels, stacked in reading order</option><option value="pages">Whole pages as they are</option></select></div>
+  <small>Panels use the same detection as Smart panels (and your panel edits, whole-page choices and hidden pages). With Smart halves and thirds or Fixed halves or thirds selected, whole pages are used.</small>
+  <div class="f"><label for="pdfW">Webtoon PDF width <small>(pixels, phone screens need little)</small></label><select id="pdfW"><option value="720">720 (smaller file)</option><option value="900" selected>900</option><option value="1080">1080 (sharper)</option></select></div>
   <div class="f"><label for="zipLayout">ZIP download layout</label><select id="zipLayout"><option value="flat" selected>All files together</option><option value="book">One folder per book</option><option value="sets">One folder per book, and a folder for each set of parts</option></select></div>
   <small>Folders only apply to the ZIP download. Downloading files one by one cannot make folders.</small>
   <small id="splitNote">Large XTCH files can run a small e-reader out of memory. Splitting makes several smaller files per shape and type (part 1, part 2 ...), cut at chapter starts where possible.</small>
@@ -477,11 +513,25 @@
     <h2 style="margin:0;font-size:1.05rem">Review all pages</h2>
     <select id="rvFile" hidden></select>
     <div class="seg" id="rvFilter"><label><input type="radio" name="rvf" value="all" checked><span>All</span></label><label><input type="radio" name="rvf" value="flag"><span>Flagged</span></label><label><input type="radio" name="rvf" value="edited"><span>Edited</span></label></div>
+    <label class="opt"><input type="checkbox" id="rvBlur"><span>Spoiler blur</span></label><input type="range" id="rvBlurAmt" min="1" max="100" value="45" aria-label="Blur strength" title="Blur strength" style="max-width:130px">
     <small id="rvMsg"></small>
     <button type="button" class="btn2" id="rvClose">Close</button>
   </div>
   <small>Click a page to fix it in the editor. <b>Whole</b> keeps a page as one box. Red boxes are the detected panels, numbered in reading order. Flags use the sensitivity set in the editor.</small>
   <div id="rvGrid"></div>
+</dialog>
+<dialog id="cgDlg">
+  <div class="rvHead"><h2 style="margin:0;font-size:1.05rem">Review cuts</h2><select id="cgFile" hidden></select><label style="margin:0">Show <select id="cgKind"></select></label><label class="opt"><input type="checkbox" id="cgBlur"><span>Spoiler blur</span></label><input type="range" id="cgBlurAmt" min="1" max="100" value="45" aria-label="Blur strength" title="Blur strength" style="max-width:130px;flex:1"><small id="cgMsg"></small><button type="button" class="btn2" id="cgClose">Close</button></div>
+  <small>Dashed boxes are the parts for each page, numbered in reading order. Use the buttons under a page to set Auto, No zoom, Halves or Thirds. Click the picture for a larger preview.</small>
+  <div id="cgGrid"></div>
+</dialog>
+<dialog id="cutDlg">
+  <div class="rvHead"><h2 style="margin:0;font-size:1.05rem">Preview cuts</h2><select id="cutFile" hidden></select><label style="margin:0">Page <input type="number" id="cutNum" min="1" style="width:5em"></label><span id="cutPage"></span><label class="opt"><input type="checkbox" id="cutBlur"><span>Spoiler blur</span></label><input type="range" id="cutBlurAmt" min="1" max="100" value="45" aria-label="Blur strength" title="Blur strength" style="max-width:130px;flex:1"><button type="button" class="btn2" id="cutClose">Done</button></div>
+  <div class="seg" style="margin:6px 0"><button type="button" class="btn2" id="cutPrev">&larr; Prev</button><button type="button" class="btn2" id="cutNext">Next &rarr;</button></div>
+  <div class="opts" style="margin:8px 0"><button type="button" class="btn2" data-c="">Auto <kbd>A</kbd></button><button type="button" class="btn2" data-c="n">No zoom <kbd>N</kbd></button><button type="button" class="btn2" data-c="2">Halves <kbd>H</kbd></button><button type="button" class="btn2" data-c="3">Thirds <kbd>T</kbd></button></div>
+  <small id="cutInfo"></small>
+  <div id="cutCanvases" style="display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-top:10px"></div>
+  <small>Dashed boxes are the parts, shown in the order they appear on the reader. Only the orientations you ticked are shown. Spoiler blur applies here too.</small>
 </dialog>
 <dialog id="dirDlg">
   <h2 style="margin:0 0 6px;font-size:1.05rem">Which reading direction is right?</h2>
@@ -603,7 +653,7 @@
     <h2>Keyboard</h2>
     <ul>
       <li><kbd>&larr;</kbd> / <kbd>&rarr;</kbd> go to the previous / next page (<kbd>PageUp</kbd> / <kbd>PageDown</kbd> and <kbd>P</kbd> / <kbd>N</kbd> work too). <kbd>&uarr;</kbd> / <kbd>&darr;</kbd> or <kbd>1</kbd>&ndash;<kbd>9</kbd> pick a box.</li>
-      <li><kbd>H</kbd> halves, <kbd>T</kbd> thirds, <kbd>O</kbd> no zoom, <kbd>A</kbd> auto for the selected box. <kbd>D</kbd> draw, <kbd>Delete</kbd> remove, <kbd>[</kbd> / <kbd>]</kbd> earlier / later, <kbd>W</kbd> whole page, <kbd>R</kbd> re-detect, <kbd>S</kbd> sort, <kbd>F</kbd> flagged pages only, <kbd>Ctrl</kbd>+<kbd>Z</kbd> undo.</li>
+      <li><kbd>H</kbd> halves, <kbd>T</kbd> thirds, <kbd>O</kbd> no zoom, <kbd>A</kbd> auto for the selected box. <kbd>D</kbd> draw, <kbd>G</kbd> re-detect with black gutters (<kbd>R</kbd> goes back to normal detection), <kbd>Delete</kbd> remove, <kbd>[</kbd> / <kbd>]</kbd> earlier / later, <kbd>W</kbd> whole page, <kbd>R</kbd> re-detect, <kbd>S</kbd> sort, <kbd>F</kbd> flagged pages only, <kbd>Ctrl</kbd>+<kbd>Z</kbd> undo.</li>
       <li><kbd>Shift</kbd> + arrows nudge the selected box; add <kbd>Ctrl</kbd> for bigger steps.</li>
     </ul>
     <h2>Good to know</h2>
@@ -695,6 +745,7 @@
         <div class="edHead"><h3>Page</h3><select id="edFile" hidden></select><span class="grow"></span>
           <button type="button" class="btn2 sm" id="edHelp" data-help="editor">Help</button>
           <button type="button" class="btn2 sm" id="edClose" title="Close the editor (Esc)">Done <kbd>Esc</kbd></button></div>
+        <div class="blurRow"><label class="opt"><input type="checkbox" id="edBlur"><span>Spoiler blur <kbd>B</kbd></span></label><input type="range" id="edBlurAmt" min="1" max="100" value="45" aria-label="Blur strength" title="Blur strength"></div>
         <div class="edNav">
           <button type="button" class="btn2" id="edPrev"><span class="lbl">Prev</span> <kbd>&larr;</kbd></button>
           <input type="number" id="edPage" min="1" value="1" aria-label="Page number"><small id="edOf"></small>
@@ -730,7 +781,7 @@
           <button type="button" class="btn2" id="edWhole">Whole page <kbd>W</kbd></button>
           <button type="button" class="btn2" id="edReset">Re-detect <kbd>R</kbd></button>
           <button type="button" class="btn2" id="edSort" title="Put the boxes in reading order again">Sort order <kbd>S</kbd></button>
-          <button type="button" class="btn2" id="edDark" title="Detect panels again treating black gaps as the gutters">Black gutters</button>
+          <button type="button" class="btn2" id="edDark" title="Detect panels again treating black gaps as the gutters">Black gutters <kbd>G</kbd></button>
         </div>
         <small>Click a box (or press its number) to select it. Drag it to move it, or drag its handles to resize it.</small>
       </section>
@@ -1295,17 +1346,19 @@ function tryGroup(us, W, H, land, ratio){
   return scales.every((s, i) => s >= ratio * soloScale(us[i], W, H)) ? scales : null;
 }
 function unitCanvas(u){
-  const c = document.createElement('canvas'); c.width = u.w; c.height = u.h;
+  const c = mkCanvas(u.w, u.h);
+  if(u.c && u.c.length === u.w * u.h * 4){ c.getContext('2d').putImageData(new ImageData(new Uint8ClampedArray(u.c.buffer, u.c.byteOffset, u.c.length), u.w, u.h), 0, 0); return c; }
   const ctx = c.getContext('2d'), id = ctx.createImageData(u.w, u.h), d = id.data;
   for(let i = 0, j = 0; i < u.g.length; i++, j += 4){ d[j] = d[j + 1] = d[j + 2] = u.g[i]; d[j + 3] = 255; }
   ctx.putImageData(id, 0, 0);
   return c;
 }
-const OPT = {sharpen: 0, contrast: false, gamma: 1};
+const OPT = {sharpen: 0, contrast: false, gamma: 1, color: false};
 function postProcess(ctx, W, H){
-  const id = ctx.getImageData(0, 0, W, H), d = id.data, n = W * H;
+  const id = ctx.getImageData(0, 0, W, H), d = id.data, n = W * H, col = OPT.color;
   let g = new Float32Array(n);
-  for(let i = 0; i < n; i++) g[i] = d[i * 4];
+  for(let i = 0; i < n; i++) g[i] = col ? (d[i * 4] * 299 + d[i * 4 + 1] * 587 + d[i * 4 + 2] * 114) / 1000 : d[i * 4];
+  const g0 = col ? Float32Array.from(g) : null;
   if(OPT.autoLevels){   // stretch so the darkest ink and the paper reach black and white
     const hist = new Uint32Array(256);
     for(let i = 0; i < n; i++) hist[Math.min(255, Math.max(0, Math.round(g[i])))]++;
@@ -1333,7 +1386,13 @@ function postProcess(ctx, W, H){
     if(OPT.contrast) v = (v - 24) / (232 - 24) * 255;
     v = v < 0 ? 0 : v > 255 ? 255 : v;
     if(OPT.gamma !== 1) v = 255 * Math.pow(v / 255, OPT.gamma);
-    d[i * 4] = d[i * 4 + 1] = d[i * 4 + 2] = v;
+    if(!col) d[i * 4] = d[i * 4 + 1] = d[i * 4 + 2] = v;
+    else{
+      const o = g0[i], j = i * 4;
+      if(o < 2){ d[j] = d[j + 1] = d[j + 2] = v; }
+      else if(v <= o){ const r = v / o; d[j] *= r; d[j + 1] *= r; d[j + 2] *= r; }
+      else { const a = v - o; d[j] += a; d[j + 1] += a; d[j + 2] += a; }
+    }
   }
   ctx.putImageData(id, 0, 0);
 }
@@ -1353,12 +1412,12 @@ function boxBlur1(g, w, h, r){
   return out;
 }
 function descreen(u, scale){
-  if(!OPT.moire || scale >= 0.9) return u;
+  if(!OPT.moire || scale >= 0.9 || u.c) return u;
   const r = Math.min(5, Math.max(1, Math.round(OPT.moire / scale)));
   return {...u, g: boxBlur1(boxBlur1(u.g, u.w, u.h, r), u.w, u.h, r)};
 }
 function makeThumb(src){   // 120x200 1-bit XTG image for the cover thumbnail
-  const TW = 120, TH = 200, c = document.createElement('canvas'); c.width = TW; c.height = TH;
+  const TW = 120, TH = 200, c = mkCanvas(TW, TH);
   const ctx = c.getContext('2d'); ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, TW, TH);
   ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high';
   const s = Math.min(TW / src.width, TH / src.height), w = Math.max(1, Math.round(src.width * s)), h = Math.max(1, Math.round(src.height * s));
@@ -1375,36 +1434,252 @@ function makeThumb(src){   // 120x200 1-bit XTG image for the cover thumbnail
   }
   return out;
 }
-function canvasToBlob(c, q){ return new Promise(res => c.toBlob(res, 'image/jpeg', q)); }
-async function emit(mode, us, scales, q){
-  const c = document.createElement('canvas'); c.width = mode.W; c.height = mode.H;
-  const ctx = c.getContext('2d');
-  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, mode.W, mode.H);
+
+/* ---------- webtoon PDF: all pages joined into tall strips for scrolling ---------- */
+function jpegComps(u8){
+  for(let i = 2; i < u8.length - 9;){
+    if(u8[i] !== 0xFF){ i++; continue; }
+    const m = u8[i + 1];
+    if(m >= 0xC0 && m <= 0xCF && m !== 0xC4 && m !== 0xC8 && m !== 0xCC) return u8[i + 9];
+    i += 2 + ((u8[i + 2] << 8) | u8[i + 3]);
+  }
+  return 3;
+}
+function pdfStr(t){ let h = 'FEFF'; for(const ch of String(t || '')){ const c = ch.codePointAt(0); if(c > 0xFFFF){ const v = c - 0x10000; h += (0xD800 + (v >> 10)).toString(16).padStart(4, '0') + (0xDC00 + (v & 1023)).toString(16).padStart(4, '0'); } else h += c.toString(16).padStart(4, '0'); } return '<' + h + '>'; }
+function buildPdf(strips, meta){
+  const enc = new TextEncoder(), chunks = [], offs = []; let pos = 0;
+  const push = b => { const u = typeof b === 'string' ? enc.encode(b) : b; chunks.push(u); pos += u.length; };
+  const begin = n => { offs[n] = pos; push(`${n} 0 obj\n`); }, end = () => push('\nendobj\n');
+  push('%PDF-1.4\n%âãÏÓ\n');
+  begin(1); push('<< /Type /Catalog /Pages 2 0 R /PageLayout /OneColumn >>'); end();
+  begin(2); push(`<< /Type /Pages /Count ${strips.length} /Kids [${strips.map((_, k) => `${4 + 3 * k} 0 R`).join(' ')}] >>`); end();
+  begin(3); push(`<< /Title ${pdfStr(meta.title)} /Author ${pdfStr(meta.author)} /Producer ${pdfStr('Banana Comic Converter')} >>`); end();
+  strips.forEach((st, k) => {
+    const pg = 4 + 3 * k, ct = pg + 1, im = pg + 2, cs = `q ${st.w} 0 0 ${st.h} 0 0 cm /Im0 Do Q`;
+    begin(pg); push(`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${st.w} ${st.h}] /Resources << /XObject << /Im0 ${im} 0 R >> >> /Contents ${ct} 0 R >>`); end();
+    begin(ct); push(`<< /Length ${cs.length} >>\nstream\n${cs}\nendstream`); end();
+    begin(im); push(`<< /Type /XObject /Subtype /Image /Width ${st.w} /Height ${st.h} /ColorSpace /${jpegComps(st.jpg) === 1 ? 'DeviceGray' : 'DeviceRGB'} /BitsPerComponent 8 /Filter /DCTDecode /Length ${st.jpg.length} >>\nstream\n`); push(st.jpg); push('\nendstream'); end();
+  });
+  const n = 4 + 3 * strips.length, xr = pos;
+  push(`xref\n0 ${n}\n0000000000 65535 f \n` + offs.slice(1, n).map(o => String(o).padStart(10, '0') + ' 00000 n \n').join(''));
+  push(`trailer\n<< /Size ${n} /Root 1 0 R /Info 3 0 R >>\nstartxref\n${xr}\n%%EOF\n`);
+  return new Blob(chunks, {type: 'application/pdf'});
+}
+async function buildWebtoon(src, seq, width, q, meta, prog, boxFn){
+  const MAXH = 9000, strips = []; let cv = null, y = 0;
+  const flush = async () => {
+    if(!cv || !y) return;
+    y = Math.min(y, MAXH); const out = document.createElement('canvas'); out.width = width; out.height = y;
+    const ox = out.getContext('2d', {willReadFrequently: true}); ox.drawImage(cv, 0, 0);
+    if(OPT.sharpen > 0 || OPT.contrast || OPT.gamma !== 1 || OPT.autoLevels) postProcess(ox, width, y);
+    const blob = await canvasToBlob(out, q); strips.push({w: width, h: y, jpg: new Uint8Array(await blob.arrayBuffer())}); cv = null; y = 0;
+  };
+  for(let k = 0; k < seq.length; k++){
+    if(cancelFlag) throw new Error('Cancelled');
+    prog(k / seq.length);
+    let pg; try{ pg = await src.getPage(seq[k]); }catch(e){ continue; }
+    const bx = boxFn ? boxFn(seq[k], pg, k) : null;
+    const parts = bx && bx.length ? bx.map(b => edCropUnit(pg.g, pg.W, b, pg.c)) : [{g: pg.g, c: pg.c, w: pg.W, h: pg.H}];
+    for(let n = 0; n < parts.length; n++){
+      const u = parts[n]; let sc = bx && bx.length ? Math.min(width / u.w, 1.6) : width / u.w;
+      let w = Math.max(1, Math.round(u.w * sc)), h = Math.max(1, Math.round(u.h * sc));
+      if(h > MAXH){ w = Math.max(1, Math.round(w * MAXH / h)); h = MAXH; }
+      if(cv && y + h > MAXH) await flush();
+      if(!cv){ cv = document.createElement('canvas'); cv.width = width; cv.height = MAXH; const c0 = cv.getContext('2d'); c0.fillStyle = '#fff'; c0.fillRect(0, 0, width, MAXH); }
+      const c = cv.getContext('2d'); c.imageSmoothingQuality = 'high'; c.drawImage(unitCanvas({g: u.g, c: u.c, w: u.w, h: u.h}), Math.round((width - w) / 2), y, w, h);
+      y += h + (bx && bx.length ? (n < parts.length - 1 ? 14 : 44) : 0);
+    }
+    await new Promise(r => setTimeout(r, 0));
+  }
+  await flush();
+  if(!strips.length) throw new Error('No readable pages for the PDF.');
+  return buildPdf(strips, meta);
+}
+// Canvas helpers that work on the page and inside a worker (OffscreenCanvas).
+function mkCanvas(w, h){
+  if(typeof document !== 'undefined'){ const c = document.createElement('canvas'); c.width = w; c.height = h; return c; }
+  return new OffscreenCanvas(w, h);
+}
+function canvasToBlob(c, q){ return c.convertToBlob ? c.convertToBlob({type: 'image/jpeg', quality: q}) : new Promise(res => c.toBlob(res, 'image/jpeg', q)); }
+// Draws and encodes one screen. Pure: everything it needs is in `job`, so it runs the same on the page or in a worker.
+async function renderScreen(job){
+  const {W, H, land, rtl, rot, xtch, scales, us} = job;
+  const c = mkCanvas(W, H), ctx = c.getContext('2d');
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
   ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high';
   const dr = us.map((u, i) => descreen(u, scales[i]));
   const sz = us.map((u, i) => [Math.max(1, Math.round(u.w * scales[i])), Math.max(1, Math.round(u.h * scales[i]))]);
-  if(mode.land){
+  if(land){
     const total = sz.reduce((a, s) => a + s[0], 0) + (us.length - 1) * CFG.GAP;
-    let x = mode.rtl ? Math.round((mode.W + total) / 2) : Math.round((mode.W - total) / 2);
+    let x = rtl ? Math.round((W + total) / 2) : Math.round((W - total) / 2);
     us.forEach((u, i) => {
-      if(mode.rtl){ x -= sz[i][0]; ctx.drawImage(unitCanvas(dr[i]), x, Math.round((mode.H - sz[i][1]) / 2), sz[i][0], sz[i][1]); x -= CFG.GAP; }
-      else{ ctx.drawImage(unitCanvas(dr[i]), x, Math.round((mode.H - sz[i][1]) / 2), sz[i][0], sz[i][1]); x += sz[i][0] + CFG.GAP; }
+      if(rtl){ x -= sz[i][0]; ctx.drawImage(unitCanvas(dr[i]), x, Math.round((H - sz[i][1]) / 2), sz[i][0], sz[i][1]); x -= CFG.GAP; }
+      else{ ctx.drawImage(unitCanvas(dr[i]), x, Math.round((H - sz[i][1]) / 2), sz[i][0], sz[i][1]); x += sz[i][0] + CFG.GAP; }
     });
   }else{
     const total = sz.reduce((a, s) => a + s[1], 0) + (us.length - 1) * CFG.GAP;
-    let y = Math.round((mode.H - total) / 2);
-    us.forEach((u, i) => { ctx.drawImage(unitCanvas(dr[i]), Math.round((mode.W - sz[i][0]) / 2), y, sz[i][0], sz[i][1]); y += sz[i][1] + CFG.GAP; });
+    let y = Math.round((H - total) / 2);
+    us.forEach((u, i) => { ctx.drawImage(unitCanvas(dr[i]), Math.round((W - sz[i][0]) / 2), y, sz[i][0], sz[i][1]); y += sz[i][1] + CFG.GAP; });
   }
-  if(OPT.sharpen > 0 || OPT.contrast || OPT.gamma !== 1 || OPT.autoLevels) postProcess(ctx, mode.W, mode.H);
+  if(OPT.sharpen > 0 || OPT.contrast || OPT.gamma !== 1 || OPT.autoLevels) postProcess(ctx, W, H);
+  let gc = c, gx = ctx;
+  if(OPT.color && xtch){   // XTCH and XTC are grey only: use the brightness of the colour page
+    gc = mkCanvas(W, H); gx = gc.getContext('2d', {willReadFrequently: true});
+    const id = ctx.getImageData(0, 0, W, H), d = id.data;
+    for(let i = 0; i < d.length; i += 4) d[i] = d[i + 1] = d[i + 2] = (d[i] * 299 + d[i + 1] * 587 + d[i + 2] * 114) / 1000;
+    gx.putImageData(id, 0, 0);
+  }
+  const thumb = job.wantThumb ? makeThumb(gc) : null;
+  const xth = xtch && OPT.wantXth ? xthPage(gx, W, H, OPT.dither, rot) : null, xtg = xtch && OPT.wantXtg ? xtgPage(gx, W, H, OPT.dither, rot, OPT.xtcThr) : null;
+  const blob = await canvasToBlob(c, job.q);
+  return {jpg: new Uint8Array(await blob.arrayBuffer()), xth, xtg, thumb};
+}
+
+/* ---------- parallel work: a small pool of Web Workers ---------- */
+// The page keeps reading, cropping and packing while the workers draw, dither and encode screens (and detect panels).
+// If workers or OffscreenCanvas are missing, or one fails, the same functions run on the page instead.
+function workerSource(){
+  const fns = [mkCanvas, canvasToBlob, unitCanvas, postProcess, boxBlur1, descreen, makeThumb, xthPage, xtgPage, renderScreen,
+    trim, runs, boundsFrom, xycut, readingOrder, orderBoxes, ccSplit, darkMargin, panelsFor, separateOverlaps, softSplit, panelsLight];
+  return '"use strict";\nconst CFG = ' + JSON.stringify(CFG) + ';\nconst OPT = {};\nconst XTH_CODE = ' + JSON.stringify(XTH_CODE) + ';\nlet __gm = "auto";\n' +
+    'const $ = id => id === "gutterMode" ? {value: __gm} : null;\n' + fns.map(f => f.toString()).join('\n') + '\n' +
+    `self.onmessage = async e => {
+  const {kind, job} = e.data;
+  try{
+    Object.assign(CFG, job.cfg);
+    if(kind === 'det'){ __gm = job.gm; self.postMessage({r: panelsFor(job.g, job.W, job.H, job.rtl, job.force)}); }
+    else{
+      Object.assign(OPT, job.opt);
+      const r = await renderScreen(job), tr = [r.jpg.buffer];
+      for(const k of ['xth', 'xtg', 'thumb']) if(r[k]) tr.push(r[k].buffer);
+      self.postMessage({r}, tr);
+    }
+  }catch(err){ self.postMessage({err: String(err && err.message || err)}); }
+};`;
+}
+const POOL = {
+  ws: [], free: [], queue: [], busy: new Map(), inflight: 0, err: null, gen: 0, waiters: [], url: null,
+  want(){
+    const el = $('parOn');
+    if(el && !el.checked) return 0;
+    if(typeof Worker === 'undefined' || typeof OffscreenCanvas === 'undefined' || !OffscreenCanvas.prototype.convertToBlob) return 0;
+    const hc = navigator.hardwareConcurrency || 2;
+    return Math.max(1, Math.min(6, hc <= 2 ? hc : hc - 1));
+  },
+  size(){ return this.ws.length; },
+  begin(){
+    this.abort();
+    const n = this.want();
+    if(!n) return;
+    try{
+      if(!this.url) this.url = URL.createObjectURL(new Blob([workerSource()], {type: 'text/javascript'}));
+      for(let i = 0; i < n; i++){
+        const w = new Worker(this.url);
+        w.onmessage = e => this.done(w, e.data);
+        w.onerror = e => { if(e.preventDefault) e.preventDefault(); this.fail(new Error(e.message || 'worker error')); };
+        this.ws.push(w); this.free.push(w);
+      }
+    }catch(e){ console.warn('Workers unavailable, using the page instead', e); this.kill(); }
+  },
+  kill(){ for(const w of this.ws) w.terminate(); this.ws = []; this.free = []; },
+  // Stop everything in progress and release the workers. Work that was submitted is dropped.
+  abort(){
+    this.gen++; this.kill(); this.queue = []; this.busy.clear(); this.inflight = 0; this.err = null; this.wake();
+  },
+  wake(){ const w = this.waiters; this.waiters = []; w.forEach(f => f()); },
+  submit(kind, payload, onDone){
+    const gen = this.gen;
+    return new Promise((res, rej) => {
+      this.inflight++;
+      const t = {kind, payload,
+        res: r => {
+          if(gen !== this.gen) return;
+          try{ if(onDone) onDone(r); }catch(e){ if(!this.err) this.err = e; }
+          this.inflight--; this.wake(); res(r);
+        },
+        rej: e => {
+          if(gen !== this.gen) return;
+          if(kind === 'render' && !this.err) this.err = e;
+          this.inflight--; this.wake(); rej(e);
+        }};
+      if(!this.ws.length) this.inline(t); else{ this.queue.push(t); this.pump(); }
+    });
+  },
+  inline(t){
+    Promise.resolve().then(() => {
+      const p = t.payload;
+      return t.kind === 'det' ? panelsFor(p.g, p.W, p.H, p.rtl, p.force) : renderScreen(p);
+    }).then(t.res, t.rej);
+  },
+  pump(){
+    while(this.queue.length && this.free.length){
+      const t = this.queue.shift(), w = this.free.pop(), p = t.payload;
+      this.busy.set(w, t);
+      if(t.kind === 'det') w.postMessage({kind: 'det', job: {g: p.g, W: p.W, H: p.H, rtl: p.rtl, force: p.force, gm: p.gm, cfg: CFG}});
+      else w.postMessage({kind: 'render', job: p});
+    }
+  },
+  done(w, m){
+    const t = this.busy.get(w); if(!t) return;
+    this.busy.delete(w); this.free.push(w);
+    if(m.err){ console.warn('Worker could not do this job, doing it here:', m.err); this.inline(t); }
+    else t.res(m.r);
+    this.pump();
+  },
+  fail(e){   // a worker crashed: stop using workers and finish everything that was waiting on the page
+    console.warn('Worker error, switching to the page:', e);
+    const ts = [...this.busy.values(), ...this.queue]; this.busy.clear(); this.queue = [];
+    this.kill();
+    for(const t of ts) this.inline(t);
+  },
+  limit(){ return this.ws.length ? this.ws.length * 2 : 1; },
+  check(){ if(cancelFlag) throw new Error('Cancelled'); if(this.err) throw this.err; },
+  async room(){   // wait until there is space for another job (keeps memory bounded)
+    while(this.inflight >= this.limit() && !this.err){ this.check(); await new Promise(r => this.waiters.push(r)); }
+    this.check();
+  },
+  async flush(){   // wait for every submitted job
+    while(this.inflight > 0 && !this.err){ this.check(); await new Promise(r => this.waiters.push(r)); }
+    this.check();
+  }
+};
+
+/* ---------- detection cache: the same page is only analysed once per setting ---------- */
+const detCache = new Map();
+const detGm = force => force || ($('gutterMode') ? $('gutterMode').value : 'auto');
+const detKey = (f, i, pg, rtl, force) => edFileKey(f) + '#' + i + '|' + pg.W + 'x' + pg.H + '|' + (rtl ? 1 : 0) + '|' + detGm(force) + '|' + JSON.stringify(CFG);
+function detGet(k){ const v = detCache.get(k); if(!v) return null; detCache.delete(k); detCache.set(k, v); return v.map(b => b.slice()); }
+function detPut(k, v){ detCache.set(k, v.map(b => b.slice())); if(detCache.size > 6000) detCache.delete(detCache.keys().next().value); }
+function panelsAt(f, i, pg, rtl, force){
+  const k = detKey(f, i, pg, rtl, force); let r = detGet(k);
+  if(!r){ r = panelsFor(pg.g, pg.W, pg.H, rtl, force); detPut(k, r); r = r.map(b => b.slice()); }
+  return r;
+}
+async function panelsAtAsync(f, i, pg, rtl, force){
+  const k = detKey(f, i, pg, rtl, force); let r = detGet(k);
+  if(r) return r;
+  r = await POOL.submit('det', {g: pg.g, W: pg.W, H: pg.H, rtl, force, gm: detGm(force)});
+  detPut(k, r);
+  return r.map(b => b.slice());
+}
+
+async function emit(mode, us, scales, q){
   const th = mode.thumbHolder || mode;
-  if(mode.xtch && OPT.thumb && !th.thumb && mode.screens.length === 0) th.thumb = makeThumb(c);
-  const xth = mode.xtch && OPT.wantXth ? xthPage(ctx, mode.W, mode.H, OPT.dither, mode.rot) : null, xtg = mode.xtch && OPT.wantXtg ? xtgPage(ctx, mode.W, mode.H, OPT.dither, mode.rot, OPT.xtcThr) : null;
-  const blob = await canvasToBlob(c, q);
-  mode.screens.push({data: new Uint8Array(await blob.arrayBuffer()), chap: us[0].chap, xth, xtg, w: mode.W, h: mode.H, cover: !!mode.isCover});
-  if(mode.screens.length % 30 === 1){
-    const img = $('prev'); if(img.dataset.u) URL.revokeObjectURL(img.dataset.u);
-    img.dataset.u = URL.createObjectURL(blob); img.src = img.dataset.u; img.style.display = 'block'; img.style.width = Math.min(mode.W, 360) + 'px';
-  }
+  const wantThumb = !!(mode.xtch && OPT.thumb && !th.thumb && mode.screens.length === 0);
+  const slot = {data: null, chap: us[0].chap, xth: null, xtg: null, w: mode.W, h: mode.H, cover: !!mode.isCover};
+  mode.screens.push(slot);   // reserved now so screens stay in order; the worker fills it in
+  const showPrev = mode.screens.length % 30 === 1;
+  const job = {W: mode.W, H: mode.H, land: !!mode.land, rtl: !!mode.rtl, rot: mode.rot || null, xtch: !!mode.xtch, wantThumb, q, scales,
+    us: us.map(u => ({g: u.g, c: u.c, w: u.w, h: u.h})), opt: OPT, cfg: CFG};
+  POOL.submit('render', job, r => {
+    slot.data = r.jpg; slot.xth = r.xth; slot.xtg = r.xtg;
+    if(r.thumb && !th.thumb) th.thumb = r.thumb;
+    if(showPrev){
+      const img = $('prev'); if(img.dataset.u) URL.revokeObjectURL(img.dataset.u);
+      img.dataset.u = URL.createObjectURL(new Blob([r.jpg], {type: 'image/jpeg'})); img.src = img.dataset.u; img.style.display = 'block'; img.style.width = Math.min(mode.W, 360) + 'px';
+    }
+  }).catch(() => {});
+  await POOL.room();
 }
 function halvesGain(u, W, H, land, ov){
   const f = 0.5 + ov;
@@ -1474,12 +1749,17 @@ function spansFor(ink, len, n, lim, userOv){
   out.push([Math.max(0, pc - po), len]);
   return out;
 }
+function cropRGBA(c, W, x0, y0, w, h){
+  const o = new Uint8ClampedArray(w * h * 4);
+  for(let y = 0; y < h; y++) o.set(c.subarray(((y0 + y) * W + x0) * 4, ((y0 + y) * W + x0 + w) * 4), y * w * 4);
+  return o;
+}
 function cropUnit(u, x0, y0, x1, y1){
-  const w = x1 - x0, h = y1 - y0;
-  if(x0 === 0 && x1 === u.w) return {g: u.g.slice(y0 * u.w, y1 * u.w), w, h, chap: u.chap, solo: true};
+  const w = x1 - x0, h = y1 - y0, c = u.c ? cropRGBA(u.c, u.w, x0, y0, w, h) : undefined;
+  if(x0 === 0 && x1 === u.w) return {g: u.g.slice(y0 * u.w, y1 * u.w), c, w, h, chap: u.chap, solo: true};
   const g = new Uint8Array(w * h);
   for(let y = 0; y < h; y++) g.set(u.g.subarray((y0 + y) * u.w + x0, (y0 + y) * u.w + x1), y * w);
-  return {g, w, h, chap: u.chap, solo: true};
+  return {g, c, w, h, chap: u.chap, solo: true};
 }
 // Pure geometry: the enlarged parts (as [x0,y0,x1,y1] inside the panel) that follow a panel shown alone. Empty when it stays whole.
 // Used both for conversion and for the panel editor's screen preview, so the two always agree.
@@ -1539,6 +1819,60 @@ function simpleParts(mode, u, sp){
   }
   if(!mode.land && mode.rtl) out.reverse();
   return out;
+}
+
+/* ---------- smart halves and thirds ---------- */
+// Chooses halves or thirds for one page and one screen shape, cutting in white gaps and filling the screen width.
+function autoPlan(mode, u){
+  const A = mode.W / mode.H, byY = !!mode.land, force = u.cut === 2 || u.cut === 3 ? u.cut : 0;
+  if(u.cut === 'n') return {parts: [], clean: true, n: 1};
+  if(!force && !byY && u.w <= u.h) return {parts: [], clean: true, n: 1};
+  if(!force && byY && u.w / u.h >= A * 0.95) return {parts: [], clean: true, n: 1};
+  const L = byY ? u.h : u.w, T = byY ? u.w : u.h;
+  let win = byY ? T / A : T * A; const need = L / win;
+  if(force) win = Math.min(win, L / force * 1.12);
+  if(!force && need <= 1.12) return {parts: [], clean: true, n: 1};
+  const raw = new Float32Array(L);
+  for(let y = 0; y < u.h; y++) for(let x = 0; x < u.w; x++) if(u.g[y * u.w + x] < CFG.WHITE) raw[byY ? y : x]++;
+  const ink = new Float32Array(L);
+  for(let i = 0; i < L; i++){ let a = 0, c = 0; for(let k = Math.max(0, i - 2); k <= Math.min(L - 1, i + 2); k++){ a += raw[k]; c++; } ink[i] = a / c / T; }
+  const m = Math.max(2, Math.ceil(need - 0.08)), cands = force ? [force] : (m >= 3 ? [3] : [2, 3]);
+  let best = null;
+  for(const n of cands){
+    const seg = L / n, R = Math.max(4, Math.round(Math.max(seg * 0.12, Math.abs(win - seg) / 2)));
+    const cuts = []; let score = 0, clean = true;
+    for(let k = 1; k < n; k++){
+      const ideal = Math.round(k * seg); let bc = ideal, bv = 1e9;
+      for(let c = Math.max(1, ideal - R); c <= Math.min(L - 2, ideal + R); c++){ const v = ink[c] + Math.abs(c - ideal) / L * 0.05; if(v < bv){ bv = v; bc = c; } }
+      cuts.push(bc); score += ink[bc]; if(ink[bc] > CFG.GAP_INK) clean = false;
+    }
+    const cand = {n, cuts, clean, score: score + 0.01 * n};
+    if(!best || (cand.clean && !best.clean) || (cand.clean === best.clean && cand.score < best.score - 0.005)) best = cand;
+    if(best.clean) break;
+  }
+  const o = best.clean ? 0 : Math.round(win * 0.1), bounds = [0, ...best.cuts, L], parts = [];
+  for(let i = 0; i < best.n; i++){
+    let a = bounds[i] - (i > 0 ? o : 0), b = bounds[i + 1] + (i < best.n - 1 ? o : 0);
+    if(b - a < win){ const pad = win - (b - a); a -= pad / 2; b += pad / 2; if(a < 0){ b -= a; a = 0; } if(b > L){ a -= b - L; b = L; } a = Math.max(0, a); }
+    a = Math.round(a); b = Math.round(b);
+    parts.push(byY ? [0, a, u.w, b] : [a, 0, b, u.h]);
+  }
+  if(!byY && mode.rtl) parts.reverse();
+  return {parts, clean: best.clean, n: best.n};
+}
+function autoTarget(mode, u){
+  if(!mode.mixed){ const p = autoPlan(mode, u); return {target: mode, parts: p.parts}; }
+  const land = mode.subs.land, port = mode.subs.port;
+  if(u.cut === 'n') return {target: u.w > u.h ? land : port, parts: []};
+  if(u.w > u.h && !u.cut) return {target: land, parts: []};
+  const p = autoPlan(land, u);
+  if(u.cut === 2 || u.cut === 3) return {target: land, parts: p.parts};
+  return p.parts.length && (p.clean || p.n === 2) ? {target: land, parts: p.parts} : {target: port, parts: []};
+}
+async function emitAuto(mode, u, q){
+  const {target, parts} = autoTarget(mode, u);
+  if(!parts.length){ await emit(target, [u], [soloScale(u, target.W, target.H)], q); return; }
+  for(const r of parts){ const t = cropUnit(u, r[0], r[1], r[2], r[3]); await emit(target, [t], [soloScale(t, target.W, target.H)], q); }
 }
 async function emitSimple(mode, u, q, sp){
   const parts = simpleParts(mode, u, sp);
@@ -1809,7 +2143,7 @@ function grayFromCanvas(cv){
   const px = cv.getContext('2d', {willReadFrequently: true}).getImageData(0, 0, W, H).data;
   const g = new Uint8Array(W * H);
   for(let p = 0, j = 0; p < g.length; p++, j += 4) g[p] = (px[j] * 299 + px[j + 1] * 587 + px[j + 2] * 114) / 1000;
-  return {g, W, H};
+  return OPT.color ? {g, W, H, c: px} : {g, W, H};
 }
 function parseComicInfo(xml){
   const doc = new DOMParser().parseFromString(xml, 'application/xml');
@@ -1922,12 +2256,12 @@ function readSettings(){
   OPT.sharpen = $('eSharp').checked ? Math.min(1.5, Math.max(0.2, parseFloat($('sharpAmt').value) || 0.5)) : 0;
   OPT.contrast = $('eContrast').checked;
   OPT.gamma = parseFloat($('gamma').value) || 1;
-  OPT.dither = $('xDither').value; OPT.moire = parseFloat($('moire').value) || 0; OPT.autoLevels = $('eAuto').checked; OPT.thumb = $('xThumb').checked; OPT.wantXth = $('fX').checked; OPT.wantXtg = $('fXtc').checked; OPT.xtcThr = Math.min(220, Math.max(40, parseInt($('xtcThr').value, 10) || 128));
-  S.simple = $('modeSimple').checked ? {n: parseInt($('spN').value, 10) === 3 ? 3 : 2, ov: Math.min(0.4, Math.max(0.02, parseFloat($('spOv').value) || 0.15)), whole: $('spWhole').checked} : null;
+  OPT.color = ($('fEpub').checked || $('fCbz').checked || $('fPdf').checked) && $('colorCol').checked; OPT.dither = $('xDither').value; OPT.moire = parseFloat($('moire').value) || 0; OPT.autoLevels = $('eAuto').checked; OPT.thumb = $('xThumb').checked; OPT.wantXth = $('fX').checked; OPT.wantXtg = $('fXtc').checked; OPT.xtcThr = Math.min(220, Math.max(40, parseInt($('xtcThr').value, 10) || 128));
+  S.simple = $('modeAuto').checked ? {auto: true} : $('modeSimple').checked ? {n: parseInt($('spN').value, 10) === 3 ? 3 : 2, ov: Math.min(0.4, Math.max(0.02, parseFloat($('spOv').value) || 0.15)), whole: $('spWhole').checked} : null;
   S.keepCover = $('keepCover').checked; S.wantXtch = $('fXtch').checked; S.wantXtchL = $('fXtchL').checked; S.wantXtchM = $('fXtchM').checked; S.rot = $('xRot').value;
-  if(!$('fEpub').checked && !$('fCbz').checked && !$('fX').checked && !$('fXtc').checked) throw new Error('Select at least one file type (XTCH, XTC, EPUB or CBZ).');
+  if(!$('fEpub').checked && !$('fCbz').checked && !$('fX').checked && !$('fXtc').checked && !$('fPdf').checked) throw new Error('Select at least one file format (XTCH, XTC, EPUB, CBZ or PDF).');
   S.cw = parseInt($('cw').value); S.chh = parseInt($('ch').value);
-  if(!$('oPort').checked && !$('oLand').checked && !$('oMix').checked) throw new Error('Select at least one screen shape (portrait, landscape or mixed).');
+  if(($('fEpub').checked || $('fCbz').checked || $('fX').checked || $('fXtc').checked) && !$('oPort').checked && !$('oLand').checked && !$('oMix').checked) throw new Error('Select at least one screen shape (portrait, landscape or mixed).');
   return S;
 }
 async function convertFile(file, idx, total, S){
@@ -1949,6 +2283,7 @@ async function convertFile(file, idx, total, S){
     };
   }
 
+  POOL.begin();
   log(tag + 'Reading file...'); setLabel((total > 1 ? `File ${idx + 1} of ${total}: ` : '') + 'reading file...');
   const src = await openSource(file);
   if(!src.count) throw new Error('No pages found in this file.');
@@ -1965,38 +2300,68 @@ async function convertFile(file, idx, total, S){
   meta.title = meta.title || base;
   const chapters = []; let curKey = null, curIdx = -1, totalPanels = 0, skipped = 0;
   const pgOrder = pgSeq(file, src.count);
-  for(let kk = 0; kk < pgOrder.length; kk++){
-    const i = pgOrder[kk];
+  let pdfShare = 0;
+  if($('fPdf').checked){
+    pdfShare = modes.length ? 0.4 : 1;
+    const wpx = parseInt($('pdfW').value, 10) || 900;
+    setLabel((total > 1 ? `File ${idx + 1} of ${total}: ` : '') + 'building webtoon PDF...');
+    const pdf = await buildWebtoon(src, pgOrder, wpx, q, meta, f => { updateEta((idx + pdfShare * f) / total); log(tag + `Webtoon PDF: page ${Math.round(f * pgOrder.length) + 1} / ${pgOrder.length}`); },
+      ($('pdfMode').value === 'panels' && !S.simple) ? (i, pg, k) => {
+        if(k === 0 && keepCover && pg.H >= pg.W) return null;
+        if(pgIsWhole(file, i)) return null;
+        const ov = edits.get(edKey(file, i)); return ov ? ov.map(b => b.slice()) : panelsAt(file, i, pg, rtl);
+      } : null);
+    addLink(pdf, `${base}-webtoon.pdf`, base, null);
+  }
+  const loopOrder = modes.length ? pgOrder : [];
+  // Read the next few pages (and start their panel detection in the workers) while the current one is being packed.
+  const LA = POOL.size() ? Math.min(OPT.color ? 1 : 3, POOL.size()) : 0, ahead = new Map();
+  const load = kk => {
+    if(ahead.has(kk)) return;
+    const i = loopOrder[kk];
+    ahead.set(kk, (async () => {
+      let pg; try{ pg = await src.getPage(i); }catch(e){ return {err: e}; }
+      let bp = null;
+      if(!S.simple && !edits.get(edKey(file, i)) && !pgIsWhole(file, i) && modes.some(m => !(keepCover && kk === 0 && pg.H >= pg.W && (m.land || m.mixed)))){
+        bp = panelsAtAsync(file, i, pg, rtl); bp.catch(() => {});
+      }
+      return {pg, bp};
+    })());
+  };
+  for(let kk = 0; kk < loopOrder.length; kk++){
+    const i = loopOrder[kk];
     const c = src.chapterOf(i);
     if(c.key !== curKey){
       for(const m of modes) await drain(m, true, ratio, q);
       chapters.push({title: c.title}); curKey = c.key; curIdx = chapters.length - 1;
     }
     if(cancelFlag) throw new Error('Cancelled');
-    updateEta((idx + kk / pgOrder.length) / total);
-    setLabel((total > 1 ? `File ${idx + 1} of ${total}, ` : '') + `page ${kk + 1} of ${pgOrder.length}`);
-    log(tag + `Page ${kk + 1} / ${pgOrder.length}  (${c.title})\nPanels so far: ${totalPanels}`);
-    let pg;
-    try{ pg = await src.getPage(i); }
-    catch(e){ console.warn('Skipping page', i + 1, e); skipped++; continue; }
+    updateEta((idx + pdfShare + (1 - pdfShare) * kk / loopOrder.length) / total);
+    setLabel((total > 1 ? `File ${idx + 1} of ${total}, ` : '') + `page ${kk + 1} of ${loopOrder.length}`);
+    log(tag + `Page ${kk + 1} / ${loopOrder.length}  (${c.title})\nPanels so far: ${totalPanels}`);
+    for(let k2 = kk; k2 <= Math.min(loopOrder.length - 1, kk + LA); k2++) load(k2);
+    const got = await ahead.get(kk); ahead.delete(kk);
+    if(got.err){ console.warn('Skipping page', i + 1, got.err); skipped++; continue; }
+    const pg = got.pg;
     const {g, W, H} = pg;
     const coverModes = (keepCover && kk === 0 && H >= W) ? modes.filter(m => m.land || m.mixed) : [];
-    for(const m of coverModes) await emitCover(m, {g, w: W, h: H, chap: curIdx, solo: true}, pw, ph, q);
+    for(const m of coverModes) await emitCover(m, {g, c: pg.c, w: W, h: H, chap: curIdx, solo: true}, pw, ph, q);
     if(S.simple){
       for(const m of modes){
         if(coverModes.includes(m)) continue;
-        await emitSimple(m.mixed ? m.subs.port : m, {g, w: W, h: H, chap: curIdx, solo: true}, q, S.simple);
+        if(S.simple.auto) await emitAuto(m, {g, c: pg.c, w: W, h: H, chap: curIdx, solo: true, cut: pgCutOf(file, i)}, q);
+        else await emitSimple(m.mixed ? m.subs.port : m, {g, c: pg.c, w: W, h: H, chap: curIdx, solo: true}, q, S.simple);
       }
       totalPanels++;
       await new Promise(r => setTimeout(r, 0));
       continue;
     }
     const ov = pgIsWhole(file, i) ? [[0, 0, W, H]] : edits.get(edKey(file, i));
-    const boxes = modes.some(m => !coverModes.includes(m)) ? (ov ? ov.map(b => b.slice()) : panelsFor(g, W, H, rtl)) : [];
+    const boxes = modes.some(m => !coverModes.includes(m)) ? (ov ? ov.map(b => b.slice()) : await (got.bp || panelsAtAsync(file, i, pg, rtl))) : [];
     for(const b of boxes){
       const w = b[2] - b[0], h = b[3] - b[1], cg = new Uint8Array(w * h);
       for(let y = 0; y < h; y++) cg.set(g.subarray((b[1] + y) * W + b[0], (b[1] + y) * W + b[0] + w), y * w);
-      const u = {g: cg, w, h, chap: curIdx, solo: boxes.length === 1 || b[4] === 2 || b[4] === 3, zoom: b[4]};
+      const u = {g: cg, c: pg.c ? cropRGBA(pg.c, W, b[0], b[1], w, h) : undefined, w, h, chap: curIdx, solo: boxes.length === 1 || b[4] === 2 || b[4] === 3, zoom: b[4]};
       totalPanels++;
       for(const m of modes) if(!coverModes.includes(m)) m.queue.push(m.mixed ? {...u, o: (u.w / u.h >= m.mixAsp) ? 'land' : 'port'} : u);
     }
@@ -2005,6 +2370,7 @@ async function convertFile(file, idx, total, S){
   }
   for(const m of modes) await drain(m, true, ratio, q);
 
+  await POOL.flush();
   log(tag + 'Packaging...'); setLabel((total > 1 ? `File ${idx + 1} of ${total}: ` : '') + 'packaging...');
   const maxScr = parseInt($('splitParts').value, 10) || 0;
   for(const m of modes){
@@ -2061,8 +2427,10 @@ async function run(){
         window.__batch.push({name: files[f].name, error: err.message});
         if(cancelFlag) break;
       }
+      POOL.abort();
       await new Promise(r => setTimeout(r, 50));
     }
+    POOL.abort();
     $('bar').value = 1; $('barPct').textContent = '100%';
     const B = window.__batch, ok = B.filter(b => !b.error);
     const line = b => b.error ? (b.error === 'Cancelled' ? `${b.name}: cancelled` : `${b.name}: FAILED - ${b.error}`)
@@ -2135,7 +2503,7 @@ async function fillMeta(){
   if(!m.title) $('mTitle').value = f.name.replace(/\.[^.]+$/, '');
   metaFor = f.name + '|' + f.size;
 }
-function updateGo(){ updateSummaries(); $('go').disabled = !($('file').files[0] && $('consent').checked); $('edOpen').disabled = !$('file').files[0] || $('modeSimple').checked; $('edOpenFlag').disabled = !$('file').files[0] || $('modeSimple').checked; }
+function updateGo(){ updateSummaries(); $('go').disabled = !($('file').files[0] && $('consent').checked); $('edOpen').disabled = !$('file').files[0] || simpleOn(); $('edOpenFlag').disabled = !$('file').files[0] || simpleOn(); }
 $('file').addEventListener('change', updateGo);
 $('file').addEventListener('change', fillMeta);
 $('consent').addEventListener('change', updateGo);
@@ -2230,8 +2598,9 @@ const SENS = {
 };
 // Which kinds of flag are active. By default only the two that point at a merged or oversized box.
 const edKinds = () => ({group: $('edKGroup').checked, big: $('edKBig').checked, tall: $('edKTall').checked, busy: $('edKBusy').checked, ov: $('edKOv').checked});
-function edCropUnit(g, W, b){
+function edCropUnit(g, W, b, c){
   const w = b[2] - b[0], h = b[3] - b[1], cg = new Uint8Array(w * h);
+  if(c) return {g: (() => { for(let y = 0; y < h; y++) cg.set(g.subarray((b[1] + y) * W + b[0], (b[1] + y) * W + b[0] + w), y * w); return cg; })(), c: cropRGBA(c, W, b[0], b[1], w, h), w, h};
   for(let y = 0; y < h; y++) cg.set(g.subarray((b[1] + y) * W + b[0], (b[1] + y) * W + b[0] + w), y * w);
   return {g: cg, w, h};
 }
@@ -2325,7 +2694,7 @@ async function edScanRun(){
     if(!sc.m.has(i)){
       try{
         const pg = await src.getPage(i), ov = edits.get(edKey(file, i));
-        sc.m.set(i, edMetrics(pg.g, pg.W, pg.H, ov || panelsFor(pg.g, pg.W, pg.H, edRtl())));
+        sc.m.set(i, edMetrics(pg.g, pg.W, pg.H, ov || panelsAt(file, i, pg, edRtl())));
       }catch(e){ sc.m.set(i, null); }
     }
     if(i % 3 === 2 || i === src.count - 1){ if(ed.file === file) edFlagUI(); await new Promise(r => setTimeout(r, 0)); }
@@ -2455,7 +2824,7 @@ function edFill(w, h){
 function edRender(){
   if(!ed.pageCv) return;
   const cv = $('edCv'), ctx = cv.getContext('2d');
-  ctx.drawImage(ed.pageCv, 0, 0);
+  ctx.drawImage(edBase(), 0, 0);
   const lw = Math.max(3, Math.round(ed.W / 220)), fs = Math.max(16, Math.round(ed.W / 22)), r = fs * 0.8;
   ed.boxes.forEach((b, i) => {
     const sel = i === ed.sel;
@@ -2528,7 +2897,7 @@ async function edLoadPage(p){
   if(tok !== ed.tok) return;
   ed.g = pg.g; ed.W = pg.W; ed.H = pg.H;
   const ov = pgIsWhole(ed.file, p) ? [[0, 0, pg.W, pg.H]] : edits.get(edKey(ed.file, p));
-  ed.edited = !!ov; ed.boxes = ov ? ov.map(b => b.slice()) : panelsFor(pg.g, pg.W, pg.H, edRtl());
+  ed.edited = !!ov; ed.boxes = ov ? ov.map(b => b.slice()) : panelsAt(ed.file, p, pg, edRtl());
   ed.sel = -1; ed.act = null; ed.hist = []; ed.note = ''; ed.pageCv = unitCanvas({g: pg.g, w: pg.W, h: pg.H});
   const cv = $('edCv'); cv.width = pg.W; cv.height = pg.H;
   edFit();
@@ -2724,6 +3093,7 @@ document.addEventListener('keydown', e => {
   }
   if(/^[1-9]$/.test(k)){ pick(parseInt(k, 10) - 1); return; }
   if(lk === 'd'){ edSetDraw(!ed.draw); return; }
+  if(lk === 'b'){ BL.on = !BL.on; blurApply(); return; }
   if(lk === 'c'){ edSetCut(!ed.cut); return; }
   if(lk === 'm'){ $('edMerge').click(); return; }
   if(k === 'Delete' || k === 'Backspace'){ if(ed.sel >= 0){ e.preventDefault(); edDo(() => { ed.boxes.splice(ed.sel, 1); ed.sel = -1; }); } return; }
@@ -2735,6 +3105,7 @@ document.addEventListener('keydown', e => {
   if(k === ']'){ $('edDown').click(); return; }
   if(lk === 'w'){ $('edWhole').click(); return; }
   if(lk === 'r'){ $('edReset').click(); return; }
+  if(lk === 'g'){ $('edDark').click(); return; }
   if(lk === 's'){ $('edSort').click(); return; }
   if(lk === 'f'){ $('edFlagOnly').click(); return; }
 });
@@ -2756,7 +3127,7 @@ $('edOpenFlag').addEventListener('click', () => edOpenDlg(true));
 const pgState = new Map(), pgThumbs = new Map(), pgInfo = new Map();
 const pgSt = (f, n) => {
   const k = edFileKey(f); let st = pgState.get(k);
-  if(!st){ st = {order: null, hidden: new Set(), whole: new Set()}; pgState.set(k, st); }
+  if(!st){ st = {order: null, hidden: new Set(), whole: new Set(), cut: new Map()}; pgState.set(k, st); }
   if(n && (!st.order || st.order.length !== n)) st.order = Array.from({length: n}, (_, i) => i);
   return st;
 };
@@ -2765,6 +3136,7 @@ function pgSeq(f, n){
   if(!st || !st.order || st.order.length !== n) return Array.from({length: n}, (_, i) => i);
   return st.order.filter(i => !st.hidden.has(i));
 }
+const pgCutOf = (f, i) => { const st = pgState.get(edFileKey(f)); return st && st.cut ? st.cut.get(i) : undefined; };
 const pgIsWhole = (f, i) => { const st = pgState.get(edFileKey(f)); return !!(st && st.whole.has(i)); };
 const pgp = {file: null, src: null, sel: new Set(), last: -1, q: [], busy: false, tok: 0};
 async function pgSrc(f){
@@ -2773,13 +3145,13 @@ async function pgSrc(f){
   return edSrcs.get(k);
 }
 function pgSummary(){
-  let h = 0, r = 0, w = 0;
+  let h = 0, r = 0, w = 0, c = 0;
   for(const f of Array.from($('file').files)){
     const st = pgState.get(edFileKey(f)); if(!st) continue;
-    h += st.hidden.size; w += st.whole.size;
+    h += st.hidden.size; w += st.whole.size; c += st.cut ? st.cut.size : 0;
     if(st.order && st.order.some((v, i) => v !== i)) r++;
   }
-  const parts = []; if(h) parts.push(h + ' hidden'); if(r) parts.push('reordered'); if(w) parts.push(w + ' whole');
+  const parts = []; if(h) parts.push(h + ' hidden'); if(r) parts.push('reordered'); if(w) parts.push(w + ' whole'); if(c) parts.push(c + ' with set cuts');
   $('sumPages').textContent = parts.join(', ') || 'reorder, hide ads, pick a cover (optional)';
 }
 async function pgFill(){
@@ -2798,8 +3170,8 @@ function pgThumb(f, i, src){
     if(pgThumbs.has(key)) return res(pgThumbs.get(key));
     try{
       const pg = await src.getPage(i), full = unitCanvas({g: pg.g, w: pg.W, h: pg.H});
-      const sc = 120 / Math.max(pg.W, 1), c = document.createElement('canvas');
-      c.width = 120; c.height = Math.max(1, Math.round(pg.H * sc));
+      const sc = 144 / Math.max(pg.W, 1), c = document.createElement('canvas');
+      c.width = 144; c.height = Math.max(1, Math.round(pg.H * sc));
       const x = c.getContext('2d'); x.imageSmoothingQuality = 'high'; x.drawImage(full, 0, 0, c.width, c.height);
       // blank / dark / small statistics
       let sum = 0, sq = 0, n = 0; const g = pg.g, step = Math.max(1, Math.floor(g.length / 20000));
@@ -2810,13 +3182,13 @@ function pgThumb(f, i, src){
       else if(pg.W * pg.H < 250000) tag = 'Small';
       pgInfo.set(key, {tag, mean, sd, W: pg.W, H: pg.H});
       pgThumbs.set(key, c); res(c);
-    }catch(e){ pgInfo.set(key, {tag: 'Unreadable'}); const c = document.createElement('canvas'); c.width = 120; c.height = 160; pgThumbs.set(key, c); res(c); }
+    }catch(e){ pgInfo.set(key, {tag: 'Unreadable'}); const c = document.createElement('canvas'); c.width = 144; c.height = 192; pgThumbs.set(key, c); res(c); }
   });
 }
 function pgDecorate(tile, f, i){
   tile.querySelectorAll('i').forEach(e => e.remove());
   const st = pgSt(f), inf = pgInfo.get(edKey(f, i));
-  const lab = []; if(st.whole.has(i)) lab.push('whole'); if(inf && inf.tag) lab.push(inf.tag.toLowerCase());
+  const lab = []; if(st.whole.has(i)) lab.push('whole'); { const cu = st.cut && st.cut.get(i); if(cu) lab.push(cu === 'n' ? 'no zoom' : cu === 2 ? 'halves' : 'thirds'); } if(inf && inf.tag) lab.push(inf.tag.toLowerCase());
   if(lab.length){ const t = document.createElement('i'); t.textContent = lab.join(', '); tile.append(t); }
   tile.classList.toggle('hid', st.hidden.has(i));
   tile.classList.toggle('sel', pgp.sel.has(i));
@@ -2951,10 +3323,107 @@ $('secPages').addEventListener('toggle', () => { if($('secPages').open) pgRender
 $('file').addEventListener('change', pgFill);
 
 
+/* ---------- saved progress: edits are kept in this browser (IndexedDB) and come back when the same file is opened again ---------- */
+const PROG = {db: undefined, last: new Map(), ok: new Set(), note: ''};
+function progDb(){
+  if(PROG.db !== undefined) return Promise.resolve(PROG.db);
+  return new Promise(res => {
+    try{
+      const r = indexedDB.open('bcc_progress', 1);
+      r.onupgradeneeded = () => r.result.createObjectStore('p');
+      r.onsuccess = () => { PROG.db = r.result; res(r.result); };
+      r.onerror = r.onblocked = () => { PROG.db = null; res(null); };
+    }catch(e){ PROG.db = null; res(null); }
+  });
+}
+async function progOp(mode, fn){
+  const db = await progDb(); if(!db) return undefined;
+  return new Promise(res => {
+    try{
+      const tx = db.transaction('p', mode), r = fn(tx.objectStore('p'));
+      tx.oncomplete = () => res(r && 'result' in r ? r.result : true); tx.onerror = tx.onabort = () => res(undefined);
+    }catch(e){ res(undefined); }
+  });
+}
+function progSnap(f){
+  const k = edFileKey(f), pre = k + '#', o = {v: 1, edits: {}, seen: []};
+  for(const [key, v] of edits) if(key.startsWith(pre)) o.edits[key.slice(pre.length)] = v;
+  for(const key of edSeen) if(key.startsWith(pre)) o.seen.push(+key.slice(pre.length));
+  const st = pgState.get(k);
+  if(st){
+    const ord = st.order && st.order.some((v, i) => v !== i) ? st.order : null;
+    if(ord || st.hidden.size || st.whole.size || st.cut.size) o.pg = {order: ord, hidden: [...st.hidden], whole: [...st.whole], cut: [...st.cut]};
+  }
+  o.empty = !Object.keys(o.edits).length && !o.pg;
+  return o;
+}
+const progCounts = o => ({e: Object.keys(o.edits).length, h: o.pg ? o.pg.hidden.length : 0, m: o.pg ? o.pg.whole.length + o.pg.cut.length + (o.pg.order ? 1 : 0) : 0});
+function progApply(f, o){
+  const k = edFileKey(f);
+  for(const i in o.edits) edits.set(k + '#' + i, o.edits[i]);
+  for(const i of o.seen || []) edSeen.add(k + '#' + i);
+  if(o.pg) pgState.set(k, {order: o.pg.order, hidden: new Set(o.pg.hidden), whole: new Set(o.pg.whole), cut: new Map(o.pg.cut)});
+}
+function progUI(){
+  const files = Array.from($('file').files); let e = 0, h = 0, m = 0;
+  for(const f of files){ const c = progCounts(progSnap(f)); e += c.e; h += c.h; m += c.m; }
+  const parts = [];
+  if(e) parts.push(`${e} page${e > 1 ? 's' : ''} edited`);
+  if(h) parts.push(`${h} hidden`);
+  if(m) parts.push('page order or zoom changes');
+  $('progRow').hidden = !(parts.length || PROG.db === null && files.length);
+  $('progMsg').textContent = PROG.db === null ? 'Saving edits is not available in this browser.' : (PROG.note ? PROG.note + ' ' : '') + (parts.length ? 'Saved in this browser: ' + parts.join(', ') + '.' : '');
+  $('progForget').hidden = PROG.db === null || !parts.length;
+}
+async function progRestore(){
+  const files = Array.from($('file').files);
+  for(const f of files){
+    const k = edFileKey(f); if(PROG.ok.has(k)) continue;
+    const rec = await progOp('readonly', st => st.get(k));
+    if(rec && rec.v === 1 && progSnap(f).empty){
+      progApply(f, rec); const c = progCounts(rec);
+      PROG.note = 'Restored your earlier edits' + (rec.t ? ' from ' + new Date(rec.t).toLocaleDateString() : '') + '.';
+      if(c.e + c.h + c.m) edCountText();
+    }
+    PROG.last.set(k, JSON.stringify(progSnap(f))); PROG.ok.add(k);
+  }
+  progUI();
+  try{ if(pgCur() && $('secPages').open) pgRender(); }catch(e){}
+}
+async function progTick(){
+  for(const f of Array.from($('file').files)){
+    const k = edFileKey(f); if(!PROG.ok.has(k)) continue;
+    const o = progSnap(f), js = JSON.stringify(o);
+    if(js === PROG.last.get(k)) continue;
+    PROG.last.set(k, js);
+    if(o.empty) await progOp('readwrite', st => st.delete(k));
+    else{ o.t = Date.now(); await progOp('readwrite', st => st.put(o, k)); }
+  }
+  progUI();
+}
+setInterval(progTick, 2000);
+document.addEventListener('visibilitychange', () => { if(document.visibilityState === 'hidden') progTick(); });
+window.addEventListener('pagehide', progTick);
+$('edDlg').addEventListener('close', progTick);
+$('file').addEventListener('change', progRestore);
+$('progForget').addEventListener('click', async () => {
+  if(!confirm('Forget the saved edits for the selected files? This also clears them in the editor.')) return;
+  for(const f of Array.from($('file').files)){
+    const k = edFileKey(f), pre = k + '#';
+    for(const key of Array.from(edits.keys())) if(key.startsWith(pre)) edits.delete(key);
+    for(const key of Array.from(edSeen)) if(key.startsWith(pre)) edSeen.delete(key);
+    pgState.delete(k); PROG.last.delete(k);
+    await progOp('readwrite', st => st.delete(k)); PROG.last.set(k, JSON.stringify(progSnap(f)));
+  }
+  PROG.note = ''; edCountText(); progUI();
+  try{ if(pgCur()) pgRender(); }catch(e){}
+});
+try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persist(); }catch(e){}
+
 /* ---------- device: remember last, profiles, direction test, size estimate ---------- */
 const LASTK = 'bcc_last';
 function lastSave(){
-  try{ localStorage.setItem(LASTK, JSON.stringify({preset: $('preset').selectedIndex, cw: $('cw').value, ch: $('ch').value, dir: document.querySelector('input[name=dir]:checked').value})); }catch(e){}
+  try{ localStorage.setItem(LASTK, JSON.stringify({preset: $('preset').selectedIndex, cw: $('cw').value, ch: $('ch').value, dir: document.querySelector('input[name=dir]:checked').value, col: $('colorCol').checked})); }catch(e){}
 }
 function lastLoad(){
   try{
@@ -2962,10 +3431,11 @@ function lastLoad(){
     if(Number.isInteger(o.preset) && o.preset >= 0 && o.preset < $('preset').options.length) $('preset').selectedIndex = o.preset;
     if(o.cw) $('cw').value = o.cw; if(o.ch) $('ch').value = o.ch;
     const r = document.querySelector(`input[name=dir][value=${o.dir === 'ltr' ? 'ltr' : 'rtl'}]`); if(r) r.checked = true;
+    if(typeof o.col === 'boolean') $(o.col ? 'colorCol' : 'colorBw').checked = true;
   }catch(e){}
 }
 lastLoad();
-$('preset').addEventListener('change', lastSave); $('cw').addEventListener('input', lastSave); $('ch').addEventListener('input', lastSave);
+$('preset').addEventListener('change', () => setTimeout(lastSave, 0)); document.addEventListener('change', e => { if(e.target && /^color(Bw|Col)$/.test(e.target.id)) lastSave(); }); $('cw').addEventListener('input', lastSave); $('ch').addEventListener('input', lastSave);
 document.querySelectorAll('input[name=dir]').forEach(r => r.addEventListener('change', lastSave));
 
 const PROFILES = {
@@ -2979,7 +3449,7 @@ $('devProf').addEventListener('change', () => {
   const pr = PROFILES[$('devProf').value]; if(!pr) return;
   const pre = $('preset'); pre.value = pr.size; const [w, h] = pr.size.split(','); $('cw').value = w; $('ch').value = h;
   setChk('oPort', true); setChk('oLand', false); setChk('oMix', false);
-  setChk('fX', pr.xtch); setChk('fXtc', pr.xtc); setChk('fEpub', false); setChk('fCbz', false);
+  setChk('fX', pr.xtch); setChk('fXtc', pr.xtc); setChk('fEpub', false); setChk('fCbz', false); setChk('fPdf', false); colorSet('bw');
   $('splitParts').value = pr.split; $('splitParts').dispatchEvent(new Event('change', {bubbles: true}));
   pre.dispatchEvent(new Event('change', {bubbles: true})); updateSummaries(); lastSave();
 });
@@ -3072,7 +3542,19 @@ $('estBtn').addEventListener('click', async () => {
     for(let j = 0; j < take; j++){
       const i = seq[Math.floor((j + 0.5) * n / take)];
       let pg; try{ pg = await src.getPage(i); }catch(e){ continue; }
-      const bx = pgIsWhole(f, i) ? [[0, 0, pg.W, pg.H]] : (edits.get(edKey(f, i)) || panelsFor(pg.g, pg.W, pg.H, rtl)); got++;
+      if(simpleOn()){
+        const sp = $('modeAuto').checked ? null : {n: parseInt($('spN').value, 10) === 3 ? 3 : 2, ov: parseFloat($('spOv').value) || 0.15, whole: $('spWhole').checked};
+        for(const sh of shapes){
+          const md = {W: sh[1] === 'land' ? hi : lo, H: sh[1] === 'land' ? lo : hi, land: sh[1] === 'land', rtl, mixed: sh[1] === 'mix'};
+          if(md.mixed) md.subs = {land: {W: hi, H: lo, land: true, rtl}, port: {W: lo, H: hi, land: false, rtl}};
+          const u = {g: pg.g, w: pg.W, h: pg.H, cut: pgCutOf(f, i)}; let c = 1;
+          if(sp){ const ps = simpleParts(md.mixed ? md.subs.port : md, u, sp); c = ps.length ? ps.length + (sp.whole ? 1 : 0) : 1; }
+          else c = Math.max(1, autoTarget(md, u).parts.length);
+          per[sh[1]].t += c;
+        }
+        got++; continue;
+      }
+      const bx = pgIsWhole(f, i) ? [[0, 0, pg.W, pg.H]] : (edits.get(edKey(f, i)) || panelsAt(f, i, pg, rtl)); got++;
       for(const sh of shapes){ const r = estScreens(pg.g, pg.W, pg.H, bx, sh[1]); per[sh[1]].t += r.total; per[sh[1]].l += r.land; }
       await new Promise(r => setTimeout(r, 0));
     }
@@ -3096,6 +3578,40 @@ $('estBtn').addEventListener('click', async () => {
 $('file').addEventListener('change', () => { $('estBox').hidden = true; });
 
 
+
+/* ---------- spoiler blur ---------- */
+const BL = {on: false, amt: 45};
+try{ const o = JSON.parse(localStorage.getItem('bcc_blur') || 'null'); if(o){ BL.on = !!o.on; BL.amt = Math.min(100, Math.max(1, +o.amt || 45)); } }catch(e){}
+function blurRadius(w, h, f){ return Math.max(1, Math.round(BL.amt / 100 * Math.min(w, h) * 0.075 * (f || 1))); }
+function blurGrayCanvas(g, w, h, r){
+  const a = boxBlur1(boxBlur1(g, w, h, Math.max(1, Math.round(r * 0.6))), w, h, Math.max(1, Math.round(r * 0.6)));
+  return unitCanvas({g: a, w, h});
+}
+let blurCache = {key: '', cv: null};
+function edBase(){
+  if(!BL.on) return ed.pageCv;
+  const r = blurRadius(ed.W, ed.H), key = edFileKey(ed.file) + '#' + ed.page + '|' + r;
+  if(blurCache.key !== key){ blurCache = {key, cv: blurGrayCanvas(ed.g, ed.W, ed.H, r)}; }
+  return blurCache.cv;
+}
+let blurT = 0;
+function blurApply(){
+  for(const p of ['ed', 'rv', 'cg', 'cut', 'pg']){ $(p + 'Blur').checked = BL.on; $(p + 'BlurAmt').value = BL.amt; }
+  document.body.classList.toggle('spoil', BL.on); document.body.style.setProperty('--pgb', (1 + BL.amt / 100 * 6).toFixed(1) + 'px');
+  try{ localStorage.setItem('bcc_blur', JSON.stringify(BL)); }catch(e){}
+  clearTimeout(blurT); blurT = setTimeout(() => {
+    if($('edDlg').open && ed.pageCv) edRender();
+    if($('rvDlg').open) for(const t of $('rvGrid').children) if(t._base) rvPaint(t);
+    if($('cgDlg').open) for(const t of $('cgGrid').children) if(t._base) cgPaint(t);
+    if($('cutDlg').open && cp.src) cutDraw();
+  }, 60);
+}
+['ed', 'rv', 'cg', 'cut', 'pg'].forEach(p => {
+  $(p + 'Blur').addEventListener('change', () => { BL.on = $(p + 'Blur').checked; blurApply(); $(p + 'Blur').blur(); });
+  $(p + 'BlurAmt').addEventListener('input', () => { BL.amt = +$(p + 'BlurAmt').value; if(!BL.on) BL.on = true; blurApply(); });
+});
+blurApply();
+
 /* ---------- review grid: all pages with detected boxes, fix only the bad ones ---------- */
 const rv = {tiles: [], tok: 0, idx: 0, auto: new Map()};
 async function openEditorAt(idx, page){
@@ -3112,12 +3628,22 @@ function rvBoxes(f, i, pg){
   return rv.auto.get(ck);
 }
 function rvDraw(t, pg, boxes){
-  const sc = 150 / pg.W, cv = t.querySelector('canvas'); cv.width = 150; cv.height = Math.max(1, Math.round(pg.H * sc));
-  const x = cv.getContext('2d'); x.drawImage(unitCanvas({g: pg.g, w: pg.W, h: pg.H}), 0, 0, cv.width, cv.height);
+  const sc = 180 / pg.W, base = document.createElement('canvas'); base.width = 180; base.height = Math.max(1, Math.round(pg.H * sc));
+  base.getContext('2d').drawImage(unitCanvas({g: pg.g, w: pg.W, h: pg.H}), 0, 0, base.width, base.height);
+  t._base = base; t._bx = boxes.map(b => [b[0] * sc, b[1] * sc, b[2] * sc, b[3] * sc]); rvPaint(t);
+}
+function rvPaint(t){
+  const base = t._base, cv = t.querySelector('canvas'); cv.width = base.width; cv.height = base.height;
+  const x = cv.getContext('2d'); x.drawImage(base, 0, 0);
+  if(BL.on){
+    const id = x.getImageData(0, 0, cv.width, cv.height), d = id.data, g = new Uint8Array(cv.width * cv.height);
+    for(let i = 0; i < g.length; i++) g[i] = d[i * 4];
+    x.drawImage(blurGrayCanvas(g, cv.width, cv.height, blurRadius(cv.width, cv.height, 1.3)), 0, 0);
+  }
   x.lineWidth = 1.5; x.font = 'bold 11px sans-serif'; x.textAlign = 'center'; x.textBaseline = 'middle';
-  boxes.forEach((b, i) => {
-    x.strokeStyle = '#be123c'; x.strokeRect(b[0] * sc + 1, b[1] * sc + 1, (b[2] - b[0]) * sc - 2, (b[3] - b[1]) * sc - 2);
-    const cx = (b[0] + b[2]) / 2 * sc, cy = (b[1] + b[3]) / 2 * sc;
+  t._bx.forEach((b, i) => {
+    x.strokeStyle = '#be123c'; x.strokeRect(b[0] + 1, b[1] + 1, b[2] - b[0] - 2, b[3] - b[1] - 2);
+    const cx = (b[0] + b[2]) / 2, cy = (b[1] + b[3]) / 2;
     x.fillStyle = 'rgba(190,18,60,.85)'; x.beginPath(); x.arc(cx, cy, 8, 0, 7); x.fill(); x.fillStyle = '#fff'; x.fillText(String(i + 1), cx, cy + 1);
   });
 }
@@ -3165,7 +3691,7 @@ async function rvBuild(){
   const seq = pgSeq(f, src.count);
   for(const i of seq){
     const t = document.createElement('div'); t.className = 'rvT'; t.dataset.i = i;
-    const c = document.createElement('canvas'); c.width = 150; c.height = 200; const b = document.createElement('div'); b.className = 'rvB'; b.textContent = 'p.' + (i + 1);
+    const c = document.createElement('canvas'); c.width = 180; c.height = 240; const b = document.createElement('div'); b.className = 'rvB'; b.textContent = 'p.' + (i + 1);
     t.append(c, b); grid.append(t);
     t.addEventListener('click', async () => { $('rvDlg').close(); await openEditorAt(idx, i); });
   }
@@ -3196,7 +3722,7 @@ function qpFit(pg, W, H){   // whole page fitted to the screen, white around it
   const c = document.createElement('canvas'); c.width = W; c.height = H;
   const x = c.getContext('2d', {willReadFrequently: true}); x.fillStyle = '#fff'; x.fillRect(0, 0, W, H);
   const sc = Math.min(W / pg.W, H / pg.H), w = Math.max(1, Math.round(pg.W * sc)), h = Math.max(1, Math.round(pg.H * sc));
-  x.imageSmoothingQuality = 'high'; x.drawImage(unitCanvas({g: pg.g, w: pg.W, h: pg.H}), Math.round((W - w) / 2), Math.round((H - h) / 2), w, h);
+  x.imageSmoothingQuality = 'high'; x.drawImage(unitCanvas({g: pg.g, c: pg.c, w: pg.W, h: pg.H}), Math.round((W - w) / 2), Math.round((H - h) / 2), w, h);
   return c;
 }
 function qpOpt(){ try{ readSettings(); }catch(e){} }
@@ -3230,7 +3756,8 @@ async function qpRender(){
   if(!pg){ box.textContent = 'Add a file first.'; return; }
   if(tok !== qp.tok) return;
   const {W, H} = qpScreen(); qpOpt();
-  const orig = qpFit(pg, W, H), proc = document.createElement('canvas'); proc.width = W; proc.height = H;
+  const colView = OPT.color && $('qpView').value === 'gray'; if(!colView) OPT.color = false;
+  const orig = qpFit(colView ? pg : {...pg, c: undefined}, W, H), proc = document.createElement('canvas'); proc.width = W; proc.height = H;
   const px = proc.getContext('2d', {willReadFrequently: true}); px.drawImage(orig, 0, 0); postProcess(px, W, H);
   let out = proc, cap = 'After (grey)'; const v = $('qpView').value;
   if(v === 'xtc'){ out = qpDecode(xtgPage(px, W, H, OPT.dither, null, OPT.xtcThr), W, H, 'xtc'); cap = `After (XTC, cutoff ${OPT.xtcThr})`; }
@@ -3331,15 +3858,180 @@ $('cfgFile').addEventListener('change', async () => {
   }catch(e){ $('cfgMsg').textContent = 'Could not import: ' + e.message + '.'; }
 });
 
+/* ---------- per-page zoom choice for Smart halves and thirds, with cut preview ---------- */
+function cutShow(){ $('pgCutRow').hidden = !$('modeAuto').checked; }
+document.querySelectorAll('input[name=cmode]').forEach(r => r.addEventListener('change', cutShow)); cutShow();
+function pgSetCut(v){
+  const f = pgCur(); if(!f || !pgp.sel.size){ $('pgMsg').textContent = 'Select one or more pages first.'; return; }
+  const st = pgSt(f);
+  for(const i of pgp.sel){ if(v === '') st.cut.delete(i); else st.cut.set(i, v === 'n' ? 'n' : +v); }
+  pgRefreshSel(f); pgSummary();
+  $('pgMsg').textContent = `${pgp.sel.size} page${pgp.sel.size > 1 ? 's' : ''} set to ${v === '' ? 'Auto' : v === 'n' ? 'No zoom' : v === '2' ? 'Halves' : 'Thirds'}.`;
+}
+document.querySelectorAll('#pgCutRow [data-cut]').forEach(b => b.addEventListener('click', () => pgSetCut(b.dataset.cut)));
+$('pgSelAll').addEventListener('click', () => { const f = pgCur(); if(!f) return; const st = pgSt(f); st.order && st.order.forEach(i => pgp.sel.add(i)); pgRefreshSel(f); });
+const cp = {f: null, src: null, seq: [], pos: 0, tok: 0};
+async function cutOpen(idx, page){
+  const files = Array.from($('file').files), f = files[idx === undefined ? (parseInt($('pgFile').value, 10) || 0) : idx]; if(!f) return;
+  const sel = $('cutFile'); sel.textContent = '';
+  files.forEach((ff, k) => { const o = document.createElement('option'); o.value = k; o.textContent = ff.name; sel.append(o); });
+  sel.value = files.indexOf(f); sel.hidden = files.length < 2;
+  cp.f = f; cp.src = await pgSrc(f); cp.seq = pgSeq(f, cp.src.count);
+  const first = page !== undefined ? page : (pgp.sel.size && idx === undefined ? Math.min(...pgp.sel) : cp.seq[0]); cp.pos = Math.max(0, cp.seq.indexOf(first));
+  if(!$('cutDlg').open) $('cutDlg').showModal(); if(document.activeElement && document.activeElement.blur) document.activeElement.blur(); cutDraw();
+}
+function cutMode(kind){
+  const L = edMode(true), P = edMode(false);
+  if(kind === 'mix') return {...P, mixed: true, subs: {land: L, port: P}};
+  return kind === 'land' ? L : P;
+}
+async function cutDraw(){
+  const tok = ++cp.tok, i = cp.seq[cp.pos]; if(i === undefined) return;
+  $('cutNum').value = i + 1; $('cutPage').textContent = `of ${cp.src.count} (${cp.pos + 1} of ${cp.seq.length} shown)`;
+  let pg; try{ pg = await cp.src.getPage(i); }catch(e){ $('cutInfo').textContent = 'Could not read this page.'; return; }
+  if(tok !== cp.tok) return;
+  const cut = pgCutOf(cp.f, i);
+  document.querySelectorAll('#cutDlg [data-c]').forEach(b => b.classList.toggle('on', b.dataset.c === (cut === undefined ? '' : String(cut))));
+  const u = {g: pg.g, w: pg.W, h: pg.H, cut}, kinds = [['land', 'Landscape'], ['port', 'Portrait'], ['mix', 'Mixed']].filter(k => $({land: 'oLand', port: 'oPort', mix: 'oMix'}[k[0]]).checked);
+  if(!kinds.length) kinds.push(['land', 'Landscape']);
+  const box = $('cutCanvases'); box.textContent = ''; const info = [];
+  for(const [k, label] of kinds){
+    const md = cutMode(k), {target, parts} = autoTarget(md, u), pl = target.land ? autoPlan(target, u) : null;
+    const sc = Math.min(1, 300 / pg.W), cv = document.createElement('canvas'); cv.width = Math.round(pg.W * sc); cv.height = Math.round(pg.H * sc);
+    const x = cv.getContext('2d'); let img = unitCanvas({g: pg.g, w: pg.W, h: pg.H});
+    if(BL.on) img = blurGrayCanvas(pg.g, pg.W, pg.H, blurRadius(pg.W, pg.H));
+    x.drawImage(img, 0, 0, cv.width, cv.height);
+    const cols = ['#be123c', '#0e7490', '#7c3aed'];
+    x.lineWidth = 3; x.font = 'bold 16px sans-serif'; x.textAlign = 'center'; x.textBaseline = 'middle';
+    (parts.length ? parts : [[0, 0, pg.W, pg.H]]).forEach((r, n) => {
+      x.strokeStyle = cols[n % 3]; x.setLineDash(parts.length ? [8, 5] : []); x.strokeRect(r[0] * sc + 2, r[1] * sc + 2, (r[2] - r[0]) * sc - 4, (r[3] - r[1]) * sc - 4);
+      const cx = r[0] * sc + 14, cy = r[1] * sc + 14; x.setLineDash([]); x.fillStyle = cols[n % 3]; x.beginPath(); x.arc(cx, cy, 11, 0, 7); x.fill(); x.fillStyle = '#fff'; x.fillText(String(n + 1), cx, cy + 1);
+    });
+    const fig = document.createElement('figure'); fig.style.cssText = 'margin:0;text-align:center;font-size:.8rem'; const cap = document.createElement('figcaption');
+    cap.textContent = `${label}: ` + (parts.length ? `${parts.length} parts` + (pl && !pl.clean && !cut ? ', overlapping (no clean gap)' : '') : (target.land ? 'whole page' : 'whole page, upright'));
+    fig.append(cv, cap); box.append(fig);
+  }
+  $('cutInfo').textContent = cut === undefined ? 'Auto: the best cut is chosen for each page.' : cut === 'n' ? 'No zoom: the page is shown whole.' : `Forced ${cut === 2 ? 'halves' : 'thirds'}.`;
+}
+$('pgCutPrev').addEventListener('click', () => cutOpen());
+$('cutOpen').addEventListener('click', () => cutOpen(0, undefined));
+$('cutFile').addEventListener('change', () => cutOpen(parseInt($('cutFile').value, 10) || 0, undefined));
+$('cutNum').addEventListener('change', () => { const k = cp.seq.indexOf((parseInt($('cutNum').value, 10) || 1) - 1); if(k >= 0){ cp.pos = k; cutDraw(); } $('cutNum').blur(); });
+$('cutPrev').addEventListener('click', () => { if(cp.pos > 0){ cp.pos--; cutDraw(); } });
+$('cutNext').addEventListener('click', () => { if(cp.pos < cp.seq.length - 1){ cp.pos++; cutDraw(); } });
+$('cutClose').addEventListener('click', () => { $('cutDlg').close(); const f = pgCur(); if(f) pgRefreshSel(f); });
+document.querySelectorAll('#cutDlg [data-c]').forEach(b => b.addEventListener('click', () => {
+  const i = cp.seq[cp.pos], st = pgSt(cp.f), v = b.dataset.c;
+  if(v === '') st.cut.delete(i); else st.cut.set(i, v === 'n' ? 'n' : +v);
+  pgSummary(); cutDraw();
+}));
+document.addEventListener('keydown', e => {
+  if(!$('cutDlg').open || e.ctrlKey || e.metaKey || e.altKey) return;
+  const tg = e.target && e.target.tagName; if(tg === 'INPUT' || tg === 'SELECT' || tg === 'TEXTAREA') return;
+  const k = e.key.toLowerCase();
+  if(e.key === 'ArrowRight' || k === 'p' && false){ $('cutNext').click(); }
+  else if(e.key === 'ArrowLeft'){ $('cutPrev').click(); }
+  else if(k === 'a' || k === 'n' || k === 'h' || k === 't'){ const b = document.querySelector(`#cutDlg [data-c="${{a: '', n: 'n', h: '2', t: '3'}[k]}"]`); if(b) b.click(); }
+});
+
+/* ---------- review cuts grid (Smart halves and thirds) ---------- */
+const cg = {tok: 0};
+function cgKinds(){ return [['land', 'Landscape'], ['port', 'Portrait'], ['mix', 'Mixed']].filter(k => $({land: 'oLand', port: 'oPort', mix: 'oMix'}[k[0]]).checked); }
+function cgPaint(t){
+  const base = t._base, cv = t.querySelector('canvas'); cv.width = base.width; cv.height = base.height;
+  const x = cv.getContext('2d'); x.drawImage(base, 0, 0);
+  if(BL.on){
+    const d = x.getImageData(0, 0, cv.width, cv.height).data, g = new Uint8Array(cv.width * cv.height);
+    for(let i = 0; i < g.length; i++) g[i] = d[i * 4];
+    x.drawImage(blurGrayCanvas(g, cv.width, cv.height, blurRadius(cv.width, cv.height, 1.3)), 0, 0);
+  }
+  const parts = t._parts[$('cgKind').value] || [], cols = ['#be123c', '#0e7490', '#7c3aed'];
+  x.lineWidth = 2; x.font = 'bold 11px sans-serif'; x.textAlign = 'center'; x.textBaseline = 'middle';
+  (parts.length ? parts : [[0, 0, base.width, base.height]]).forEach((b, n) => {
+    x.strokeStyle = cols[n % 3]; x.setLineDash(parts.length ? [5, 3] : []); x.strokeRect(b[0] + 1.5, b[1] + 1.5, b[2] - b[0] - 3, b[3] - b[1] - 3); x.setLineDash([]);
+    x.fillStyle = cols[n % 3]; x.beginPath(); x.arc(b[0] + 11, b[1] + 11, 8, 0, 7); x.fill(); x.fillStyle = '#fff'; x.fillText(String(n + 1), b[0] + 11, b[1] + 12);
+  });
+  const k = $('cgKind').value, n = parts.length, i = +t.dataset.i, cut = pgCutOf(cg.f, i);
+  t.querySelector('.cgL').textContent = `p.${i + 1}: ` + (n ? n + ' parts' : 'whole') + (cut === undefined ? '' : cut === 'n' ? ' (no zoom)' : ` (forced ${cut === 2 ? 'halves' : 'thirds'})`);
+  t.classList.toggle('edt', cut !== undefined);
+  t.querySelectorAll('.cgB button').forEach(b => b.classList.toggle('on', b.dataset.c === (cut === undefined ? '' : String(cut))));
+}
+async function cgDo(f, i, t){
+  let pg; try{ pg = await (await pgSrc(f)).getPage(i); }catch(e){ t.querySelector('.cgL').textContent = 'p.' + (i + 1) + ': unreadable'; return; }
+  const sc = 180 / pg.W, base = document.createElement('canvas'); base.width = 180; base.height = Math.max(1, Math.round(pg.H * sc));
+  base.getContext('2d').drawImage(unitCanvas({g: pg.g, w: pg.W, h: pg.H}), 0, 0, base.width, base.height);
+  const u = {g: pg.g, w: pg.W, h: pg.H, cut: pgCutOf(f, i)}; t._base = base; t._parts = {};
+  for(const [k] of cgKinds()){ const r = autoTarget(cutMode(k), u); t._parts[k] = r.parts.map(b => [b[0] * sc, b[1] * sc, b[2] * sc, b[3] * sc]); }
+  cgPaint(t);
+}
+async function cgBuild(){
+  const files = Array.from($('file').files), idx = parseInt($('cgFile').value, 10) || 0, f = files[idx], tok = ++cg.tok, grid = $('cgGrid');
+  grid.textContent = ''; if(!f) return; cg.f = f;
+  const kinds = cgKinds(); if(!kinds.length) kinds.push(['land', 'Landscape']);
+  const ks = $('cgKind'); const prev = ks.value; ks.textContent = '';
+  kinds.forEach(([k, l]) => { const o = document.createElement('option'); o.value = k; o.textContent = l; ks.append(o); }); if(kinds.some(k => k[0] === prev)) ks.value = prev;
+  $('cgMsg').textContent = 'Opening file...';
+  let src; try{ src = await pgSrc(f); }catch(e){ $('cgMsg').textContent = 'Could not open this file.'; return; }
+  if(tok !== cg.tok) return;
+  const seq = pgSeq(f, src.count);
+  for(const i of seq){
+    const t = document.createElement('div'); t.className = 'rvT'; t.dataset.i = i;
+    const c = document.createElement('canvas'); c.className = 'cgC'; c.width = 180; c.height = 240;
+    const l = document.createElement('div'); l.className = 'cgL'; l.textContent = 'p.' + (i + 1);
+    const bb = document.createElement('div'); bb.className = 'cgB';
+    [['', 'Auto'], ['n', 'None'], ['2', '½'], ['3', '⅓']].forEach(([v, lab]) => {
+      const b = document.createElement('button'); b.type = 'button'; b.className = 'btn2'; b.dataset.c = v; b.textContent = lab;
+      b.title = v === '' ? 'Auto' : v === 'n' ? 'No zoom' : v === '2' ? 'Halves' : 'Thirds';
+      b.onclick = async () => { const st = pgSt(f); if(v === '') st.cut.delete(i); else st.cut.set(i, v === 'n' ? 'n' : +v); pgSummary(); pgRefreshSel(f); await cgDo(f, i, t); };
+      bb.append(b);
+    });
+    t.append(c, l, bb); grid.append(t);
+    c.onclick = () => { $('cgDlg').close(); cutOpen(idx, i); };
+  }
+  for(let k = 0; k < seq.length; k++){
+    if(tok !== cg.tok || !$('cgDlg').open) return;
+    await cgDo(f, seq[k], grid.children[k]);
+    if(k % 4 === 3 || k === seq.length - 1){ $('cgMsg').textContent = `Checked ${k + 1} of ${seq.length}`; await new Promise(r => setTimeout(r, 0)); }
+  }
+  const n = f && pgState.get(edFileKey(f)) ? pgState.get(edFileKey(f)).cut.size : 0;
+  $('cgMsg').textContent = `${seq.length} pages` + (n ? `, ${n} with a set zoom` : '');
+}
+async function cgOpen(){
+  const files = Array.from($('file').files); if(!files.length) return;
+  const sel = $('cgFile'); sel.textContent = ''; files.forEach((f, k) => { const o = document.createElement('option'); o.value = k; o.textContent = f.name; sel.append(o); }); sel.hidden = files.length < 2;
+  $('cgDlg').showModal(); await cgBuild();
+}
+$('cgOpen').addEventListener('click', cgOpen);
+$('cgClose').addEventListener('click', () => { cg.tok++; $('cgDlg').close(); });
+$('cgDlg').addEventListener('close', () => { cg.tok++; });
+$('cgFile').addEventListener('change', cgBuild);
+$('cgKind').addEventListener('change', () => { for(const t of $('cgGrid').children) if(t._base) cgPaint(t); });
+
+/* ---------- colour or black and white ---------- */
+function deviceCol(){ const o = $('preset').options[$('preset').selectedIndex]; return o && o.dataset.col ? o.dataset.col : ''; }
+function colorSet(v){ const r = $(v === 'color' ? 'colorCol' : 'colorBw'); if(!r.checked){ r.checked = true; r.dispatchEvent(new Event('change', {bubbles: true})); } }
+function colorUpdate(){
+  const any = $('fEpub').checked || $('fCbz').checked || $('fPdf').checked;
+  $('colorRow').hidden = !any;
+  const dc = deviceCol(), note = $('colorNote');
+  note.hidden = !any;
+  note.textContent = $('colorCol').checked
+    ? 'Keeps the original colours. Only for EPUB, CBZ and PDF; XTCH and XTC are always grey, and moiré reduction is skipped for colour pages.'
+    : (dc === 'color' ? 'Your reader shows colour. Choose Colour to keep the original colours.' : 'Black and white suits this reader and makes smaller files.');
+}
+$('preset').addEventListener('change', () => { const dc = deviceCol(); if(dc) colorSet(dc); colorUpdate(); });
+document.addEventListener('change', e => { if(e.target && /^(fEpub|fCbz|fPdf|colorBw|colorCol|devProf)$/.test(e.target.id)) colorUpdate(); });
+colorUpdate();
+
 /* ---------- help: info buttons and the How to use dialog ---------- */
 const HELP = {
   'Files': '<p>Add the comics to convert: CBZ, ZIP or PDF. Drop files (or folders) on the box, or click it to browse. Adding more keeps what is already listed; the &times; removes one file. Each file gets its own outputs.</p>',
-  'Pages': '<p>Look at every page before converting. <b>Drag</b> pages to reorder them, select pages and use <b>Hide / show</b> to leave out ads and credits, <b>Make cover</b> to move a page to the front, <b>Keep whole</b> to always output a page as one box, and <b>Edit panels</b> to open it in the panel editor. <b>Find blank pages</b> checks every page for blank, dark or tiny scans. Hidden pages stay out of every output; nothing in your original file changes.</p>',
+  'Pages': '<p>With Smart halves and thirds chosen, select pages and set their zoom to <b>Auto</b>, <b>No zoom</b>, <b>Halves</b> or <b>Thirds</b>, and use <b>Preview cuts</b> to see exactly where each page will be cut for every orientation you ticked.</p><p>Look at every page before converting. <b>Drag</b> pages to reorder them, select pages and use <b>Hide / show</b> to leave out ads and credits, <b>Make cover</b> to move a page to the front, <b>Keep whole</b> to always output a page as one box, and <b>Edit panels</b> to open it in the panel editor. <b>Find blank pages</b> checks every page for blank, dark or tiny scans. Hidden pages stay out of every output; nothing in your original file changes.</p>',
   'Output details': '<p>Extra output settings: <b>Split into parts</b> makes several smaller files for readers that run out of memory (the Quick setup picks a safe size for you), <b>ZIP layout</b> chooses folders in the ZIP download, and the XTCH/XTC options cover landscape rotation, dither style, the black and white cutoff and an optional cover thumbnail. When Mixed is ticked, you can also set when a panel counts as landscape.</p>',
   'Panel settings': '<p>Fine control for Smart panels: gap colour between panels, long-panel splitting, crowded-screen zoom, overlap, and how many small panels may share a screen. The defaults suit most comics; change them only if the panel preview shows a problem.</p>',
   'Device and reading': '<p><b>Test direction on my page</b> shows your first panelled page numbered both ways so you can see which direction is right. The last device and direction you used are remembered in this browser.</p><p><b>Reading direction</b>: right-to-left for manga, left-to-right for western comics. It sets the panel order and which half comes first when a panel is split. <b>Screen preset</b> picks your reader&rsquo;s resolution; choose Custom to type your own size. Larger screens make larger files.</p>',
-  'Output': '<p><b>Device profile</b> sets screen size, portrait, file type and a safe split size for the X3 or X4 in one choice. <b>Estimate size and screens</b> samples your pages and shows the expected screens and file size, with a warning when a file is likely too big for the device.</p><p>Pick which <b>screen shapes</b> and which <b>file types</b> to make; you get one file for every combination (listed under the buttons).</p><p><b>Split into parts</b> makes several smaller files for each shape and type (part 1, part 2 ...), about the number of screens you choose, starting at a chapter where possible. Use it if your e-reader runs out of memory on big files.</p><ul><li><b>Portrait / Landscape</b>: all pages on that screen shape.</li><li><b>Mixed</b>: one file where wide panels use landscape screens and tall panels use portrait screens. Turn the device when the page orientation changes. Long panels and dense pages still show whole first, then zoomed.</li><li><b>XTCH</b>: 4-level gray format for Xteink devices (landscape pages are stored sideways; options for rotation, dither and a cover thumbnail appear when it is ticked). <b>EPUB</b> and <b>CBZ</b> work in most readers.</li></ul><p>With <i>keep the cover</i> on, the first page is shown whole on a portrait page in landscape and mixed output.</p>',
-  'Panels': '<p><b>Review all pages (grid)</b> shows every page with its detected boxes; click a page to fix it in the editor, or press Whole to keep it as one box. In the editor, <b>Merge next</b> and <b>Split by line</b> combine or cut boxes.</p><p><b>Conversion mode:</b> <i>Smart panels</i> finds and reorders panels (everything below). <i>Simple page split</i> skips all of that: each page is just cut into 2 or 3 overlapping parts, a quick conversion like other basic converters.</p><p>Smart mode: check how each page is split into panels and fix mistakes, then control how panels become screens.</p><ul><li><b>Preview and fix panels</b>: go through all pages. <b>Review flagged pages only</b>: jump straight to tall, big or possibly grouped boxes.</li><li><b>Zoom and splitting</b>: the only two settings that show a screen whole and then enlarged pieces of it. <i>Long panels</i> become two halves; <i>dense page zoom</i> cuts crowded screens into tiles. Each adds pages. The overlap setting applies to both.</li><li><b>Packing</b>: max panels per screen (1 = never combine) and the minimum scale kept when packing.</li></ul><p>Press <b>How to use</b> at the top for the full panel editor guide.</p>',
+  'Output': '<p><b>Colour or black and white</b> (EPUB, CBZ and PDF): colour readers, phones and tablets can keep the original colours. The default follows the reader you picked, so Xteink, Kindle and Kobo black-and-white models start on black and white. XTCH and XTC are always grey.</p><p><b>PDF (webtoon scroll)</b> stacks the extracted panels (or, if you choose, whole pages) into tall continuous strips at a phone-friendly width, so you can scroll a chapter without page turns. It ignores screen orientation.</p><p><b>Device profile</b> sets screen size, portrait, file type and a safe split size for the X3 or X4 in one choice. <b>Estimate size and screens</b> samples your pages and shows the expected screens and file size, with a warning when a file is likely too big for the device.</p><p>Pick which <b>screen shapes</b> and which <b>file types</b> to make; you get one file for every combination (listed under the buttons).</p><p><b>Split into parts</b> makes several smaller files for each shape and type (part 1, part 2 ...), about the number of screens you choose, starting at a chapter where possible. Use it if your e-reader runs out of memory on big files.</p><ul><li><b>Portrait / Landscape</b>: all pages on that screen shape.</li><li><b>Mixed</b>: one file where wide panels use landscape screens and tall panels use portrait screens. Turn the device when the page orientation changes. Long panels and dense pages still show whole first, then zoomed.</li><li><b>XTCH</b>: 4-level gray format for Xteink devices (landscape pages are stored sideways; options for rotation, dither and a cover thumbnail appear when it is ticked). <b>EPUB</b> and <b>CBZ</b> work in most readers.</li></ul><p>With <i>keep the cover</i> on, the first page is shown whole on a portrait page in landscape and mixed output.</p>',
+  'Panels': '<p>With Smart halves and thirds, <b>Preview and adjust cuts</b> shows one page at a time with its parts, and <b>Review all pages (grid)</b> shows every page; both let you set Auto, No zoom, Halves or Thirds per page (keys A, N, H, T in the preview).</p><p><b>Smart halves and thirds</b> picks halves or thirds for each page, cutting in white gaps so speech bubbles are not sliced and parts fill the screen width. In the panel editor and review grid, <b>Spoiler blur</b> (key B) blurs the artwork and text with a strength slider, so you can fix boxes without seeing the story.</p><p><b>Review all pages (grid)</b> shows every page with its detected boxes; click a page to fix it in the editor, or press Whole to keep it as one box. In the editor, <b>Merge next</b> and <b>Split by line</b> combine or cut boxes.</p><p><b>Conversion mode:</b> <i>Smart panels</i> finds and reorders panels (everything below). <i>Simple page split</i> skips all of that: each page is just cut into 2 or 3 overlapping parts, a quick conversion like other basic converters.</p><p>Smart mode: check how each page is split into panels and fix mistakes, then control how panels become screens.</p><ul><li><b>Preview and fix panels</b>: go through all pages. <b>Review flagged pages only</b>: jump straight to tall, big or possibly grouped boxes.</li><li><b>Zoom and splitting</b>: the only two settings that show a screen whole and then enlarged pieces of it. <i>Long panels</i> become two halves; <i>dense page zoom</i> cuts crowded screens into tiles. Each adds pages. The overlap setting applies to both.</li><li><b>Packing</b>: max panels per screen (1 = never combine) and the minimum scale kept when packing.</li></ul><p>Press <b>How to use</b> at the top for the full panel editor guide.</p>',
   'Image quality': '<p>The <b>Preview before / after</b> at the top shows one page with your sharpen, contrast and dither settings, as grey, XTCH or XTC, and updates as you change them. <b>Auto</b> next to the XTC cutoff picks a cutoff from your pages.</p><p>Tweaks that help e-ink screens: sharpening for enlarged panels, e-ink contrast, darker midtones, moir&eacute; reduction for screentone, auto-levels for faded scans, and JPEG quality (higher is sharper and larger).</p>',
   'Metadata': '<p><b>Fill from file name</b> guesses title, volume, author and year from the name (check the result). <b>Choose cover page</b> takes you to Pages, where <b>Make cover</b> moves a page to the front.</p><p>Title, author, series and so on, filled in from the file when it has them. Blank fields keep each file&rsquo;s own values. With several files, each gets its own Title and Volume row.</p>',
   'Saved presets': '<p><b>Export</b> saves your presets to a file and <b>Import</b> loads them back, so they can move between browsers and devices.</p><p>Save all settings under a name (for example "X4 portrait") and load them in one tap. Files, metadata and panel edits are not included. Presets live in this browser only.</p>',
@@ -3385,13 +4077,16 @@ $('helpClose').addEventListener('click', () => $('helpDlg').close());
 
 
 /* ---------- compact UI: output matrix, live summaries, remembered open sections ---------- */
+
+function simpleOn(){ return $('modeSimple').checked || $('modeAuto').checked; }
+function fixedOn(){ return $('modeSimple').checked; }
 function syncOutputs(){
-  if($('modeSimple').checked) $('oMix').checked = false;
+  if(fixedOn()) $('oMix').checked = false;
   const img = $('fEpub').checked || $('fCbz').checked, x = $('fX').checked || $('fXtc').checked;
   $('mPort').checked = $('oPort').checked && img; $('mLand').checked = $('oLand').checked && img; $('mMixed').checked = $('oMix').checked && img;
   $('fXtch').checked = $('oPort').checked && x; $('fXtchL').checked = $('oLand').checked && x; $('fXtchM').checked = $('oMix').checked && x;
-  const simple = $('modeSimple').checked; $('simpleOpts').hidden = !simple; $('smartOpts').hidden = simple; $('panelSetNote').hidden = !simple; $('secPanelSet').style.opacity = simple ? .5 : '';
-  if(simple) $('oMix').checked = false; $('oMix').disabled = simple; $('oMix').closest('.opt').style.opacity = simple ? .4 : '';
+  const simple = simpleOn(), fixed = fixedOn(); $('simpleOpts').hidden = !fixed; $('autoOpts').hidden = !$('modeAuto').checked; $('smartOpts').hidden = simple; $('panelSetNote').hidden = !simple; $('secPanelSet').style.opacity = simple ? .5 : '';
+  if(fixed) $('oMix').checked = false; $('oMix').disabled = fixed; $('oMix').closest('.opt').style.opacity = fixed ? .4 : '';
   $('mixRow').hidden = !$('oMix').checked; $('xtchOpts').hidden = !x; $('xtcOpt').hidden = !$('fXtc').checked;
   $('xRot').closest('.f').hidden = !($('oLand').checked || $('oMix').checked);
   $('xRot').closest('.f').nextElementSibling.hidden = $('xRot').closest('.f').hidden;
@@ -3399,7 +4094,8 @@ function syncOutputs(){
 function outNames(){
   const sh = [['oPort', 'portrait'], ['oLand', 'landscape'], ['oMix', 'mixed']].filter(x => $(x[0]).checked).map(x => x[1]);
   const ft = [['fX', 'xtch'], ['fXtc', 'xtc'], ['fEpub', 'epub'], ['fCbz', 'cbz']].filter(x => $(x[0]).checked).map(x => x[1]);
-  return {sh, ft, n: sh.length * ft.length};
+  const pdf = $('fPdf').checked;
+  return {sh: ft.length ? sh : [], ft, pdf, n: sh.length * ft.length + (pdf ? 1 : 0)};
 }
 function splitNoteUpdate(){
   const n = parseInt($('splitParts').value, 10) || 0, cw = parseInt($('cw').value, 10) || 480, ch = parseInt($('ch').value, 10) || 800;
@@ -3412,17 +4108,17 @@ function updateSummaries(){
   $('sumFiles').textContent = nf ? `${nf} file${nf > 1 ? 's' : ''}` : 'none yet';
   $('sumDevice').textContent = `${pt} · ${document.querySelector('input[name=dir]:checked').value === 'rtl' ? 'right-to-left' : 'left-to-right'}`;
   splitNoteUpdate();
-  $('sumOutput').textContent = o.n ? `${o.sh.join(' + ')} · ${o.ft.join(' + ').toUpperCase()}` : 'nothing selected';
-  $('outNames').textContent = o.n ? `Makes ${o.n} file${o.n > 1 ? 's' : ''} per comic: ` + o.sh.flatMap(a => o.ft.map(b => `name-${a}.${b}`)).join(', ') : 'Pick at least one screen shape and one file type.';
+  $('sumOutput').textContent = o.n ? [o.sh.length ? o.sh.join(' + ') : '', o.ft.concat(o.pdf ? ['pdf'] : []).join(' + ').toUpperCase(), (($('fEpub').checked || $('fCbz').checked || $('fPdf').checked) && $('colorCol').checked) ? 'colour' : ''].filter(Boolean).join(' · ') : 'nothing selected';
+  $('outNames').textContent = o.n ? `Makes ${o.n} file${o.n > 1 ? 's' : ''} per comic: ` + o.sh.flatMap(a => o.ft.map(b => `name-${a}.${b}`)).concat(o.pdf ? ['name-webtoon.pdf'] : []).join(', ') : 'Pick at least one screen shape and one file type.';
   const dz = $('denseMode').value;
-  const _pan = $('modeSimple').checked ? `simple split \u00b7 ${$('spN').value} parts \u00b7 ${Math.round(parseFloat($('spOv').value) * 100)}% overlap` : [$('splitTall').checked ? 'long-panel split on' : 'split off', 'dense zoom ' + dz, 'max ' + $('maxGroup').value + '/screen', edits.size ? edits.size + ' pages edited' : ''].filter(Boolean).join(' · ');
-  $('sumPanelSet').textContent = _pan; $('sumPanels').textContent = $('modeSimple').checked ? `simple · ${$('spN').value} parts` : ('smart panels' + (edits.size ? ' · ' + edits.size + ' pages edited' : ''));
+  const _pan = $('modeAuto').checked ? 'smart halves and thirds' : simpleOn() ? `simple split \u00b7 ${$('spN').value} parts \u00b7 ${Math.round(parseFloat($('spOv').value) * 100)}% overlap` : [$('splitTall').checked ? 'long-panel split on' : 'split off', 'dense zoom ' + dz, 'max ' + $('maxGroup').value + '/screen', edits.size ? edits.size + ' pages edited' : ''].filter(Boolean).join(' · ');
+  $('sumPanelSet').textContent = _pan; $('sumPanels').textContent = $('modeAuto').checked ? 'smart halves and thirds' : simpleOn() ? `simple · ${$('spN').value} parts` : ('smart panels' + (edits.size ? ' · ' + edits.size + ' pages edited' : ''));
   $('sizeRow').hidden = !!$('preset').value; $('presetNote').hidden = !!$('preset').value;
   $('sumOutMore').textContent = (parseInt($('splitParts').value, 10) ? 'split ~' + $('splitParts').value + ' screens' : 'one file') + ' · zip: ' + $('zipLayout').options[$('zipLayout').selectedIndex].textContent.toLowerCase().replace(/\s*\(.*/, '').slice(0, 24);
   $('sumQuality').textContent = [$('eSharp').checked ? 'sharpen' : '', $('eContrast').checked ? 'contrast' : '', $('eAuto').checked ? 'auto-levels' : '', 'JPEG ' + $('qual').value].filter(Boolean).join(' · ');
   $('sumMeta').textContent = ($('mTitle').value || '').slice(0, 30);
   $('sumPresets').textContent = Object.keys(cfgGet()).length ? Object.keys(cfgGet()).length + ' saved' : '';
-  $('edOpen').disabled = !nf || $('modeSimple').checked; $('edOpenFlag').disabled = $('edOpen').disabled; $('rvOpen').disabled = $('edOpen').disabled;
+  $('edOpen').disabled = !nf || simpleOn(); $('edOpenFlag').disabled = $('edOpen').disabled; $('rvOpen').disabled = $('edOpen').disabled; $('cutOpen').disabled = $('cgOpen').disabled = !nf;
   $('runSummary').textContent = !nf ? 'Add a comic to start' : (!o.n ? 'Pick a file format and orientation' : `${nf} file${nf > 1 ? 's' : ''} → ${o.n * nf} output${o.n * nf > 1 ? 's' : ''}` + ($('consent').checked ? '' : ' · tick the box to convert'));
 }
 document.addEventListener('input', updateSummaries); document.addEventListener('change', updateSummaries);
@@ -3440,7 +4136,7 @@ document.addEventListener('input', updateSummaries); document.addEventListener('
 const _edCT = edCountText; edCountText = function(){ _edCT(); updateSummaries(); };
 
 /* ---------- saved presets ---------- */
-const CFG_SKIP = new Set(['qpPage', 'qpView', 'cfgFile', 'rvFile', 'devProf', 'pgFile', 'file', 'pick', 'consent', 'cfgName', 'cfgList', 'edPage', 'edFile', 'edLock', 'edSens', 'edShow', 'edView', 'edMode', 'edMin', 'edMax', 'edKGroup', 'edKBig', 'edKTall', 'edKBusy', 'edKOv', 'mTitle', 'mAuthor', 'mSeries', 'mVol', 'mPub', 'mYear', 'mLang', 'mDesc']);
+const CFG_SKIP = new Set(['qpColor', 'cgBlur', 'cgBlurAmt', 'cutBlur', 'cutBlurAmt', 'pgBlur', 'pgBlurAmt', 'cutFile', 'cutNum', 'cgFile', 'cgKind', 'edBlur', 'edBlurAmt', 'rvBlur', 'rvBlurAmt', 'qpPage', 'qpView', 'cfgFile', 'rvFile', 'devProf', 'pgFile', 'file', 'pick', 'consent', 'cfgName', 'cfgList', 'edPage', 'edFile', 'edLock', 'edSens', 'edShow', 'edView', 'edMode', 'edMin', 'edMax', 'edKGroup', 'edKBig', 'edKTall', 'edKBusy', 'edKOv', 'mTitle', 'mAuthor', 'mSeries', 'mVol', 'mPub', 'mYear', 'mLang', 'mDesc']);
 const cfgControls = () => Array.from(document.querySelectorAll('input[id],select[id],textarea[id]')).filter(e => e.type !== 'file' && !CFG_SKIP.has(e.id) && !/^bm[TV]\d+$/.test(e.id));
 const cfgGet = () => { try{ return JSON.parse(localStorage.getItem('bcc_presets') || '{}'); }catch(e){ return {}; } };
 const cfgPut = o => { try{ localStorage.setItem('bcc_presets', JSON.stringify(o)); return true; }catch(e){ return false; } };
