@@ -201,7 +201,14 @@
   .info[aria-expanded=true]{background:var(--acc);color:var(--onacc);border-color:var(--acc)}
   .help{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin:0 0 12px;font-size:.88rem;line-height:1.5;color:var(--fg);clear:both}
   .help p{margin:.4em 0}.help ul{margin:.3em 0;padding-left:1.2em}.help li{margin:.2em 0}
-  #helpOpen,#tipsOpen{width:auto;margin:0;flex:0 0 auto}
+  #helpOpen,#tipsOpen,#newOpen{width:auto;margin:0;flex:0 0 auto}
+  #newDlg[open]{display:block;height:auto;max-height:92vh;width:min(600px,96vw)}
+  #newDlg h2{margin:0 0 4px;font-size:1.3rem;color:var(--head)}
+  #newDlg ul{list-style:none;padding:0;margin:12px 0}
+  #newDlg li{margin:0 0 10px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;font-size:.93rem}
+  #newDlg li b{display:block;color:var(--head);margin-bottom:2px}
+  #newDlg .nbar{display:flex;gap:10px;align-items:center;justify-content:flex-end;margin-top:8px}
+  #newDlg .nbar .btn2{width:auto;margin:0}
   #helpDlg[open]{display:block;height:auto;max-height:92vh;width:min(860px,96vw)}
   .tabs{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px;position:sticky;top:0;background:var(--bg);padding-bottom:6px}
   .tabs .btn2{margin:0}
@@ -282,7 +289,7 @@
 <div class="top">
   <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTQiIGZpbGw9IiNmZmY2ZDEiLz48cGF0aCBkPSJNMTcgMTNjLTMgMTkgNiAzNiAyNyA0MSA2IDEgMTEtMSAxNC02LTEyIDEtMjUtNS0zMC0xOS0yLTYtNS0xMC01LTE2eiIgZmlsbD0iI2Y3Y2YyZSIgc3Ryb2tlPSIjOWE3NDEwIiBzdHJva2Utd2lkdGg9IjIuNCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjxwYXRoIGQ9Ik0xNy41IDEzLjUwMGw1LjUwMC0uNS0uNS03LTUuNTAwIDF6IiBmaWxsPSIjN2E1ZjFkIiBzdHJva2U9IiM1YTQ1MTAiIHN0cm9rZS13aWR0aD0iMS42IiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PHBhdGggZD0iTTI0IDIyYzIgOSA3IDE3IDE1IDIyIiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYzYTgiIHN0cm9rZS13aWR0aD0iMi40IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48cGF0aCBkPSJNNTIgNTBjMi0xIDQtMyA2LTQtMiA0LTUgNy04IDh6IiBmaWxsPSIjNWE0NTEwIi8+PC9zdmc+Cg==" alt="">
   <div class="topT"><h1>Banana Comic Converter</h1><small>Comic and manga CBZ / PDF &rarr; panel-by-panel pages for e-ink readers. Private: everything runs in your browser.</small></div>
-  <div class="topBtns"><a class="kofi" id="kofi" href="https://ko-fi.com/curseofthebanana" target="_blank" rel="noopener noreferrer" title="Buy me a coffee on Ko-fi">&#9749; Buy me a coffee</a><button type="button" class="btn2" id="helpOpen" data-help="start">How to use</button><button type="button" class="btn2" id="tipsOpen" data-help="tips">Tips and fixes</button></div>
+  <div class="topBtns"><a class="kofi" id="kofi" href="https://ko-fi.com/curseofthebanana" target="_blank" rel="noopener noreferrer" title="Buy me a coffee on Ko-fi">&#9749; Buy me a coffee</a><button type="button" class="btn2" id="helpOpen" data-help="start">How to use</button><button type="button" class="btn2" id="tipsOpen" data-help="tips">Tips and fixes</button><button type="button" class="btn2" id="newOpen">What's new</button></div>
 </div>
 
 <section class="step" id="stFiles"><div class="stH" data-help="Files"><span class="num">1</span><span class="stitle">Add your comics</span><span class="ssum" id="sumFiles"></span></div>
@@ -542,6 +549,19 @@
   </div>
   <p style="margin:10px 0 0;font-size:.85rem">The numbers show the order you would read the panels. Pick the picture where 1, 2, 3... follow the story.</p>
   <div style="margin-top:10px"><button type="button" class="btn2" id="dirClose">Close</button></div>
+</dialog>
+<dialog id="newDlg">
+  <h2>&#127820; What's new</h2>
+  <small>Recent updates to Banana Comic Converter. You can open this again from the What's new button at the top.</small>
+  <ul>
+    <li><b>Webtoon PDF</b>Scroll on your phone. Panels are cut out and stacked in reading order.</li>
+    <li><b>Spoiler blur</b>A toggle and slider hide artwork and text but keep panel outlines visible in the editor, reviews and previews.</li>
+    <li><b>Smart halves and thirds</b>Picks halves or thirds for each page, keeps bubbles whole and uses the full screen width. Preview it and change the zoom page by page.</li>
+    <li><b>Colour or black and white</b>Black and white by default for e-ink devices. Keep colour for phones and colour readers.</li>
+    <li><b>Progress saving</b>Your edits, hidden pages and zoom choices are kept in this browser, so you can pick up later, even after converting.</li>
+    <li><b>Faster and easier</b>Parallel processing on multi-core computers, four guided steps, bigger preview thumbnails and a G shortcut for black gutters in the editor.</li>
+  </ul>
+  <div class="nbar"><button type="button" class="btn2" id="newClose">Got it</button></div>
 </dialog>
 <dialog id="helpDlg">
   <div class="tabs" role="tablist">
@@ -3419,6 +3439,17 @@ $('progForget').addEventListener('click', async () => {
   try{ if(pgCur()) pgRender(); }catch(e){}
 });
 try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persist(); }catch(e){}
+
+/* ---------- what's new pop-up: shown once per version, and from the What's new button ---------- */
+const WN_VER = '2026-10-31', WN_KEY = 'bcc_wn';
+function wnSeen(set){
+  try{ if(set) localStorage.setItem(WN_KEY, WN_VER); else return localStorage.getItem(WN_KEY) === WN_VER; }catch(e){}
+  return false;
+}
+$('newOpen').addEventListener('click', () => { if(!$('newDlg').open) $('newDlg').showModal(); });
+$('newClose').addEventListener('click', () => $('newDlg').close());
+$('newDlg').addEventListener('close', () => wnSeen(true));
+if(!wnSeen() && !navigator.webdriver) setTimeout(() => { if(!document.querySelector('dialog[open]')) $('newDlg').showModal(); }, 600);
 
 /* ---------- device: remember last, profiles, direction test, size estimate ---------- */
 const LASTK = 'bcc_last';
