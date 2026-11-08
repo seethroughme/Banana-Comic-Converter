@@ -828,6 +828,7 @@ body.bkMode{padding-bottom:18px}
   <input type="file" id="bkCovFile" accept="image/*" hidden></div>
 <small id="bkCovWho"></small>
 <label class="chk"><input type="checkbox" id="bkCovText" checked><span>Make a simple title page when a book has no cover picture</span></label>
+<div id="bkCovPortRow" hidden><label class="chk"><input type="checkbox" id="bkCovPort"><span>Keep the cover upright (portrait) when reading in landscape <small>(only the cover stays upright; every other page is landscape)</small></span></label></div>
 <div class="sub2">Make it look right on e-ink</div>
 <small>Dark covers often turn into a black block and pale ones wash out on an e-ink screen. Pick a quick look, then fine-tune. The preview on the left shows the real result for your file type.</small>
 <div class="f col1"><span>Quick looks</span>
@@ -913,6 +914,7 @@ body.bkMode{padding-bottom:18px}
   <h2>&#127820; What's new</h2>
   <small>Recent updates to Banana Converter. You can open this again from the What's new button at the top.</small>
   <ul>
+    <li><b>Upright cover in landscape books</b>Reading a book in landscape? Tick <i>Keep the cover upright</i> under Cover and the cover page stays portrait while every other page is landscape.</li>
     <li><b>Smaller layout, hideable preview, +/- buttons</b>Everything is a little more compact on desktop and phone. Both previews have a Hide preview / Show preview button (closed by default on phones), and number fields such as margins, font size and spacing have minus and plus buttons you can hold to repeat.</li>
     <li><b>Preview on the left for comics and manga</b>The comics page now keeps its preview fixed on the left, like Books, while the settings scroll on the right. It shows the real screens before you convert: Back and Next through them, pick the shape and look (XTCH, XTC or EPUB / CBZ), and jump to any page. It updates as you change settings and follows your panel edits.</li>
     <li><b>Books or comics pop-up</b>When you open the page you choose what to convert: Books, or Manga / Comics. The tabs at the top still switch between them.</li>
@@ -991,6 +993,7 @@ body.bkMode{padding-bottom:18px}
     <p><b>Pictures in the book</b> keeps illustrations from EPUB, FB2 and PDF text (for PDFs, each picture is cut out of the page where it sits and placed in the text). Choose <i>Leave them out</i> for a text-only book. <i>Picture shading</i> sets how greys are made; XTC uses the black and white cutoff.</p>
     <h2>Cover page</h2>
     <ul>
+      <li>Reading in <b>landscape</b>? Tick <b>Keep the cover upright</b> and the cover stays portrait while every other page is landscape.</li>
       <li>The cover comes from the book. Use <b>Choose my own image</b> to replace it for the selected book, or tick the title-page option to get a simple typeset cover when a book has none.</li>
       <li><b>Quick looks</b> and the sliders fix covers that go muddy on e-ink: <i>Lighter</i> for dark covers, <i>Darker</i> for pale ones, <i>Crisp</i> for more contrast. <b>Brightness</b>, <b>Contrast</b> and <b>Midtones</b> fine-tune it, <b>Auto levels</b> stretches the range, and <b>Negative</b> swaps light and dark.</li>
       <li><b>Size on screen</b> fits the whole cover or fills the screen (cropping edges), and <b>Colour around the cover</b> sets the border. <b>Cover shading</b> picks the dither for the cover only. Use <b>Show cover in preview</b> to jump to it.</li>
@@ -3980,7 +3983,7 @@ $('progForget').addEventListener('click', async () => {
 try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persist(); }catch(e){}
 
 /* ---------- what's new pop-up: shown once per version, and from the What's new button ---------- */
-const WN_VER = '2026-11-14', WN_KEY = 'bcc_wn';
+const WN_VER = '2026-11-15', WN_KEY = 'bcc_wn';
 function wnSeen(set){
   try{ if(set) localStorage.setItem(WN_KEY, WN_VER); else return localStorage.getItem(WN_KEY) === WN_VER; }catch(e){}
   return false;
@@ -4886,7 +4889,7 @@ function S(){
   const W = land ? dims[1] : dims[0], H = land ? dims[0] : dims[1], hd = B('bkHdr').value, ft = B('bkFtr').value;
   const mt = nv('bkMT', 28) + (hd !== 'none' ? 24 : 0), mb = nv('bkMB', 28) + (ft !== 'none' ? 26 : 0), ml = nv('bkML', 22), mr = nv('bkMR', 22);
   const fv = B('bkFont').value;
-  return {W, H, land, mt, mb, ml, mr, cw: Math.max(100, W - ml - mr), ch: Math.max(100, H - mt - mb), hd, ft, size: nv('bkSize', 28), line: nv('bkLine', 1.35), align: B('bkAlign').value, hyph: B('bkHyph').value, indent: nv('bkIndent', 1.2), pgap: nv('bkGap', 0), weight: B('bkWeight').value, stroke: nv('bkStroke', 0), font: fv === 'custom' && BK.font ? "'BkCustom',serif" : (FONTS[fv] || FONTS.georgia), img: B('bkImg').value, idm: B('bkImgDither').value, cover: B('bkCover').checked, thr: nv('bkThr', 150), xtch: B('bkXtch').checked, xtc: B('bkXtc').checked, pdf: B('bkPdfMode').value, trim: B('bkPdfTrim').checked,
+  return {W, H, land, mt, mb, ml, mr, cw: Math.max(100, W - ml - mr), ch: Math.max(100, H - mt - mb), hd, ft, size: nv('bkSize', 28), line: nv('bkLine', 1.35), align: B('bkAlign').value, hyph: B('bkHyph').value, indent: nv('bkIndent', 1.2), pgap: nv('bkGap', 0), weight: B('bkWeight').value, stroke: nv('bkStroke', 0), font: fv === 'custom' && BK.font ? "'BkCustom',serif" : (FONTS[fv] || FONTS.georgia), img: B('bkImg').value, idm: B('bkImgDither').value, cover: B('bkCover').checked, cvPort: B('bkCovPort').checked && land, thr: nv('bkThr', 150), xtch: B('bkXtch').checked, xtc: B('bkXtc').checked, pdf: B('bkPdfMode').value, trim: B('bkPdfTrim').checked,
     cv: {b: nv('bkCovB', 0), c: nv('bkCovC', 0), m: nv('bkCovM', 0), auto: B('bkCovAuto').checked, inv: B('bkCovInv').checked, fit: B('bkCovFit').value, bg: B('bkCovBg').value, dm: B('bkCovDm').value, txt: B('bkCovText').checked}};
 }
 const coverDm = s => s.cv.dm === 'same' ? s.idm : s.cv.dm;
@@ -5274,7 +5277,7 @@ function decorate(x, s, no, total, title){
 }
 async function pageCanvas(s, seg, k, no, total, title){
   const c = document.createElement('canvas'); c.width = s.W; c.height = s.H; const x = c.getContext('2d', {willReadFrequently: true}); x.fillStyle = '#fff'; x.fillRect(0, 0, s.W, s.H);
-  if(seg.cover){ drawCover(x, s, seg.cover); return c; }
+  if(seg.cover){ if(s.cvPort){ const p = {...s, W: s.H, H: s.W, land: false}; c.width = p.W; c.height = p.H; x.fillStyle = '#fff'; x.fillRect(0, 0, p.W, p.H); drawCover(x, p, seg.cover); } else drawCover(x, s, seg.cover); return c; }
   if(seg.pic){   // a PDF page kept as a picture: the whole page, or one part of it, as large as fits the screen
     const {i, j, n, book: pc} = seg.pic, g = await pc.get(i, s.trim), ph = n > 1 ? g.h / n * 1.06 : g.h, y0 = n > 1 ? g.y + j * (g.h - ph) / (n - 1) : g.y;
     const r = Math.min(s.W / g.w, s.H / ph), w = g.w * r, h = ph * r; x.imageSmoothingQuality = 'high'; x.drawImage(g.c, g.x, y0, g.w, ph, (s.W - w) / 2, (s.H - h) / 2, w, h); grayCanvas(c); return c;
@@ -5330,8 +5333,8 @@ async function showPage(i){
   const pag = BK.pag, s = BK.s; if(!pag) return; i = Math.max(0, Math.min(pag.total - 1, i)); BK.idx = i; const tok = ++BK.stok;
   const L = locate(pag, i), c = await pageCanvas(s, L.seg, L.k, i + 1, pag.total, pageTitle(s, BK.title, pag, L.seg)); if(tok !== BK.stok) return;
   const x = c.getContext('2d', {willReadFrequently: true}), dm = L.seg.cover ? coverDm(s) : (L.seg.hasImg ? s.idm : 'none'), four = s.xtch || !s.xtc;
-  const o = four ? xthPage(x, s.W, s.H, dm, false) : xtgPage(x, s.W, s.H, dm, false, s.thr);
-  B('bkPrev').getContext('2d').putImageData(four ? decodeXth(o, s.W, s.H) : decodeXtg(o, s.W, s.H), 0, 0);
+  const cw = c.width, chh = c.height, o = four ? xthPage(x, cw, chh, dm, false) : xtgPage(x, cw, chh, dm, false, s.thr);
+  const pv = B('bkPrev'); if(pv.width !== cw || pv.height !== chh){ pv.width = cw; pv.height = chh; } pv.getContext('2d').putImageData(four ? decodeXth(o, cw, chh) : decodeXtg(o, cw, chh), 0, 0);
   B('bkPrevN').textContent = 'Page ' + (i + 1) + ' of ' + pag.total + ' · ' + (four ? 'XTCH' : 'XTC');
   const ch = B('bkPrevChap'); let best = 0; Array.from(ch.options).forEach((o2, k) => { if(+o2.value <= i) best = k; });
   if(ch.selectedIndex !== best){ BK.quiet = true; ch.selectedIndex = best; ch.dispatchEvent(new Event('change', {bubbles: true})); BK.quiet = false; }
@@ -5356,8 +5359,8 @@ async function run(){
         const book = await getBook(f), m = meta(f, book), cov = await coverFor(f, book, s, m), pag = await paginate(book, s, cov, m.title), pages = []; let no = 0; B('bkProg').max = pag.total; B('bkProg').value = 0;
         for(const seg of pag.segs) for(let k = 0; k < seg.pages; k++){
           if(BK.cancel) throw new Error('cancelled'); no++;
-          const c = await pageCanvas(s, seg, k, no, pag.total, pageTitle(s, m.title, pag, seg)), x = c.getContext('2d', {willReadFrequently: true}), dm = seg.cover ? coverDm(s) : (seg.hasImg ? s.idm : 'none'), rot = s.land ? 'cw' : false;
-          pages.push({chap: seg.chap, xth: s.xtch ? xthPage(x, s.W, s.H, dm, rot) : null, xtg: s.xtc ? xtgPage(x, s.W, s.H, dm, rot, s.thr) : null});
+          const c = await pageCanvas(s, seg, k, no, pag.total, pageTitle(s, m.title, pag, seg)), x = c.getContext('2d', {willReadFrequently: true}), dm = seg.cover ? coverDm(s) : (seg.hasImg ? s.idm : 'none'), rot = s.land && c.width === s.W ? 'cw' : false;
+          pages.push({chap: seg.chap, xth: s.xtch ? xthPage(x, c.width, c.height, dm, rot) : null, xtg: s.xtc ? xtgPage(x, c.width, c.height, dm, rot, s.thr) : null});
           if(no % 4 === 0){ B('bkProg').value = no; msg(`${f.name}: page ${no} of ${pag.total}`); await new Promise(r => setTimeout(r)); }
         }
         let base = outName(f, m), u = base, n = 2; while(used.has(u.toLowerCase())) u = base + ' (' + (n++) + ')'; used.add(u.toLowerCase()); base = u;
@@ -5488,11 +5491,11 @@ try{ const o = JSON.parse(localStorage.getItem('bcc_books') || 'null') || {}; KE
 function save(){ try{ const o = {}; KEYS.forEach(id => { const el = B(id); o[id] = el.type === 'checkbox' ? el.checked : el.value; }); localStorage.setItem('bcc_books', JSON.stringify(o)); }catch(x){} }
 const onSet = e => {
   const id = e.target.id; if(!KEYS.includes(id)){ if(id === 'bkConsent') updateSums(); return; }
-  B('bkCustom').hidden = B('bkDev').value !== 'custom'; covOut(); save();
+  B('bkCustom').hidden = B('bkDev').value !== 'custom'; B('bkCovPortRow').hidden = B('bkOri').value !== 'land'; covOut(); save();
   if(COVQ.has(id)) coverQuick(); else { if(id === 'bkCovText') coverNote(); if((id === 'bkPdfMode' || id === 'bkImg') && BK.files.some(f => /\.pdf$/i.test(f.name))) drawList(); refresh(); }
 };
 B('pgBooks').addEventListener('change', onSet); B('pgBooks').addEventListener('input', e => { if(e.target.type === 'number' || e.target.type === 'range') onSet(e); });
-B('bkCustom').hidden = B('bkDev').value !== 'custom'; covOut();
+B('bkCustom').hidden = B('bkDev').value !== 'custom'; B('bkCovPortRow').hidden = B('bkOri').value !== 'land'; covOut();
 /* ---------- fixed-height two-column layout ---------- */
 function fitBooks(){
   document.querySelectorAll('.bkLayout').forEach(L => {
