@@ -3323,8 +3323,8 @@ function renderList(){
   $('fclear').hidden = !picked.length;
 }
 function syncFiles(){
-  const dt = new DataTransfer(); picked.forEach(f => dt.items.add(f));
-  $('file').files = dt.files; $('file').dispatchEvent(new Event('change'));
+  try{ const dt = new DataTransfer(); picked.forEach(f => dt.items.add(f)); $('file').files = dt.files; }
+  catch(e){ $('dropMsg').textContent = 'This browser cannot hand the chosen files to the converter (' + e.message + '). Update iOS or try another browser.'; } $('file').dispatchEvent(new Event('change'));
   renderList();
 }
 window.__cx = {
@@ -3377,6 +3377,13 @@ window.addEventListener('drop', async e => {
 });
 dropZone.addEventListener('click', () => $('pick').click());
 dropZone.addEventListener('keydown', e => { if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); $('pick').click(); } });
+/* iOS (Safari and Chrome both use WebKit) greys out files whose extension it does not know, such as .cbz and .cbr, whenever an accept list is set.
+   On iOS the filter is dropped so every file can be chosen; addFiles() still skips anything that is not a comic or book file. */
+try{
+  if(/iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)){
+    $('pick').removeAttribute('accept'); const bf = document.getElementById('bkFile'); if(bf) bf.removeAttribute('accept');
+  }
+}catch(e){}
 $('pick').addEventListener('change', () => { addFiles(Array.from($('pick').files)); $('pick').value = ''; });
 $('fclear').addEventListener('click', () => { picked.forEach(f => SHARED.gone.add(SHARED.key(f))); picked = []; $('dropMsg').textContent = ''; syncFiles(); });
 
