@@ -40,6 +40,10 @@
   button:active:not(:disabled){transform:translateY(1px)}
   button:disabled{background:var(--card);color:var(--mut);border:1px solid var(--line);box-shadow:none;cursor:not-allowed;filter:none}
   #runDock{position:sticky;bottom:14px;z-index:5}
+  #links:not(:empty){background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:10px 12px;margin-bottom:8px;box-shadow:var(--shadow);max-height:42vh;overflow:auto;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+  #links:not(:empty)::before{content:"Ready to download";display:block;font-weight:700;color:var(--head);margin-bottom:6px}
+  #links a{padding:9px 12px!important;margin:6px 0 0!important}
+  #links>button{margin:0 0 6px!important;padding:11px 16px}
   #prog{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:12px 14px;margin-top:8px;box-shadow:var(--shadow);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
   .progTop,.progRow{display:flex;justify-content:space-between;align-items:center;gap:10px}
   .progTop{font-size:.95rem}
@@ -59,7 +63,6 @@
   details.fs[open]>summary::after{transform:rotate(180deg)}
   details.fs[open]>summary{margin-bottom:8px}
   #install{display:none;margin-top:10px;background:var(--surface);color:var(--fg);box-shadow:none;border:1px solid var(--line)}
-  #prev{max-width:100%;border:1px solid var(--line);border-radius:10px;margin-top:8px;display:none}
   .legal{font-size:.82rem;color:var(--mut);border-top:1px solid var(--line);margin-top:26px;padding-top:12px}
   #drop{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;padding:26px 16px;border:2px dashed var(--line);border-radius:18px;background:var(--field);cursor:pointer;transition:border-color .15s,background .15s,transform .15s}
   #drop:hover,#drop:focus-visible{border-color:var(--acc)}
@@ -1417,6 +1420,7 @@ html:root #newDlg ul.nl{list-style:disc;padding-left:1.2em;margin:10px 0}html:ro
 
 
 <div id="runDock">
+  <div id="links"></div>
   <div class="dockBar">
     <label class="chk consentL"><input type="checkbox" id="consent"><span>I own these files, or have the right to convert them for personal use.</span></label>
     <span id="runSummary"></span>
@@ -1429,8 +1433,6 @@ html:root #newDlg ul.nl{list-style:disc;padding-left:1.2em;margin:10px 0}html:ro
   </div>
 </div>
 <div id="log"></div>
-<img id="prev" alt="preview">
-<div id="links"></div>
 <div class="legal">
   <p><strong>About your files.</strong> Banana Converter does not host, store, upload or share any files. Conversion happens locally in your browser, and the file you choose never leaves your device. It is meant for personal format-shifting of files you legally own or are allowed to use. Please do not use it to copy or distribute material you don't have rights to.</p>
   <p>PDF reading uses PDF.js by Mozilla (Apache License 2.0). XTCH output follows a community-written format description and is untested on some devices.</p>
@@ -2421,16 +2423,11 @@ async function emit(mode, us, scales, q){
   const wantThumb = !!(mode.xtch && OPT.thumb && !th.thumb && mode.screens.length === 0);
   const slot = {data: null, chap: us[0].chap, xth: null, xtg: null, w: mode.W, h: mode.H, cover: !!mode.isCover};
   mode.screens.push(slot);   // reserved now so screens stay in order; the worker fills it in
-  const showPrev = mode.screens.length % 30 === 1;
   const job = {W: mode.W, H: mode.H, land: !!mode.land, rtl: !!mode.rtl, rot: mode.rot || null, xtch: !!mode.xtch, wantThumb, q, scales,
     us: us.map(u => ({g: u.g, c: u.c, w: u.w, h: u.h})), grid: !!(PK.grid && us.length >= 3), opt: OPT, cfg: CFG};
   POOL.submit('render', job, r => {
     slot.data = r.jpg; slot.xth = r.xth; slot.xtg = r.xtg;
     if(r.thumb && !th.thumb) th.thumb = r.thumb;
-    if(showPrev){
-      const img = $('prev'); if(img.dataset.u) URL.revokeObjectURL(img.dataset.u);
-      img.dataset.u = URL.createObjectURL(new Blob([r.jpg], {type: 'image/jpeg'})); img.src = img.dataset.u; img.style.display = 'block'; img.style.width = Math.min(mode.W, 360) + 'px';
-    }
   }).catch(() => {});
   await POOL.room();
 }
@@ -3207,7 +3204,7 @@ async function run(){
     const B = window.__batch, ok = B.filter(b => !b.error);
     const line = b => b.error ? (b.error === 'Cancelled' ? `${b.name}: cancelled` : `${b.name}: FAILED - ${b.error}`)
       : `${files.length > 1 ? b.name + ': ' : ''}${b.pages} pages${b.skipped ? ' (' + b.skipped + ' unreadable, skipped)' : ''} -> ${b.panels} panels -> ` + Object.entries(b.screens).map(([k, v]) => `${v} ${k} screens`).join(', ');
-    if(cancelFlag) log('Cancelled. ' + (ok.length ? ok.length + ' finished file' + (ok.length > 1 ? 's are' : ' is') + ' available below.' : 'Nothing was produced.'));
+    if(cancelFlag) log('Cancelled. ' + (ok.length ? ok.length + ' finished file' + (ok.length > 1 ? 's are' : ' is') + ' ready to download above the Convert bar.' : 'Nothing was produced.'));
     else if(files.length === 1) log(B[0].error ? 'Error: ' + B[0].error : 'Done. ' + line(B[0]));
     else log(`Finished ${ok.length} of ${files.length} files.\n` + B.map(line).join('\n'));
     window.__stats = ok.length ? ok[ok.length - 1] : null;
@@ -4566,7 +4563,10 @@ async function rvBuild(){
     const rb = document.createElement('button'); rb.type = 'button'; rb.className = 'btn2 sm rvRot'; rb.textContent = '\u21BB'; rb.title = 'Rotate this page';
     rb.addEventListener('click', async e => { e.stopPropagation(); pageRotate(f, i); await rvDo(f, i, t, true); rvApply(); });
     t.append(c, b, rb); grid.append(t);
-    t.addEventListener('click', async () => { $('rvDlg').close(); await openEditorAt(idx, i); });
+    t.addEventListener('click', async () => {   // the editor opens on top of the grid, so Esc / Done in the editor returns here
+      const sig = () => { const o = {}; for(const tt of grid.children){ const k = edKey(f, +tt.dataset.i); o[tt.dataset.i] = JSON.stringify([edits.get(k) || null, pgIsWhole(f, +tt.dataset.i)]); } return o; };
+      rv.back = {f, i, before: sig(), sig}; await openEditorAt(idx, i);
+    });
   }
   for(let k = 0; k < seq.length; k++){
     if(tok !== rv.tok || !$('rvDlg').open) return;
@@ -4583,6 +4583,15 @@ $('edRotBox').addEventListener('click', () => { if(ed.sel >= 0 && ed.boxes[ed.se
 $('edRotPage').addEventListener('click', async () => { if(!ed.file) return; pageRotate(ed.file, ed.page); await edLoadPage(ed.page); });
 $('rvClose').addEventListener('click', () => { rv.tok++; $('rvDlg').close(); });
 $('rvDlg').addEventListener('close', () => { rv.tok++; });
+$('edDlg').addEventListener('close', async () => {   // back to the grid after editing a page from it: redraw the pages that changed, keep the scroll position
+  const b = rv.back; rv.back = null; if(!b || !$('rvDlg').open) return;
+  const now = b.sig(), grid = $('rvGrid');
+  for(const t of Array.from(grid.children)){
+    const i = +t.dataset.i; if(!t._base) continue;
+    if(i === b.i || now[i] !== b.before[i]){ try{ await rvDo(b.f, i, t, true); }catch(e){} }
+  }
+  rvApply(); $('rvMsg').textContent = `${grid.children.length} pages: ${rv.counts.flagged} flagged, ${rv.counts.edited} edited.`;
+});
 $('rvFile').addEventListener('change', rvBuild);
 document.querySelectorAll('input[name=rvf]').forEach(r => r.addEventListener('change', rvApply));
 
