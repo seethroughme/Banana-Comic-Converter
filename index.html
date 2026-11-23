@@ -116,6 +116,7 @@
   .sub2{font-size:.7rem;text-transform:uppercase;letter-spacing:.09em;font-weight:700;color:var(--head);margin:14px 0 2px;padding-top:10px;border-top:1px solid var(--line)}
   .sub2 .hint{text-transform:none;letter-spacing:0;font-weight:400;color:var(--mut);margin-left:6px}
   .opts{display:flex;flex-wrap:wrap;gap:6px}
+  .fgrp{margin:6px 0 2px}.fgrp>b{display:block;font-size:.85rem;margin:2px 0 4px;color:var(--head)}.fgrp>b small{font-weight:400;color:var(--mut)}
   .opt{position:relative;margin:0;display:inline-block}
   .opt input{position:absolute;opacity:0;pointer-events:none;margin:0}
   .opt span{display:inline-block;padding:6px 14px;border:1px solid var(--line);border-radius:99px;background:var(--field);cursor:pointer;font-weight:600;font-size:.88rem;transition:background .12s}
@@ -660,6 +661,12 @@ html:root #newDlg ul.nl{list-style:disc;padding-left:1.2em;margin:10px 0}html:ro
   <input type="file" id="pick" accept=".cbz,.cbr,.zip,.rar,.epub,.pdf,application/pdf,application/epub+zip" multiple hidden>
   <ul id="flist"></ul>
   <div><button type="button" class="btn2" id="fclear" hidden>Clear all</button> <small id="dropMsg"></small></div>
+  <div id="edIO" hidden style="margin-top:6px">
+    <button type="button" class="btn2 sm" id="edSaveBtn" title="Download your panel edits, hidden pages, page order and zoom choices as a small file">Save edits file</button>
+    <button type="button" class="btn2 sm" id="edLoadBtn" title="Load an edits file made on another device or browser">Load edits file</button>
+    <input type="file" id="edLoadIn" accept=".json,application/json" hidden>
+    <small id="edIOMsg"></small>
+  </div>
   <div id="progRow" hidden style="margin-top:6px"><small id="progMsg"></small> <button type="button" class="btn2 sm" id="progForget" title="Delete the saved edits for the selected files">Forget saved edits</button></div>
 <details class="sec" id="secPages"><summary><span class="stitle">Pages</span><span class="ssum" id="sumPages"></span></summary>
 <div class="secBody">
@@ -701,20 +708,30 @@ html:root #newDlg ul.nl{list-style:disc;padding-left:1.2em;margin:10px 0}html:ro
 <section class="step" id="stOutput"><div class="stH" data-help="Output"><span class="num">3</span><span class="stitle">Choose what to make</span><span class="ssum" id="sumOutput"></span></div>
 <div class="stBody">
 
-  <div class="f col1"><span>File format</span>
-    <div class="opts"><label class="opt"><input type="checkbox" id="fX"><span>XTCH</span></label><label class="opt"><input type="checkbox" id="fXtc"><span>XTC (black &amp; white)</span></label><label class="opt"><input type="checkbox" id="fEpub"><span>EPUB</span></label><label class="opt"><input type="checkbox" id="fCbz"><span>CBZ</span></label><label class="opt"><input type="checkbox" id="fPdf"><span>PDF (webtoon scroll)</span></label></div></div>
-  <small>XTCH and XTC are for Xteink readers (XTC is black and white and much smaller). EPUB and CBZ open on Kindle, Kobo, Boox and most reading apps. <b>PDF (webtoon scroll)</b> stacks panels into one continuous strip for scrolling on a phone; it ignores orientation.</small>
+  <div class="f col1"><span>File types <small>(tick any: one file is made for each)</small></span>
+    <div class="fgrp"><b>For Xteink e-ink readers</b><div class="opts"><label class="opt"><input type="checkbox" id="fX"><span>XTCH</span></label><label class="opt"><input type="checkbox" id="fXtc"><span>XTC (black &amp; white)</span></label></div></div>
+    <div class="fgrp"><b>For any reader or reading app</b><div class="opts"><label class="opt"><input type="checkbox" id="fEpub"><span>EPUB</span></label><label class="opt"><input type="checkbox" id="fCbz"><span>CBZ</span></label></div></div>
+    <div class="fgrp"><b>For phones <small>(no screen shape needed)</small></b><div class="opts"><label class="opt"><input type="checkbox" id="fPanelImg"><span>CBZ: one image per panel</span></label><label class="opt"><input type="checkbox" id="fPdf"><span>PDF (webtoon scroll)</span></label></div></div></div>
+  <small><b>XTCH</b> and <b>XTC</b> are for Xteink readers (XTC is black and white and much smaller). <b>EPUB</b> and <b>CBZ</b> open on Kindle, Kobo, Boox and most reading apps, one screen per page. <b>CBZ: one image per panel</b> saves every panel as its own image at its exact crop size with no padding, for phone comic apps with panel-by-panel reading (extra file <i>name-panels.cbz</i>). <b>PDF (webtoon scroll)</b> stacks panels into one strip for scrolling on a phone.</small>
+  <div id="shapeBox">
   <div class="f col1"><span>Screen orientation <small>(you get one file for each you tick)</small></span>
     <div class="opts"><label class="opt"><input type="checkbox" id="oPort"><span>Portrait</span></label><label class="opt"><input type="checkbox" id="oLand"><span>Landscape</span></label><label class="opt"><input type="checkbox" id="oMix"><span>Mixed</span></label></div></div>
-  <small>Portrait means the reader is held upright. Landscape means turned sideways, which makes panels larger.</small>
+  <small>Portrait means the reader is held upright. Landscape means turned sideways, which makes panels larger. Only used by XTCH, XTC, EPUB and CBZ.</small>
+  </div>
   <div class="f col1" id="colorRow"><span>Colour or black and white <small>(for EPUB, CBZ and PDF)</small></span>
     <div class="seg"><label><input type="radio" name="colorOut" id="colorBw" value="bw" checked><span>Black and white</span></label><label><input type="radio" name="colorOut" id="colorCol" value="color"><span>Colour</span></label></div></div>
   <small id="colorNote"></small>
   <small id="outNames"></small>
+  <div class="sub2">Look of the pages</div>
+  <label class="chk"><input type="checkbox" id="blackBg"><span><b>Dark mode:</b> black gutters. The gaps and margins around panels are black instead of white, so pages are easier on the eyes in the dark and black pixels are switched off on OLED screens (saves battery). Panel artwork is not changed. <small>(Not the same as the editor&rsquo;s &ldquo;Black gutters&rdquo; button, which is for detecting comics whose gaps are black.)</small></span></label>
+  <label class="chk"><input type="checkbox" id="keepSize"><span><b>Keep panel size:</b> do not enlarge panels to fill the screen. They stay at their original pixel size, centred on the screen. A panel bigger than the screen is still shrunk to fit. <small>(XTCH, XTC, EPUB and CBZ; turns off the two-column grid)</small></span></label>
+  <div class="sub2">File names</div>
   <label class="chk"><input type="checkbox" id="nmShape"><span>Add portrait / landscape / mixed to the file names <small>(off: your original file name is kept. With several shapes ticked it is added anyway so files do not overwrite each other)</small></span></label>
   <label class="chk"><input type="checkbox" id="mRename"><span>Rename output files from the metadata <small>(title, volume, author, series)</small></span></label>
   <div id="orderRow" hidden><div class="ordGrid"><div class="ordSlot"><label for="mOrd1">First</label><select id="mOrd1"><option value="">None</option><option value="title" selected>Title</option><option value="vol">Volume</option><option value="author">Author</option><option value="series">Series</option></select></div><div class="ordSlot"><label for="mOrd2">Second</label><select id="mOrd2"><option value="">None</option><option value="title">Title</option><option value="vol" selected>Volume</option><option value="author">Author</option><option value="series">Series</option></select></div><div class="ordSlot"><label for="mOrd3">Third</label><select id="mOrd3"><option value="">None</option><option value="title">Title</option><option value="vol">Volume</option><option value="author">Author</option><option value="series">Series</option></select></div><div class="ordSlot"><label for="mOrd4">Fourth</label><select id="mOrd4"><option value="">None</option><option value="title">Title</option><option value="vol">Volume</option><option value="author">Author</option><option value="series">Series</option></select></div></div><small id="ordPrev"></small></div>
   <small id="orderNote" hidden>Pick what goes first, second and so on. Each field is used once, empty fields are skipped, and if nothing is left the original name is kept.</small>
+  <div class="sub2">Before you convert</div>
+  <label class="chk"><input type="checkbox" id="saveEditsWith" checked><span><b>Save my edits with the downloads:</b> adds a small edits file next to your converted files whenever you have edited panels, hidden pages or page order, so you can carry them to another device <small>(load it with &ldquo;Load edits file&rdquo; under your file list)</small></span></label>
   <div style="margin:8px 0"><button type="button" class="btn2" id="estBtn">Estimate file size</button></div>
   <div id="estBox" class="help" hidden></div>
 </div></section>
@@ -744,7 +761,38 @@ html:root #newDlg ul.nl{list-style:disc;padding-left:1.2em;margin:10px 0}html:ro
 <div class="moreH"><h2>More options</h2><small>All optional. The defaults work well.</small><span class="moreBtns"><button type="button" class="link" id="openAll">Expand all</button><button type="button" class="link" id="closeAll">Collapse all</button></span></div>
 
 
-<details class="sec" id="secPanelSet"><summary><span class="stitle">Panel settings</span><span class="ssum" id="sumPanelSet"></span></summary>
+<details class="sec" id="secOutMore"><summary><span class="stitle">Format options</span><span class="ssum" id="sumOutMore"></span></summary>
+<div class="secBody">
+  <div id="xtchOpts">
+    <div class="sub2">XTCH and XTC options</div>
+    <div class="f"><label for="xRot">Landscape page rotation</label><select id="xRot"><option value="cw" selected>Clockwise</option><option value="ccw">Counter-clockwise</option></select></div>
+    <small>If landscape pages look upside-down on your device, use the other one.</small>
+    <div class="f"><label for="xDither">Dither style (XTCH: 4 grays, XTC: black and white)</label><select id="xDither"><option value="fs" selected>Floyd-Steinberg (smooth)</option><option value="atk">Atkinson (crisper)</option><option value="bayer">Ordered pattern</option><option value="none">None (hard levels)</option></select></div>
+    <div class="f" id="xtcOpt"><label for="xtcThr">XTC black and white cutoff (lower = more white)</label><input type="number" id="xtcThr" value="128" min="40" max="220" step="4"><button type="button" class="btn2" id="xtcAuto" title="Pick the cutoff from your pages">Auto</button></div>
+  </div>
+  <div class="sub2">CBZ: one image per panel</div>
+  <div class="f"><label for="panelMinW">Panels narrower than this are scaled up</label><select id="panelMinW"><option value="0" selected>Never: exact original crop size</option><option value="480">480 px wide</option><option value="720">720 px wide</option><option value="1080">1080 px wide (full-HD phone)</option></select></div>
+  <small>Each panel is cropped from the page and saved on its own, in reading order, with no padding. The cover and pages you set to show whole stay whole. With Smart halves and thirds or a fixed split selected, whole pages are used. Your panel edits and hidden pages apply. Colour follows the Colour option.</small>
+  <div class="sub2">Webtoon PDF</div>
+  <div class="f"><label for="pdfMode">Webtoon PDF content</label><select id="pdfMode"><option value="panels" selected>Extracted panels, stacked in reading order</option><option value="pages">Whole pages as they are</option></select></div>
+  <small>Panels use the same detection as Smart panels (and your panel edits, whole-page choices and hidden pages). With Smart halves and thirds or Fixed halves or thirds selected, whole pages are used.</small>
+  <div class="f"><label for="pdfW">Webtoon PDF width <small>(pixels, phone screens need little)</small></label><select id="pdfW"><option value="720">720 (smaller file)</option><option value="900" selected>900</option><option value="1080">1080 (sharper)</option></select></div>
+  <div class="sub2">Mixed shape and covers</div>
+  <div id="mixRow" hidden>
+    <div class="f"><label for="mixAsp">Mixed: use landscape when width &divide; height is at least</label><input type="number" id="mixAsp" value="1.15" step="0.05" min="0.6" max="3"></div>
+    <small>Wide panels go on landscape screens, tall ones on portrait. 1.0 picks whichever shape fills the screen better; higher keeps more panels portrait.</small>
+  </div>
+  <label class="chk"><input type="checkbox" id="keepCover" checked><span>Keep the cover as a full portrait page in landscape and mixed output</span></label>
+  <div id="xThumbRow">
+    <label class="chk"><input type="checkbox" id="xThumb"><span>Add a cover thumbnail (experimental, untested on devices)</span></label>
+  </div>
+  <div hidden>
+    <input type="checkbox" id="mLand" checked><input type="checkbox" id="mPort" checked><input type="checkbox" id="mMixed">
+    <input type="checkbox" id="fXtch" checked><input type="checkbox" id="fXtchL" checked><input type="checkbox" id="fXtchM">
+  </div>
+</div></details>
+
+<details class="sec" id="secPanelSet"><summary><span class="stitle">Panel detection and packing</span><span class="ssum" id="sumPanelSet"></span></summary>
 <div class="secBody">
   <div class="sub2">Detection</div>
   <div class="f"><label for="gutterMode">Gap colour between panels</label><select id="gutterMode"><option value="auto" selected>Auto (spot black gutters)</option><option value="light">White gaps only</option><option value="dark">Black gaps on every page</option></select></div>
@@ -794,41 +842,6 @@ html:root #newDlg ul.nl{list-style:disc;padding-left:1.2em;margin:10px 0}html:ro
   </div>
 </div></details>
 
-<details class="sec" id="secOutMore"><summary><span class="stitle">Output details</span><span class="ssum" id="sumOutMore"></span></summary>
-<div class="secBody">
-  <div id="xtchOpts">
-    <div class="sub2">XTCH and XTC options</div>
-    <div class="f"><label for="xRot">Landscape page rotation</label><select id="xRot"><option value="cw" selected>Clockwise</option><option value="ccw">Counter-clockwise</option></select></div>
-    <small>If landscape pages look upside-down on your device, use the other one.</small>
-    <div class="f"><label for="xDither">Dither style (XTCH: 4 grays, XTC: black and white)</label><select id="xDither"><option value="fs" selected>Floyd-Steinberg (smooth)</option><option value="atk">Atkinson (crisper)</option><option value="bayer">Ordered pattern</option><option value="none">None (hard levels)</option></select></div>
-    <div class="f" id="xtcOpt"><label for="xtcThr">XTC black and white cutoff (lower = more white)</label><input type="number" id="xtcThr" value="128" min="40" max="220" step="4"><button type="button" class="btn2" id="xtcAuto" title="Pick the cutoff from your pages">Auto</button></div>
-  </div>
-  <div class="sub2">Webtoon PDF</div>
-  <div class="f"><label for="pdfMode">Webtoon PDF content</label><select id="pdfMode"><option value="panels" selected>Extracted panels, stacked in reading order</option><option value="pages">Whole pages as they are</option></select></div>
-  <small>Panels use the same detection as Smart panels (and your panel edits, whole-page choices and hidden pages). With Smart halves and thirds or Fixed halves or thirds selected, whole pages are used.</small>
-  <div class="f"><label for="pdfW">Webtoon PDF width <small>(pixels, phone screens need little)</small></label><select id="pdfW"><option value="720">720 (smaller file)</option><option value="900" selected>900</option><option value="1080">1080 (sharper)</option></select></div>
-  <div class="sub2">Shapes and covers</div>
-  <div id="mixRow" hidden>
-    <div class="f"><label for="mixAsp">Mixed: use landscape when width &divide; height is at least</label><input type="number" id="mixAsp" value="1.15" step="0.05" min="0.6" max="3"></div>
-    <small>Wide panels go on landscape screens, tall ones on portrait. 1.0 picks whichever shape fills the screen better; higher keeps more panels portrait.</small>
-  </div>
-  <label class="chk"><input type="checkbox" id="keepCover" checked><span>Keep the cover as a full portrait page in landscape and mixed output</span></label>
-  <div id="xThumbRow">
-    <label class="chk"><input type="checkbox" id="xThumb"><span>Add a cover thumbnail (experimental, untested on devices)</span></label>
-  </div>
-  <div class="sub2">Speed and memory</div>
-  <div class="f"><label for="splitParts">Split into parts <small>(for devices that run out of memory)</small></label><select id="splitParts"><option value="0" selected>Off (one file)</option><option value="100">About 100 screens per file</option><option value="150">About 150 screens per file</option><option value="200">About 200 screens per file</option><option value="300">About 300 screens per file</option><option value="500">About 500 screens per file</option></select></div>
-  <label class="chk"><input type="checkbox" id="parOn" checked><span>Use parallel processing <small>(faster on multi-core computers; turn off if the page runs out of memory)</small></span></label>
-  <small id="splitNote">Large XTCH files can run a small e-reader out of memory. Splitting makes several smaller files per shape and type (part 1, part 2 ...), cut at chapter starts where possible.</small>
-  <div class="sub2">Download</div>
-  <div class="f"><label for="zipLayout">ZIP download layout</label><select id="zipLayout"><option value="flat" selected>All files together</option><option value="book">One folder per book</option><option value="sets">One folder per book, and a folder for each set of parts</option></select></div>
-  <small>Folders only apply to the ZIP download. Downloading files one by one cannot make folders.</small>
-  <div hidden>
-    <input type="checkbox" id="mLand" checked><input type="checkbox" id="mPort" checked><input type="checkbox" id="mMixed">
-    <input type="checkbox" id="fXtch" checked><input type="checkbox" id="fXtchL" checked><input type="checkbox" id="fXtchM">
-  </div>
-</div></details>
-
 <details class="sec" id="metaBox"><summary><span class="stitle">Metadata</span><span class="ssum" id="sumMeta"></span></summary>
 <div class="secBody">
   <small>Filled in from the file when it has any. Blank fields keep what each file already has. With several files, each file gets its own card with every field; blank fields keep what that file already has. XTCH stores only title, author, publisher and language.</small>
@@ -850,6 +863,16 @@ html:root #newDlg ul.nl{list-style:disc;padding-left:1.2em;margin:10px 0}html:ro
   <label>Description <textarea id="mDesc" rows="2"></textarea></label>
   </details>
   </div>
+</div></details>
+
+<details class="sec" id="secDelivery"><summary><span class="stitle">Memory, parts and downloads</span><span class="ssum" id="sumDelivery"></span></summary>
+<div class="secBody">
+  <div class="f"><label for="splitParts">Split into parts <small>(for devices that run out of memory)</small></label><select id="splitParts"><option value="0" selected>Off (one file)</option><option value="100">About 100 screens per file</option><option value="150">About 150 screens per file</option><option value="200">About 200 screens per file</option><option value="300">About 300 screens per file</option><option value="500">About 500 screens per file</option></select></div>
+  <label class="chk"><input type="checkbox" id="parOn" checked><span>Use parallel processing <small>(faster on multi-core computers; turn off if the page runs out of memory)</small></span></label>
+  <small id="splitNote">Large XTCH files can run a small e-reader out of memory. Splitting makes several smaller files per shape and type (part 1, part 2 ...), cut at chapter starts where possible.</small>
+  <div class="sub2">Download</div>
+  <div class="f"><label for="zipLayout">ZIP download layout</label><select id="zipLayout"><option value="flat" selected>All files together</option><option value="book">One folder per book</option><option value="sets">One folder per book, and a folder for each set of parts</option></select></div>
+  <small>Folders only apply to the ZIP download. Downloading files one by one cannot make folders.</small>
 </div></details>
 
 <details class="sec" id="cfgBox"><summary><span class="stitle">Saved presets</span><span class="ssum" id="sumPresets"></span></summary>
@@ -1039,7 +1062,7 @@ html:root #newDlg ul.nl{list-style:disc;padding-left:1.2em;margin:10px 0}html:ro
 <dialog id="newDlg">
   <h2>&#127820; What's new</h2>
   <small>Recent updates to Banana Converter. You can open this again from the What's new button at the top.</small>
-  <ul class="nl"><li><b>New (experimental): Scientific papers</b> – papers keep columns, figures, tables and equations whole, with the text reflowed for your screen.</li><li><b>Quick tour</b> – a short walkthrough of every step on each page. Replay it from How to use.</li><li><b>More comic formats</b> – CBR and EPUB comics can be added alongside CBZ, ZIP and PDF.</li><li><b>Files follow you</b> – a file you add shows up in every mode that can read it.</li><li><b>Upright cover in landscape books</b> – keep the cover portrait while the other pages are landscape.</li><li><b>Hideable preview, +/- buttons</b> – both previews can be hidden, and number fields have minus and plus buttons.</li><li><b>Preview on the left for comics</b> – see the real screens before you convert, and it follows your panel edits.</li></ul>
+  <ul class="nl"><li><b>Keep panel size, black gutters, edits file</b> – new options to leave panels at their original size instead of enlarging them, Dark mode with black gutters (good for OLED and reading in the dark), and save your edits as a file to move to another device.</li><li><b>New (experimental): Scientific papers</b> – papers keep columns, figures, tables and equations whole, with the text reflowed for your screen.</li><li><b>Quick tour</b> – a short walkthrough of every step on each page. Replay it from How to use.</li><li><b>More comic formats</b> – CBR and EPUB comics can be added alongside CBZ, ZIP and PDF.</li><li><b>Files follow you</b> – a file you add shows up in every mode that can read it.</li><li><b>Upright cover in landscape books</b> – keep the cover portrait while the other pages are landscape.</li><li><b>Hideable preview, +/- buttons</b> – both previews can be hidden, and number fields have minus and plus buttons.</li><li><b>Preview on the left for comics</b> – see the real screens before you convert, and it follows your panel edits.</li></ul>
   <div class="nbar"><button type="button" class="btn2" id="newClose">Got it</button></div>
 </dialog>
 <dialog id="helpDlg">
@@ -1069,7 +1092,7 @@ html:root #newDlg ul.nl{list-style:disc;padding-left:1.2em;margin:10px 0}html:ro
       <li><b>Choose how pages are cut.</b> <i>Smart panels</i> finds each panel and fits it to the screen. <i>Simple halves or thirds</i> just cuts each page into 2 or 3 overlapping parts. You can check the result in the panel editor before converting.</li>
       <li>Tick <b>I own these files</b> in the bar at the bottom and press <b>Convert</b>. A progress bar shows the file, page and time left, and Cancel stops it between pages.</li>
     </ol>
-    <p>Everything under <b>More options</b> (output details, panel settings, image quality, metadata, saved presets) is optional; the defaults work well.</p>
+    <p>Everything under <b>More options</b> (format options, panel detection, image quality, metadata, memory and downloads, saved presets) is optional; the defaults work well.</p>
     <h2>Finding your way around</h2>
     <ul>
       <li>The rows under <b>More options</b> open and close, and each shows a one-line summary of its settings. Use <b>Expand all</b> / <b>Collapse all</b> beside the heading. Which rows are open is remembered in this browser.</li>
@@ -1251,7 +1274,7 @@ html:root #newDlg ul.nl{list-style:disc;padding-left:1.2em;margin:10px 0}html:ro
     <h3>Files</h3><p>CBZ, CBR, EPUB, ZIP, PDF; drag and drop or browse; batches get their own outputs; unreadable pages are skipped and counted in the summary.</p>
     <h3>Device and reading</h3><p>Reading direction and your reader, chosen from a collapsible list grouped by brand (Xteink, Kindle, Kobo, Boox, PocketBook, phone and other), or Custom with portrait width &times; height and screen diagonal.</p>
     <h3>Output</h3><p>File formats, screen shapes, colour or black and white, the option to add the shape to file names, and a file size estimate. Nothing is ticked on first use; later visits restore your last choices.</p>
-    <h3>More options</h3><p>In this order: Panel settings, Image quality, Output details, Metadata, Saved presets. <b>Output details</b> holds the XTCH and XTC options, webtoon PDF, shapes and covers (mixed ratio, keep the cover, cover thumbnail), speed and memory (splitting, parallel processing) and the ZIP download layout.</p>
+    <h3>Step 3 and More options</h3><p><b>Step 3</b> now groups file types by where they are used (Xteink readers, any reader, phones). The screen orientation only shows when a screen-sized format is ticked. <b>Look of the pages</b> has Dark mode (black gutters) and Keep panel size, and <b>File names</b> and the size estimate sit below.</p><p><b>More options</b>, in this order: Format options (XTCH and XTC, one image per panel, webtoon PDF, mixed shape and covers), Panel detection and packing, Image quality, Metadata, Memory, parts and downloads (splitting, parallel processing, ZIP layout), Saved presets.</p>
     <h3>Panels</h3><p>Conversion mode (Smart panels or Simple page split); in Smart mode the panel editor buttons, gap colour, long-panel split and threshold, dense page zoom, overlap, max panels per screen (up to 6 on larger screens), arrangement, auto-rotate and minimum scale kept; in Simple mode parts per page, overlap and show-whole-page-first.</p>
     <h3>Image quality</h3>
     <ul>
@@ -2237,7 +2260,7 @@ async function buildWebtoon(src, seq, width, q, meta, prog, boxFn){
       let w = Math.max(1, Math.round(u.w * sc)), h = Math.max(1, Math.round(u.h * sc));
       if(h > MAXH){ w = Math.max(1, Math.round(w * MAXH / h)); h = MAXH; }
       if(cv && y + h > MAXH) await flush();
-      if(!cv){ cv = document.createElement('canvas'); cv.width = width; cv.height = MAXH; const c0 = cv.getContext('2d'); c0.fillStyle = '#fff'; c0.fillRect(0, 0, width, MAXH); }
+      if(!cv){ cv = document.createElement('canvas'); cv.width = width; cv.height = MAXH; const c0 = cv.getContext('2d'); c0.fillStyle = OPT.blackBg ? '#000' : '#fff'; c0.fillRect(0, 0, width, MAXH); }
       const c = cv.getContext('2d'); c.imageSmoothingQuality = 'high'; c.drawImage(unitCanvas({g: u.g, c: u.c, w: u.w, h: u.h}), Math.round((width - w) / 2), y, w, h);
       y += h + (bx && bx.length ? (n < parts.length - 1 ? 14 : 44) : 0);
     }
@@ -2257,7 +2280,7 @@ function canvasToBlob(c, q){ return c.convertToBlob ? c.convertToBlob({type: 'im
 async function renderScreen(job){
   const {W, H, land, rtl, rot, xtch, scales, us} = job;
   const c = mkCanvas(W, H), ctx = c.getContext('2d');
-  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = OPT.blackBg ? '#000' : '#fff'; ctx.fillRect(0, 0, W, H);
   ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high';
   const dr = us.map((u, i) => descreen(u, scales[i]));
   const sz = us.map((u, i) => [Math.max(1, Math.round(u.w * scales[i])), Math.max(1, Math.round(u.h * scales[i]))]);
@@ -2419,6 +2442,7 @@ async function panelsAtAsync(f, i, pg, rtl, force){
 }
 
 async function emit(mode, us, scales, q){
+  if(OPT.keepSize) scales = scales.map(s => Math.min(s, 1));   // 'Keep panel size': never enlarge, only shrink what does not fit
   const th = mode.thumbHolder || mode;
   const wantThumb = !!(mode.xtch && OPT.thumb && !th.thumb && mode.screens.length === 0);
   const slot = {data: null, chap: us[0].chap, xth: null, xtg: null, w: mode.W, h: mode.H, cover: !!mode.isCover};
@@ -3028,12 +3052,12 @@ function readSettings(strict){
   OPT.sharpen = $('eSharp').checked ? Math.min(1.5, Math.max(0.2, parseFloat($('sharpAmt').value) || 0.5)) : 0;
   OPT.contrast = $('eContrast').checked;
   OPT.gamma = parseFloat($('gamma').value) || 1;
-  OPT.color = ($('fEpub').checked || $('fCbz').checked || $('fPdf').checked) && $('colorCol').checked; OPT.dither = $('xDither').value; OPT.moire = parseFloat($('moire').value) || 0; OPT.autoLevels = $('eAuto').checked; OPT.thumb = $('xThumb').checked; OPT.wantXth = $('fX').checked; OPT.wantXtg = $('fXtc').checked; OPT.xtcThr = Math.min(220, Math.max(40, parseInt($('xtcThr').value, 10) || 128));
-  OPT.sat = parseFloat($('cSat').value) || 1; OPT.cGamma = parseFloat($('cGamma').value) || 1; OPT.autoRot = $('rotAuto').value === 'auto'; pkSync();
+  OPT.color = ($('fEpub').checked || $('fCbz').checked || $('fPdf').checked || $('fPanelImg').checked) && $('colorCol').checked; OPT.dither = $('xDither').value; OPT.moire = parseFloat($('moire').value) || 0; OPT.autoLevels = $('eAuto').checked; OPT.thumb = $('xThumb').checked; OPT.wantXth = $('fX').checked; OPT.wantXtg = $('fXtc').checked; OPT.xtcThr = Math.min(220, Math.max(40, parseInt($('xtcThr').value, 10) || 128));
+  OPT.blackBg = $('blackBg').checked; OPT.keepSize = $('keepSize').checked; OPT.sat = parseFloat($('cSat').value) || 1; OPT.cGamma = parseFloat($('cGamma').value) || 1; OPT.autoRot = $('rotAuto').value === 'auto'; pkSync();
   if(OPT.color) S.q = Math.min(95, Math.max(50, parseInt($('cQual').value) || 88)) / 100;
   S.simple = $('modeAuto').checked ? {auto: true} : $('modeSimple').checked ? {n: parseInt($('spN').value, 10) === 3 ? 3 : 2, ov: Math.min(0.4, Math.max(0.02, parseFloat($('spOv').value) || 0.15)), whole: $('spWhole').checked} : null;
   S.keepCover = $('keepCover').checked; S.wantXtch = $('fXtch').checked; S.wantXtchL = $('fXtchL').checked; S.wantXtchM = $('fXtchM').checked; S.rot = $('xRot').value;
-  if(!$('fEpub').checked && !$('fCbz').checked && !$('fX').checked && !$('fXtc').checked && !$('fPdf').checked) { if(strict !== false) throw new Error('Select at least one file format (XTCH, XTC, EPUB, CBZ or PDF).'); }
+  if(!$('fEpub').checked && !$('fCbz').checked && !$('fX').checked && !$('fXtc').checked && !$('fPdf').checked && !$('fPanelImg').checked) { if(strict !== false) throw new Error('Select at least one file format (XTCH, XTC, EPUB, CBZ or PDF).'); }
   S.cw = parseInt($('cw').value); S.chh = parseInt($('ch').value);
   if(($('fEpub').checked || $('fCbz').checked || $('fX').checked || $('fXtc').checked) && !$('oPort').checked && !$('oLand').checked && !$('oMix').checked) { if(strict !== false) throw new Error('Select at least one screen shape (portrait, landscape or mixed).'); }
   return S;
@@ -3069,6 +3093,8 @@ async function convertFile(file, idx, total, S){
   const chapters = []; let curKey = null, curIdx = -1, totalPanels = 0, skipped = 0;
   const pgOrder = pgSeq(file, src.count);
   let pdfShare = 0;
+  const nPre = ($('fPdf').checked ? 1 : 0) + ($('fPanelImg').checked ? 1 : 0), spanPre = nPre ? (modes.length ? 0.3 : 1 / nPre) : 0;   // share of the progress bar used by each extra output
+  let blkPre = 0;
   if($('fPdf').checked){
     pdfShare = modes.length ? 0.4 : 1;
     const wpx = parseInt($('pdfW').value, 10) || 900;
@@ -3080,6 +3106,39 @@ async function convertFile(file, idx, total, S){
         const ov = edits.get(edKey(file, i)); return ov ? ov.map(b => b.slice()) : panelsAt(file, i, pg, rtl);
       } : null);
     addLink(pdf, `${base}-webtoon.pdf`, base, null);
+  }
+  if($('fPanelImg').checked){
+    pdfShare = modes.length ? 0.4 : 1;
+    setLabel((total > 1 ? `File ${idx + 1} of ${total}: ` : '') + 'saving panel images...');
+    const minW = parseInt($('panelMinW').value, 10) || 0, z = new ZipW(); let n = 0;
+    const encode = async u => {
+      let w = u.w, h = u.h;
+      if(minW && w < minW){ h = Math.max(1, Math.round(h * minW / w)); w = minW; }
+      const cv = document.createElement('canvas'); cv.width = w; cv.height = h;
+      const cx = cv.getContext('2d', {willReadFrequently: true}); cx.imageSmoothingEnabled = true; cx.imageSmoothingQuality = 'high';
+      cx.drawImage(unitCanvas(u), 0, 0, w, h);
+      if(OPT.sharpen > 0 || OPT.contrast || OPT.gamma !== 1 || OPT.autoLevels || (OPT.color && ((OPT.sat || 1) !== 1 || (OPT.cGamma || 1) !== 1))) postProcess(cx, w, h);
+      const blob = await canvasToBlob(cv, q); return new Uint8Array(await blob.arrayBuffer());
+    };
+    for(let kk = 0; kk < pgOrder.length; kk++){
+      if(cancelFlag) throw new Error('Cancelled');
+      const i = pgOrder[kk], f = (blkPre + kk / pgOrder.length) * spanPre;
+      updateEta((idx + (modes.length ? 0 : f)) / total);
+      log(tag + `Panel images: page ${kk + 1} / ${pgOrder.length}\nImages so far: ${n}`);
+      let pg; try{ pg = await src.getPage(i); }catch(e){ skipped++; continue; }
+      let bx = null;
+      if(!S.simple && !(kk === 0 && keepCover && pg.H >= pg.W) && !pgIsWhole(file, i)){
+        const ov = edits.get(edKey(file, i)); bx = ov ? ov.map(b => b.slice()) : await panelsAtAsync(file, i, pg, rtl);
+      }
+      const parts = bx && bx.length ? bx.map(b => edCropUnit(pg.g, pg.W, b, pg.c)) : [{g: pg.g, c: pg.c, w: pg.W, h: pg.H}];
+      if(!modes.length) totalPanels += parts.length;
+      for(const u of parts){ z.add(String(++n).padStart(5, '0') + '.jpg', await encode(u)); }
+      await new Promise(r => setTimeout(r, 0));
+    }
+    if(!n) throw new Error('No readable pages for the panel images.');
+    z.add('ComicInfo.xml', comicInfo({screens: {length: n}, suffix: false}, {...meta, title: (meta.title || base) + ' (panels)'}, rtl));
+    addLink(z.blob('application/vnd.comicbook+zip'), `${metaFileName(meta, base)}-panels.cbz`, base, null);
+    blkPre++;
   }
   const loopOrder = modes.length ? pgOrder : [];
   // Read the next few pages (and start their panel detection in the workers) while the current one is being packed.
@@ -3203,11 +3262,15 @@ async function run(){
     $('bar').value = 1; $('barPct').textContent = '100%';
     const B = window.__batch, ok = B.filter(b => !b.error);
     const line = b => b.error ? (b.error === 'Cancelled' ? `${b.name}: cancelled` : `${b.name}: FAILED - ${b.error}`)
-      : `${files.length > 1 ? b.name + ': ' : ''}${b.pages} pages${b.skipped ? ' (' + b.skipped + ' unreadable, skipped)' : ''} -> ${b.panels} panels -> ` + Object.entries(b.screens).map(([k, v]) => `${v} ${k} screens`).join(', ');
+      : `${files.length > 1 ? b.name + ': ' : ''}${b.pages} pages${b.skipped ? ' (' + b.skipped + ' unreadable, skipped)' : ''} -> ${b.panels} panels` + (Object.keys(b.screens).length ? ' -> ' + Object.entries(b.screens).map(([k, v]) => `${v} ${k} screens`).join(', ') : '');
     if(cancelFlag) log('Cancelled. ' + (ok.length ? ok.length + ' finished file' + (ok.length > 1 ? 's are' : ' is') + ' ready to download above the Convert bar.' : 'Nothing was produced.'));
     else if(files.length === 1) log(B[0].error ? 'Error: ' + B[0].error : 'Done. ' + line(B[0]));
     else log(`Finished ${ok.length} of ${files.length} files.\n` + B.map(line).join('\n'));
     window.__stats = ok.length ? ok[ok.length - 1] : null;
+    if($('saveEditsWith').checked){
+      const eb = edFileBuild(files);
+      if(eb) addLink(eb, edFileName(files));
+    }
     const outs = window.__outs;
     if(outs.length > 1){
       const zb = document.createElement('button');
@@ -4226,10 +4289,59 @@ $('progForget').addEventListener('click', async () => {
   PROG.note = ''; edCountText(); progUI();
   try{ if(pgCur()) pgRender(); }catch(e){}
 });
+
+/* ---------- edits file: carry panel edits, hidden pages, page order and zoom choices to another device ---------- */
+function edFileBuild(files){
+  const list = [];
+  for(const f of files){ const o = progSnap(f); if(!o.empty) list.push({name: f.name, size: f.size, key: edFileKey(f), data: o}); }
+  if(!list.length) return null;
+  return new Blob([JSON.stringify({app: 'banana-converter-edits', v: 1, saved: new Date().toISOString(), files: list})], {type: 'application/json'});
+}
+function edFileName(files){
+  const d = new Date(), p2 = v => String(v).padStart(2, '0');
+  const stamp = `${d.getFullYear()}${p2(d.getMonth() + 1)}${p2(d.getDate())}-${p2(d.getHours())}${p2(d.getMinutes())}`;
+  return files.length === 1 ? files[0].name.replace(/\.[^.]+$/, '').replace(/[\\/:*?"<>|]+/g, '_') + '-edits.json' : `banana-edits-${stamp}.json`;
+}
+function edIOShow(){
+  const has = Array.from($('file').files).length > 0;
+  $('edIO').hidden = !has;
+  $('edSaveBtn').disabled = !has || !Array.from($('file').files).some(f => !progSnap(f).empty);
+}
+$('edSaveBtn').addEventListener('click', () => {
+  const files = Array.from($('file').files), b = edFileBuild(files);
+  if(!b){ $('edIOMsg').textContent = 'No edits to save yet.'; return; }
+  const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = edFileName(files);
+  document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 60000);
+  $('edIOMsg').textContent = 'Edits file saved.';
+});
+$('edLoadBtn').addEventListener('click', () => { if(!Array.from($('file').files).length){ $('edIOMsg').textContent = 'Add your files first, then load the edits file.'; return; } $('edLoadIn').click(); });
+$('edLoadIn').addEventListener('change', async () => {
+  const f0 = $('edLoadIn').files[0]; $('edLoadIn').value = ''; if(!f0) return;
+  let o; try{ o = JSON.parse(await f0.text()); }catch(e){ o = null; }
+  if(!o || o.app !== 'banana-converter-edits' || !Array.isArray(o.files)){ $('edIOMsg').textContent = 'That is not an edits file made by this converter.'; return; }
+  const files = Array.from($('file').files); let n = 0; const miss = [];
+  const have = files.filter(f => !progSnap(f).empty).length;
+  if(have && !confirm('Replace the edits you already have for the selected files with the ones in this file?')) return;
+  for(const rec of o.files){
+    const f = files.find(x => edFileKey(x) === rec.key) || files.find(x => x.name === rec.name);
+    if(!f || !rec.data || rec.data.v !== 1){ miss.push(rec.name); continue; }
+    const k = edFileKey(f), pre = k + '#';
+    for(const key of Array.from(edits.keys())) if(key.startsWith(pre)) edits.delete(key);
+    for(const key of Array.from(edSeen)) if(key.startsWith(pre)) edSeen.delete(key);
+    for(const key of Array.from(pgRot.keys())) if(key.startsWith(pre)) pgRot.delete(key);
+    pgState.delete(k); progApply(f, rec.data); n++;
+  }
+  edCountText(); progTick();
+  try{ if(pgCur() && $('secPages').open) pgRender(); }catch(e){}
+  $('edIOMsg').textContent = n ? `Loaded edits for ${n} file${n > 1 ? 's' : ''}.` + (miss.length ? ` Not matched (add those files first): ${miss.join(', ')}.` : '') : 'None of the files in that edits file match the files you added (matched by name and size).' ;
+  edIOShow();
+});
+$('file').addEventListener('change', edIOShow);
+setInterval(edIOShow, 2000);
 try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persist(); }catch(e){}
 
 /* ---------- what's new pop-up: shown once per version, and from the What's new button ---------- */
-const WN_VER = '2026-11-23', WN_KEY = 'bcc_wn';
+const WN_VER = '2026-11-23b', WN_KEY = 'bcc_wn';
 function wnSeen(set){
   try{ if(set) localStorage.setItem(WN_KEY, WN_VER); else return localStorage.getItem(WN_KEY) === WN_VER; }catch(e){}
   return false;
@@ -4242,7 +4354,7 @@ window.__wnShow = () => { if(window.__wnPending && !document.querySelector('dial
 setTimeout(window.__wnShow, 600);
 
 /* ---------- device: remember last, profiles, direction test, size estimate ---------- */
-const LASTK = 'bcc_last', LAST_C = ['fX', 'fXtc', 'fEpub', 'fCbz', 'fPdf', 'oPort', 'oLand', 'oMix', 'nmShape', 'mRename', 'keepCover'], LAST_V = ['mOrd1', 'mOrd2', 'mOrd3', 'mOrd4', 'pkGrid', 'rotAuto', 'cSat', 'cGamma', 'cQual', 'xRot', 'splitParts', 'zipLayout', 'cin'];
+const LASTK = 'bcc_last', LAST_C = ['fPanelImg', 'keepSize', 'blackBg', 'saveEditsWith', 'fX', 'fXtc', 'fEpub', 'fCbz', 'fPdf', 'oPort', 'oLand', 'oMix', 'nmShape', 'mRename', 'keepCover'], LAST_V = ['panelMinW', 'mOrd1', 'mOrd2', 'mOrd3', 'mOrd4', 'pkGrid', 'rotAuto', 'cSat', 'cGamma', 'cQual', 'xRot', 'splitParts', 'zipLayout', 'cin'];
 function devIn(){ const o = $('preset').options[$('preset').selectedIndex]; return parseFloat(o && o.dataset.in) || parseFloat($('cin').value) || 6; }
 function grpUpdate(keep){   // screens over 5 inches may share up to 6 panels; smaller ones stay at 3
   const big = devIn() > 5, sel = $('maxGroup'), cur = keep || sel.value, vals = big ? [6, 5, 4, 3, 2, 1] : [3, 2, 1];
@@ -4250,7 +4362,7 @@ function grpUpdate(keep){   // screens over 5 inches may share up to 6 panels; s
   sel.value = vals.includes(+cur) ? String(cur) : '3';
   $('grpNote').textContent = big ? 'This screen is over 5 in, so up to 6 panels can share a screen, in reading order.' : 'Screens of 5 in or smaller keep a maximum of 3 panels per screen so text stays readable.';
 }
-function pkSync(){ PK.grid = $('pkGrid').value === 'grid'; PK.rtl = document.querySelector('input[name=dir]:checked').value === 'rtl'; }
+function pkSync(){ PK.grid = $('pkGrid').value === 'grid' && !$('keepSize').checked; PK.rtl = document.querySelector('input[name=dir]:checked').value === 'rtl'; }
 function lastSave(){
   try{
     const o = {preset: $('preset').selectedIndex, cw: $('cw').value, ch: $('ch').value, dir: document.querySelector('input[name=dir]:checked').value, col: $('colorCol').checked, mg: $('maxGroup').value, c: {}, v: {}};
@@ -4895,7 +5007,7 @@ $('cgKind').addEventListener('change', () => { for(const t of $('cgGrid').childr
 function deviceCol(){ const o = $('preset').options[$('preset').selectedIndex]; return o && o.dataset.col ? o.dataset.col : ''; }
 function colorSet(v){ const r = $(v === 'color' ? 'colorCol' : 'colorBw'); if(!r.checked){ r.checked = true; r.dispatchEvent(new Event('change', {bubbles: true})); } }
 function colorUpdate(){
-  const any = $('fEpub').checked || $('fCbz').checked || $('fPdf').checked;
+  const any = $('fEpub').checked || $('fCbz').checked || $('fPdf').checked || $('fPanelImg').checked;
   $('colorRow').hidden = !any;
   const dc = deviceCol(), note = $('colorNote');
   note.hidden = !any; $('colorQ').hidden = !(any && $('colorCol').checked);
@@ -4905,7 +5017,7 @@ function colorUpdate(){
     : (dc === 'color' ? 'Your reader shows colour. Choose Colour to keep the original colours.' : 'Black and white suits this reader and makes smaller files.');
 }
 $('preset').addEventListener('change', () => { const dc = deviceCol(); if(dc) colorSet(dc); colorUpdate(); });
-document.addEventListener('change', e => { if(e.target && /^(fEpub|fCbz|fPdf|fX|fXtc|colorBw|colorCol)$/.test(e.target.id)) colorUpdate(); });
+document.addEventListener('change', e => { if(e.target && /^(fEpub|fCbz|fPdf|fPanelImg|fX|fXtc|colorBw|colorCol)$/.test(e.target.id)) colorUpdate(); });
 colorUpdate();
 
 /* ---------- help: info buttons and the How to use dialog ---------- */
@@ -4920,13 +5032,14 @@ const HELP = {
   "Books: Convert": "<p>Tick the box to confirm you may convert these files, then press Convert. Each book becomes an XTCH and/or XTC file with a download link. Cancel stops between pages.</p>",
   'Files': '<p>Add the comics to convert: CBZ, CBR, EPUB, ZIP or PDF. A CBR or EPUB must hold page pictures; a CBR that uses RAR compression has to be re-saved as CBZ first. Drop files (or folders) on the box, or click it to browse. Adding more keeps what is already listed; the &times; removes one file. Each file gets its own outputs.</p>',
   'Pages': '<p>With Smart halves and thirds chosen, select pages and set their zoom to <b>Auto</b>, <b>No zoom</b>, <b>Halves</b> or <b>Thirds</b>, and use <b>Preview cuts</b> to see exactly where each page will be cut for every orientation you ticked.</p><p>Look at every page before converting. <b>Drag</b> pages to reorder them, select pages and use <b>Hide / show</b> to leave out ads and credits, <b>Make cover</b> to move a page to the front, <b>Keep whole</b> to always output a page as one box, and <b>Edit panels</b> to open it in the panel editor. <b>Find blank pages</b> checks every page for blank, dark or tiny scans. Hidden pages stay out of every output; nothing in your original file changes.</p>',
-  'Output details': '<p>Extra output settings: <b>Split into parts</b> makes several smaller files for readers that run out of memory , <b>ZIP layout</b> chooses folders in the ZIP download, and the XTCH/XTC options cover landscape rotation, dither style, the black and white cutoff and an optional cover thumbnail. When Mixed is ticked, you can also set when a panel counts as landscape.</p> <b>Download</b> sets the ZIP folder layout. Renaming outputs from the metadata is in Step 3.',
-  'Panel settings': '<p>Fine control for Smart panels: gap colour between panels, long-panel splitting, crowded-screen zoom, overlap, and how many small panels may share a screen. The defaults suit most comics; change them only if the panel preview shows a problem.</p></p><p>Also here: stack or grid arrangement, and Auto-rotate for large panels. Up to 6 panels can share a screen on readers over 5 in.',
+  'Format options': '<p>Extra output settings: <b>Split into parts</b> makes several smaller files for readers that run out of memory , <b>ZIP layout</b> chooses folders in the ZIP download, and the XTCH/XTC options cover landscape rotation, dither style, the black and white cutoff and an optional cover thumbnail. When Mixed is ticked, you can also set when a panel counts as landscape.</p> <b>Download</b> sets the ZIP folder layout. Renaming outputs from the metadata is in Step 3.',
+  'Panel detection and packing': '<p>Fine control for Smart panels: gap colour between panels, long-panel splitting, crowded-screen zoom, overlap, and how many small panels may share a screen. The defaults suit most comics; change them only if the panel preview shows a problem.</p></p><p>Also here: stack or grid arrangement, and Auto-rotate for large panels. Up to 6 panels can share a screen on readers over 5 in.',
   'Device and reading': '<p><b>Test direction on my page</b> shows your first panelled page numbered both ways so you can see which direction is right. The last device and direction you used are remembered in this browser.</p><p><b>Reading direction</b>: right-to-left for manga, left-to-right for western comics. It sets the panel order and which half comes first when a panel is split. <b>Screen preset</b> picks your reader&rsquo;s resolution; choose Custom to type your own size. Larger screens make larger files.</p></p><p>The reader list is grouped by brand: open a brand, pick your model and the list closes. Screens over 5 in allow more panels per screen; for Custom, type the diagonal.',
   'Output': '<p><b>Colour or black and white</b> (EPUB, CBZ and PDF): colour readers, phones and tablets can keep the original colours. The default follows the reader you picked, so Xteink, Kindle and Kobo black-and-white models start on black and white. XTCH and XTC are always grey.</p><p><b>PDF (webtoon scroll)</b> stacks the extracted panels (or, if you choose, whole pages) into tall continuous strips at a phone-friendly width, so you can scroll a chapter without page turns. It ignores screen orientation.</p><p><b>Device profile</b> sets screen size, portrait, file type and a safe split size for the X3 or X4 in one choice. <b>Estimate size and screens</b> samples your pages and shows the expected screens and file size, with a warning when a file is likely too big for the device.</p><p>Pick which <b>screen shapes</b> and which <b>file types</b> to make; you get one file for every combination (listed under the buttons).</p><p><b>Split into parts</b> makes several smaller files for each shape and type (part 1, part 2 ...), about the number of screens you choose, starting at a chapter where possible. Use it if your e-reader runs out of memory on big files.</p><ul><li><b>Portrait / Landscape</b>: all pages on that screen shape.</li><li><b>Mixed</b>: one file where wide panels use landscape screens and tall panels use portrait screens. Turn the device when the page orientation changes. Long panels and dense pages still show whole first, then zoomed.</li><li><b>XTCH</b>: 4-level gray format for Xteink devices (landscape pages are stored sideways; options for rotation, dither and a cover thumbnail appear when it is ticked). <b>EPUB</b> and <b>CBZ</b> work in most readers.</li></ul><p>With <i>keep the cover</i> on, the first page is shown whole on a portrait page in landscape and mixed output.</p></p><p>Nothing is ticked on first use and your choices are remembered. Tick <b>Add portrait / landscape / mixed to the file names</b> to put the shape in the names; otherwise the original name is kept (it is added automatically when you tick more than one shape). <b>Rename output files from the metadata</b> builds the name from your Metadata fields in the order you pick.',
   'Panels': '<p>With Smart halves and thirds, <b>Preview and adjust cuts</b> shows one page at a time with its parts, and <b>Review all pages (grid)</b> shows every page; both let you set Auto, No zoom, Halves or Thirds per page (keys A, N, H, T in the preview).</p><p><b>Smart halves and thirds</b> picks halves or thirds for each page, cutting in white gaps so speech bubbles are not sliced and parts fill the screen width. In the panel editor and review grid, <b>Spoiler blur</b> (key B) blurs the artwork and text with a strength slider, so you can fix boxes without seeing the story.</p><p><b>Review all pages (grid)</b> shows every page with its detected boxes; click a page to fix it in the editor, or press Whole to keep it as one box. In the editor, <b>Merge next</b> and <b>Split by line</b> combine or cut boxes.</p><p><b>Conversion mode:</b> <i>Smart panels</i> finds and reorders panels (everything below). <i>Simple page split</i> skips all of that: each page is just cut into 2 or 3 overlapping parts, a quick conversion like other basic converters.</p><p>Smart mode: check how each page is split into panels and fix mistakes, then control how panels become screens.</p><ul><li><b>Preview and fix panels</b>: go through all pages. <b>Review flagged pages only</b>: jump straight to tall, big or possibly grouped boxes.</li><li><b>Zoom and splitting</b>: the only two settings that show a screen whole and then enlarged pieces of it. <i>Long panels</i> become two halves; <i>dense page zoom</i> cuts crowded screens into tiles. Each adds pages. The overlap setting applies to both.</li><li><b>Packing</b>: max panels per screen (1 = never combine) and the minimum scale kept when packing.</li></ul><p>Press <b>How to use</b> at the top for the full panel editor guide.</p>',
   'Image quality': '<p>The <b>Preview before / after</b> at the top shows one page with your sharpen, contrast and dither settings, as grey, XTCH or XTC, and updates as you change them. <b>Auto</b> next to the XTC cutoff picks a cutoff from your pages.</p><p>Tweaks that help e-ink screens: sharpening for enlarged panels, e-ink contrast, darker midtones, moir&eacute; reduction for screentone, auto-levels for faded scans, and JPEG quality (higher is sharper and larger).</p></p><p>Settings are grouped as <b>All output</b> (sharpen, contrast, auto-levels), <b>Black and white</b> (darken midtones, moir&eacute;, JPEG quality) and <b>Colour</b>, which appears when Colour is chosen (strength, darken midtones, JPEG quality). The Black and white group hides when everything you make is colour.',
   'Metadata': '<p><b>Fill from file name</b> guesses title, volume, author and year from the name (check the result). <b>Choose cover page</b> takes you to Pages, where <b>Make cover</b> moves a page to the front.</p><p>Title, author, series and so on, filled in from the file when it has them. Blank fields keep each file&rsquo;s own values. With several files, each file gets its own card with every field.</p></p><p>Renaming output files from these fields is in Step 3. Publisher, year, language and description are under <b>More fields</b>.',
+  'Memory, parts and downloads': '<p><b>Split into parts</b> makes several smaller files for readers that run out of memory. <b>Parallel processing</b> is faster on multi-core computers; turn it off if the page runs out of memory. <b>ZIP layout</b> chooses folders in the ZIP download (folders only apply to the ZIP).</p>',
   'Saved presets': '<p><b>Export</b> saves your presets to a file and <b>Import</b> loads them back, so they can move between browsers and devices.</p><p>Save all settings under a name (for example "X4 portrait") and load them in one tap. Files, metadata and panel edits are not included. Presets live in this browser only.</p>',
   'Selected box': '<p>Choose how the selected box is zoomed: <b>Auto</b> follows your zoom settings, <b>Off</b> shows it as it is, <b>Halves</b> or <b>Thirds</b> show it whole and then as enlarged overlapping parts. Keys: A, O, H, T.</p></p><p><b>Rotate box</b> turns the box a quarter turn so a big panel fits better.',
   'Page': '<p>Move between pages with the arrow keys or the buttons. The bar shows how many flagged pages you have reviewed; with no scan it shows how many pages you have viewed.</p>',
@@ -4978,6 +5091,7 @@ function syncOutputs(){
   const img = $('fEpub').checked || $('fCbz').checked, x = $('fX').checked || $('fXtc').checked;
   $('mPort').checked = $('oPort').checked && img; $('mLand').checked = $('oLand').checked && img; $('mMixed').checked = $('oMix').checked && img;
   $('fXtch').checked = $('oPort').checked && x; $('fXtchL').checked = $('oLand').checked && x; $('fXtchM').checked = $('oMix').checked && x;
+  $('shapeBox').hidden = !(img || x) && ($('fPdf').checked || $('fPanelImg').checked);
   const simple = simpleOn(), fixed = fixedOn(); $('simpleOpts').hidden = !fixed; $('autoOpts').hidden = !$('modeAuto').checked; $('smartOpts').hidden = simple; $('panelSetNote').hidden = !simple; $('secPanelSet').style.opacity = simple ? .5 : '';
   if(fixed) $('oMix').checked = false; $('oMix').disabled = fixed; $('oMix').closest('.opt').style.opacity = fixed ? .4 : '';
   $('mixRow').hidden = !$('oMix').checked; $('xtchOpts').hidden = !x; $('xThumbRow').hidden = !x; $('xtcOpt').hidden = !$('fXtc').checked;
@@ -4987,8 +5101,8 @@ function syncOutputs(){
 function outNames(){
   const sh = [['oPort', 'portrait'], ['oLand', 'landscape'], ['oMix', 'mixed']].filter(x => $(x[0]).checked).map(x => x[1]);
   const ft = [['fX', 'xtch'], ['fXtc', 'xtc'], ['fEpub', 'epub'], ['fCbz', 'cbz']].filter(x => $(x[0]).checked).map(x => x[1]);
-  const pdf = $('fPdf').checked;
-  return {sh: ft.length ? sh : [], ft, pdf, n: sh.length * ft.length + (pdf ? 1 : 0)};
+  const pdf = $('fPdf').checked, pimg = $('fPanelImg').checked;
+  return {sh: ft.length ? sh : [], ft, pdf, pimg, n: sh.length * ft.length + (pdf ? 1 : 0) + (pimg ? 1 : 0)};
 }
 function splitNoteUpdate(){
   const n = parseInt($('splitParts').value, 10) || 0, cw = parseInt($('cw').value, 10) || 480, ch = parseInt($('ch').value, 10) || 800;
@@ -5001,13 +5115,14 @@ function updateSummaries(){
   $('sumFiles').textContent = nf ? `${nf} file${nf > 1 ? 's' : ''}` : 'none yet';
   $('sumDevice').textContent = `${pt} · ${document.querySelector('input[name=dir]:checked').value === 'rtl' ? 'right-to-left' : 'left-to-right'}`;
   splitNoteUpdate();
-  $('sumOutput').textContent = o.n ? [o.sh.length ? o.sh.join(' + ') : '', o.ft.concat(o.pdf ? ['pdf'] : []).join(' + ').toUpperCase(), (($('fEpub').checked || $('fCbz').checked || $('fPdf').checked) && $('colorCol').checked) ? 'colour' : ''].filter(Boolean).join(' · ') : 'nothing selected';
-  $('outNames').textContent = o.n ? `Makes ${o.n} file${o.n > 1 ? 's' : ''} per comic: ` + o.sh.flatMap(a => o.ft.map(b => `name${($('nmShape').checked || o.sh.length > 1) ? '-' + a : ''}.${b}`)).concat(o.pdf ? ['name-webtoon.pdf'] : []).join(', ') : 'Pick at least one screen shape and one file type.';
+  $('sumOutput').textContent = o.n ? [o.sh.length ? o.sh.join(' + ') : '', o.ft.concat(o.pdf ? ['pdf'] : [], o.pimg ? ['panel cbz'] : []).join(' + ').toUpperCase(), (($('fEpub').checked || $('fCbz').checked || $('fPdf').checked || $('fPanelImg').checked) && $('colorCol').checked) ? 'colour' : ''].filter(Boolean).join(' · ') : 'nothing selected';
+  $('outNames').textContent = o.n ? `Makes ${o.n} file${o.n > 1 ? 's' : ''} per comic: ` + o.sh.flatMap(a => o.ft.map(b => `name${($('nmShape').checked || o.sh.length > 1) ? '-' + a : ''}.${b}`)).concat(o.pdf ? ['name-webtoon.pdf'] : [], o.pimg ? ['name-panels.cbz'] : []).join(', ') : 'Pick at least one screen shape and one file type.';
   const dz = $('denseMode').value;
   const _pan = $('modeAuto').checked ? 'smart halves and thirds' : simpleOn() ? `simple split \u00b7 ${$('spN').value} parts \u00b7 ${Math.round(parseFloat($('spOv').value) * 100)}% overlap` : [$('splitTall').checked ? 'long-panel split on' : 'split off', 'dense zoom ' + dz, 'max ' + $('maxGroup').value + '/screen', edits.size ? edits.size + ' pages edited' : ''].filter(Boolean).join(' · ');
   $('sumPanelSet').textContent = _pan; $('sumPanels').textContent = $('modeAuto').checked ? 'smart halves and thirds' : simpleOn() ? `simple · ${$('spN').value} parts` : ('smart panels' + (edits.size ? ' · ' + edits.size + ' pages edited' : ''));
   $('sizeRow').hidden = !!$('preset').value; $('presetNote').hidden = !!$('preset').value;
-  $('sumOutMore').textContent = (parseInt($('splitParts').value, 10) ? 'split ~' + $('splitParts').value + ' screens' : 'one file') + ' · zip: ' + $('zipLayout').options[$('zipLayout').selectedIndex].textContent.toLowerCase().replace(/\s*\(.*/, '').slice(0, 24);
+  $('sumDelivery').textContent = (parseInt($('splitParts').value, 10) ? 'split ~' + $('splitParts').value + ' screens' : 'one file') + ' · zip: ' + $('zipLayout').options[$('zipLayout').selectedIndex].textContent.toLowerCase().replace(/\s*\(.*/, '').slice(0, 24);
+  $('sumOutMore').textContent = [$('fX').checked || $('fXtc').checked ? 'xtch/xtc: ' + $('xDither').value : '', $('fPanelImg').checked ? 'panel images' + (parseInt($('panelMinW').value, 10) ? ' ≥' + $('panelMinW').value + 'px' : ' at original size') : '', $('fPdf').checked ? 'pdf ' + $('pdfW').value + 'px' : '', $('oMix').checked ? 'mixed ' + $('mixAsp').value : ''].filter(Boolean).join(' · ') || 'defaults';
   $('sumQuality').textContent = [$('eSharp').checked ? 'sharpen' : '', $('eContrast').checked ? 'contrast' : '', $('eAuto').checked ? 'auto-levels' : '', 'JPEG ' + $('qual').value].filter(Boolean).join(' · ');
   $('sumMeta').textContent = ($('mTitle').value || '').slice(0, 30);
   $('sumPresets').textContent = Object.keys(cfgGet()).length ? Object.keys(cfgGet()).length + ' saved' : '';
@@ -6356,7 +6471,7 @@ const STEPS = () => {
     S('#stFiles>.stH', '1. Add your comics', 'Drop CBZ, CBR, EPUB, ZIP or PDF files or whole folders here, or click to browse. Open Pages to reorder or hide pages.'),
     S('#stDevice>.stH', '2. Choose your reader', 'Pick your reader from the brand list (or a custom size) and say which way you read.'),
     S('#stOutput>.stH', '3. Choose what to make', 'Tick the file formats (XTCH, XTC, EPUB, CBZ) and the screen shapes. Your choices are remembered.'),
-    S('#stPanels>.stH', '4. Choose how pages are cut', 'Smart panels finds each panel and fits it to the screen. Simple halves or thirds just cuts each page. Panel settings and the editor let you fine-tune.'),
+    S('#stPanels>.stH', '4. Choose how pages are cut', 'Smart panels finds each panel and fits it to the screen. Simple halves or thirds just cuts each page. Panel detection settings and the editor let you fine-tune.'),
     S('#go', 'Convert', 'Tick that you own the files, then press Convert. Everything runs in your browser; nothing is uploaded.')];
   const pp = m === 'papers', n = 0;
   return [tabs,
