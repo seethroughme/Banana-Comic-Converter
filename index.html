@@ -7,7 +7,7 @@
 <meta name="description" content="Free tool that converts comics, manga, ebooks and PDFs into pages for e-ink readers (XTCH, XTC, EPUB, CBZ). Runs entirely in your browser; files never leave your device.">
 <meta name="theme-color" content="#f5c518">
 <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTQiIGZpbGw9IiNmZmY2ZDEiLz48cGF0aCBkPSJNMTcgMTNjLTMgMTkgNiAzNiAyNyA0MSA2IDEgMTEtMSAxNC02LTEyIDEtMjUtNS0zMC0xOS0yLTYtNS0xMC01LTE2eiIgZmlsbD0iI2Y3Y2YyZSIgc3Ryb2tlPSIjOWE3NDEwIiBzdHJva2Utd2lkdGg9IjIuNCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjxwYXRoIGQ9Ik0xNy41IDEzLjUwMGw1LjUwMC0uNS0uNS03LTUuNTAwIDF6IiBmaWxsPSIjN2E1ZjFkIiBzdHJva2U9IiM1YTQ1MTAiIHN0cm9rZS13aWR0aD0iMS42IiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PHBhdGggZD0iTTI0IDIyYzIgOSA3IDE3IDE1IDIyIiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYzYTgiIHN0cm9rZS13aWR0aD0iMi40IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48cGF0aCBkPSJNNTIgNTBjMi0xIDQtMyA2LTQtMiA0LTUgNy04IDh6IiBmaWxsPSIjNWE0NTEwIi8+PC9zdmc+Cg==" type="image/svg+xml">
-<script>try{var t=localStorage.getItem('bcc_theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}if(!/^#(books|comics|papers)/.test(location.hash)){document.documentElement.dataset.mode='books';document.documentElement.dataset.start='1';}</script>
+<script>try{var q=/[?&]ui=(new|classic)/.exec(location.search);if(q)localStorage.setItem('bcc_ui',q[1]);var u=localStorage.getItem('bcc_ui');document.documentElement.dataset.ui=(u==='new'||u==='classic')?u:'classic'}catch(e){document.documentElement.dataset.ui='classic'}try{var t=localStorage.getItem('bcc_theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}if(!/^#(books|comics|papers)/.test(location.hash)){document.documentElement.dataset.mode='books';document.documentElement.dataset.start='1';}</script>
 <style>
   :root{color-scheme:light dark;--bg:#fffbea;--surface:rgba(255,253,244,.86);--field:rgba(255,255,255,.78);--fg:#2b2615;--mut:#74694a;--card:#faf1c9;--line:#eadfae;--acc:#f2c21b;--onacc:#3a2d00;--head:#8a6a00;--shadow:0 1px 2px rgba(80,60,0,.07),0 10px 28px rgba(80,60,0,.08);--bgfade:.7}
   @media (prefers-color-scheme:dark){:root{--bg:#15130b;--surface:rgba(34,29,15,.84);--field:rgba(0,0,0,.28);--fg:#f1ead0;--mut:#b3a77c;--card:#2a2412;--line:#4a4122;--acc:#f2c94c;--onacc:#2e2400;--head:#f2c94c;--shadow:0 1px 2px rgba(0,0,0,.4),0 10px 28px rgba(0,0,0,.35);--bgfade:.4}}
@@ -632,7 +632,7 @@ html:root #newDlg ul.nl{list-style:disc;padding-left:1.2em;margin:10px 0}html:ro
 <div class="top">
   <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTQiIGZpbGw9IiNmZmY2ZDEiLz48cGF0aCBkPSJNMTcgMTNjLTMgMTkgNiAzNiAyNyA0MSA2IDEgMTEtMSAxNC02LTEyIDEtMjUtNS0zMC0xOS0yLTYtNS0xMC01LTE2eiIgZmlsbD0iI2Y3Y2YyZSIgc3Ryb2tlPSIjOWE3NDEwIiBzdHJva2Utd2lkdGg9IjIuNCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjxwYXRoIGQ9Ik0xNy41IDEzLjUwMGw1LjUwMC0uNS0uNS03LTUuNTAwIDF6IiBmaWxsPSIjN2E1ZjFkIiBzdHJva2U9IiM1YTQ1MTAiIHN0cm9rZS13aWR0aD0iMS42IiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PHBhdGggZD0iTTI0IDIyYzIgOSA3IDE3IDE1IDIyIiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYzYTgiIHN0cm9rZS13aWR0aD0iMi40IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48cGF0aCBkPSJNNTIgNTBjMi0xIDQtMyA2LTQtMiA0LTUgNy04IDh6IiBmaWxsPSIjNWE0NTEwIi8+PC9zdmc+Cg==" alt="">
   <div class="topT"><h1>Banana Converter</h1><small>Comics, manga, books and PDFs &rarr; pages made for e-ink readers. Private: everything runs in your browser.</small></div>
-  <div class="topBtns"><button type="button" class="btn2" id="themeBtn" aria-label="Colour theme">Theme: Auto</button><a class="kofi" id="kofi" href="https://ko-fi.com/curseofthebanana" target="_blank" rel="noopener noreferrer" title="Buy me a coffee on Ko-fi">&#9749; Buy me a coffee</a><button type="button" class="btn2" id="helpOpen" data-help="start">How to use</button><button type="button" class="btn2" id="tipsOpen" data-help="tips">Tips and fixes</button><button type="button" class="btn2" id="newOpen">What's new</button></div>
+  <div class="topBtns"><button type="button" class="btn2" id="uiBtn" title="Switch between the Classic look and the Desktop mode. Same features either way.">Desktop mode</button><button type="button" class="btn2" id="themeBtn" aria-label="Colour theme">Theme: Auto</button><a class="kofi" id="kofi" href="https://ko-fi.com/curseofthebanana" target="_blank" rel="noopener noreferrer" title="Buy me a coffee on Ko-fi">&#9749; Buy me a coffee</a><button type="button" class="btn2" id="helpOpen" data-help="start">How to use</button><button type="button" class="btn2" id="tipsOpen" data-help="tips">Tips and fixes</button><button type="button" class="btn2" id="newOpen">What's new</button></div>
 </div>
 
 <div class="pgTabs"><button type="button" class="btn2 on" data-pg="comics">Comics and manga</button><button type="button" class="btn2" data-pg="books">Books</button><button type="button" class="btn2" data-pg="papers">Scientific papers <small class="exp">Experimental</small></button></div>
@@ -731,7 +731,7 @@ html:root #newDlg ul.nl{list-style:disc;padding-left:1.2em;margin:10px 0}html:ro
   <div id="orderRow" hidden><div class="ordGrid"><div class="ordSlot"><label for="mOrd1">First</label><select id="mOrd1"><option value="">None</option><option value="title" selected>Title</option><option value="vol">Volume</option><option value="author">Author</option><option value="series">Series</option></select></div><div class="ordSlot"><label for="mOrd2">Second</label><select id="mOrd2"><option value="">None</option><option value="title">Title</option><option value="vol" selected>Volume</option><option value="author">Author</option><option value="series">Series</option></select></div><div class="ordSlot"><label for="mOrd3">Third</label><select id="mOrd3"><option value="">None</option><option value="title">Title</option><option value="vol">Volume</option><option value="author">Author</option><option value="series">Series</option></select></div><div class="ordSlot"><label for="mOrd4">Fourth</label><select id="mOrd4"><option value="">None</option><option value="title">Title</option><option value="vol">Volume</option><option value="author">Author</option><option value="series">Series</option></select></div></div><small id="ordPrev"></small></div>
   <small id="orderNote" hidden>Pick what goes first, second and so on. Each field is used once, empty fields are skipped, and if nothing is left the original name is kept.</small>
   <div class="sub2">Before you convert</div>
-  <label class="chk"><input type="checkbox" id="saveEditsWith" checked><span><b>Save my edits with the downloads:</b> adds a small edits file next to your converted files whenever you have edited panels, hidden pages or page order, so you can carry them to another device <small>(load it with &ldquo;Load edits file&rdquo; under your file list)</small></span></label>
+  <label class="chk"><input type="checkbox" id="saveEditsWith"><span><b>Save my edits with the downloads:</b> adds a small edits file next to your converted files whenever you have edited panels, hidden pages or page order, so you can carry them to another device <small>(load it with &ldquo;Load edits file&rdquo; under your file list)</small></span></label>
   <div style="margin:8px 0"><button type="button" class="btn2" id="estBtn">Estimate file size</button></div>
   <div id="estBox" class="help" hidden></div>
 </div></section>
@@ -759,6 +759,7 @@ html:root #newDlg ul.nl{list-style:disc;padding-left:1.2em;margin:10px 0}html:ro
   </div>
 </div></section>
 <div class="moreH"><h2>More options</h2><small>All optional. The defaults work well.</small><span class="moreBtns"><button type="button" class="link" id="openAll">Expand all</button><button type="button" class="link" id="closeAll">Collapse all</button></span></div>
+<div class="moreSearch"><input type="search" id="optSearch" placeholder="Search settings (for example: black, zoom, split, ZIP)" aria-label="Search settings"><small id="optSearchMsg"></small></div>
 
 
 <details class="sec" id="secOutMore"><summary><span class="stitle">Format options</span><span class="ssum" id="sumOutMore"></span></summary>
@@ -782,7 +783,7 @@ html:root #newDlg ul.nl{list-style:disc;padding-left:1.2em;margin:10px 0}html:ro
     <div class="f"><label for="mixAsp">Mixed: use landscape when width &divide; height is at least</label><input type="number" id="mixAsp" value="1.15" step="0.05" min="0.6" max="3"></div>
     <small>Wide panels go on landscape screens, tall ones on portrait. 1.0 picks whichever shape fills the screen better; higher keeps more panels portrait.</small>
   </div>
-  <label class="chk"><input type="checkbox" id="keepCover" checked><span>Keep the cover as a full portrait page in landscape and mixed output</span></label>
+  <label class="chk"><input type="checkbox" id="keepCover"><span>Keep the cover as a full portrait page in landscape and mixed output</span></label>
   <div id="xThumbRow">
     <label class="chk"><input type="checkbox" id="xThumb"><span>Add a cover thumbnail (experimental, untested on devices)</span></label>
   </div>
@@ -797,7 +798,7 @@ html:root #newDlg ul.nl{list-style:disc;padding-left:1.2em;margin:10px 0}html:ro
   <div class="sub2">Detection</div>
   <div class="f"><label for="gutterMode">Gap colour between panels</label><select id="gutterMode"><option value="auto" selected>Auto (spot black gutters)</option><option value="light">White gaps only</option><option value="dark">Black gaps on every page</option></select></div>
   <div class="sub2">Zoom and splitting <span class="hint">show a screen whole, then enlarged parts</span></div>
-  <label class="chk"><input type="checkbox" id="splitTall" checked><span><b>Long panels:</b> show whole, then as two enlarged halves</span></label>
+  <label class="chk"><input type="checkbox" id="splitTall"><span><b>Long panels:</b> show whole, then as two enlarged halves</span></label>
   <div class="f"><label for="splitAsp">&nbsp;&nbsp;Split when long &divide; short side is at least</label><input type="number" id="splitAsp" value="1.3" step="0.1" min="1.1" max="3"></div>
   <div class="f"><label for="denseMode"><b>Crowded screens:</b> dense page zoom</label><select id="denseMode"><option value="off" selected>Off</option><option value="auto">Auto (looks multi-panel)</option><option value="always">Always</option></select></div>
   <div class="f"><label for="splitOv">Smart cuts: overlap when there is no blank gap</label><select id="splitOv"><option value="0.06">Small</option><option value="0.12" selected>Medium</option><option value="0.18">Large</option></select></div>
@@ -823,9 +824,9 @@ html:root #newDlg ul.nl{list-style:disc;padding-left:1.2em;margin:10px 0}html:ro
     <small id="qpMsg">Shows one page at your screen size with the settings below, so you can tune without converting the book. It updates as you change them. Enlarged panels look sharper than this whole-page view.</small>
   </div>
   <div class="sub2">All output</div>
-  <label class="chk"><input type="checkbox" id="eSharp" checked><span>Sharpen (helps enlarged panels look crisp)</span></label>
+  <label class="chk"><input type="checkbox" id="eSharp"><span>Sharpen (helps enlarged panels look crisp)</span></label>
   <div class="f"><label for="sharpAmt">Sharpen strength (0.2&ndash;1.5)</label><input type="number" id="sharpAmt" value="0.5" step="0.1" min="0.2" max="1.5"></div>
-  <label class="chk"><input type="checkbox" id="eContrast" checked><span>E-ink contrast (deeper blacks, whiter paper)</span></label>
+  <label class="chk"><input type="checkbox" id="eContrast"><span>E-ink contrast (deeper blacks, whiter paper)</span></label>
   <label class="chk"><input type="checkbox" id="eAuto"><span>Auto-levels (rescues faded or yellowed scans)</span></label>
   <div id="bwQ">
     <div class="sub2">Black and white</div>
@@ -1062,7 +1063,7 @@ html:root #newDlg ul.nl{list-style:disc;padding-left:1.2em;margin:10px 0}html:ro
 <dialog id="newDlg">
   <h2>&#127820; What's new</h2>
   <small>Recent updates to Banana Converter. You can open this again from the What's new button at the top.</small>
-  <ul class="nl"><li><b>Keep panel size, black gutters, edits file</b> – new options to leave panels at their original size instead of enlarging them, Dark mode with black gutters (good for OLED and reading in the dark), and save your edits as a file to move to another device.</li><li><b>New (experimental): Scientific papers</b> – papers keep columns, figures, tables and equations whole, with the text reflowed for your screen.</li><li><b>Quick tour</b> – a short walkthrough of every step on each page. Replay it from How to use.</li><li><b>More comic formats</b> – CBR and EPUB comics can be added alongside CBZ, ZIP and PDF.</li><li><b>Files follow you</b> – a file you add shows up in every mode that can read it.</li><li><b>Upright cover in landscape books</b> – keep the cover portrait while the other pages are landscape.</li><li><b>Hideable preview, +/- buttons</b> – both previews can be hidden, and number fields have minus and plus buttons.</li><li><b>Preview on the left for comics</b> – see the real screens before you convert, and it follows your panel edits.</li></ul>
+  <ul class="nl"><li><b>Desktop mode (optional)</b> – a photo-editor style workspace: the preview in the middle, settings in tabs on the right, and the panel editor and page grids open in place of the preview. On a phone the tabs sit at the bottom. Options start switched off and remember what you used last. Switch with the <b>Desktop mode</b> / <b>Classic look</b> button at the top. Every setting works the same in both.</li><li><b>Keep panel size, black gutters, edits file</b> – new options to leave panels at their original size instead of enlarging them, Dark mode with black gutters (good for OLED and reading in the dark), and save your edits as a file to move to another device.</li><li><b>New (experimental): Scientific papers</b> – papers keep columns, figures, tables and equations whole, with the text reflowed for your screen.</li><li><b>Quick tour</b> – a short walkthrough of every step on each page. Replay it from How to use.</li><li><b>More comic formats</b> – CBR and EPUB comics can be added alongside CBZ, ZIP and PDF.</li><li><b>Files follow you</b> – a file you add shows up in every mode that can read it.</li><li><b>Upright cover in landscape books</b> – keep the cover portrait while the other pages are landscape.</li><li><b>Hideable preview, +/- buttons</b> – both previews can be hidden, and number fields have minus and plus buttons.</li><li><b>Preview on the left for comics</b> – see the real screens before you convert, and it follows your panel edits.</li></ul>
   <div class="nbar"><button type="button" class="btn2" id="newClose">Got it</button></div>
 </dialog>
 <dialog id="helpDlg">
@@ -1703,6 +1704,272 @@ details.sec>summary{padding:7px 12px}details.sec .stitle{font-size:.98rem!import
 #pgComics .cvRight{padding-bottom:104px}
 #pgComics .cvLeft{padding-bottom:96px}
 @media (max-width:720px){.cvLayout .bkDevice #cvPrev{max-height:26vh!important}#pgComics .cvLeft{padding-bottom:8px}#pgComics .cvRight{padding-bottom:20px}}
+</style>
+<style id="newUiCss">
+/* ===== New UI (opt-in, :root[data-ui=new]) : flat, calm, modern. Classic UI is untouched when this is off. ===== */
+/* tokens: light */
+:root[data-ui=new][data-ui=new]{--bg:#f4f5f8!important;--surface:#ffffff!important;--field:#ffffff!important;--fg:#161a22!important;--mut:#5d6675!important;--card:#eef0f5!important;--line:#dfe3ea!important;--acc:#f2b705!important;--onacc:#1d1600!important;--head:#161a22!important;--ink:#c9cfda!important;--hard:rgba(20,26,40,.10)!important;--pop:#e0482f!important;--tsh:transparent!important;--shadow:0 1px 2px rgba(20,26,40,.06),0 4px 14px rgba(20,26,40,.06)!important;--cf:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",sans-serif!important;--glow:transparent!important;--r:14px;--ring:rgba(242,183,5,.45);--acc2:#a07800}
+:root[data-ui=new][data-ui=new][data-mode=books]{--acc:#8f3b32!important;--onacc:#fff!important;--ring:rgba(143,59,50,.35);--acc2:#8f3b32}
+:root[data-ui=new][data-ui=new][data-mode=books][data-kind=papers]{--acc:#0f766e!important;--onacc:#fff!important;--ring:rgba(15,118,110,.35);--acc2:#0f766e}
+:root[data-ui=new][data-ui=new][data-mode=start]{--acc:#3563c9!important;--onacc:#fff!important;--ring:rgba(53,99,201,.35);--acc2:#3563c9}
+@media (prefers-color-scheme:dark){:root[data-ui=new][data-ui=new]:not([data-theme=light]){--bg:#0e1116!important;--surface:#171b22!important;--field:#10141a!important;--fg:#e8ebf0!important;--mut:#98a2b3!important;--card:#1e232c!important;--line:#2b323d!important;--head:#e8ebf0!important;--ink:#3a4250!important;--hard:rgba(0,0,0,.4)!important;--shadow:0 1px 2px rgba(0,0,0,.4),0 6px 18px rgba(0,0,0,.28)!important;--acc2:#f2c94c}
+:root[data-ui=new][data-ui=new][data-mode=books]:not([data-theme=light]){--acc:#d08a7e!important;--onacc:#1b0d0a!important;--acc2:#d08a7e}:root[data-ui=new][data-ui=new][data-mode=books][data-kind=papers]:not([data-theme=light]){--acc:#4fb8ad!important;--onacc:#06201d!important;--acc2:#4fb8ad}:root[data-ui=new][data-ui=new][data-mode=start]:not([data-theme=light]){--acc:#7ea3f0!important;--onacc:#0a1430!important;--acc2:#7ea3f0}}
+:root[data-ui=new][data-ui=new][data-theme=dark]{--bg:#0e1116!important;--surface:#171b22!important;--field:#10141a!important;--fg:#e8ebf0!important;--mut:#98a2b3!important;--card:#1e232c!important;--line:#2b323d!important;--head:#e8ebf0!important;--ink:#3a4250!important;--hard:rgba(0,0,0,.4)!important;--shadow:0 1px 2px rgba(0,0,0,.4),0 6px 18px rgba(0,0,0,.28)!important;--acc2:#f2c94c}
+:root[data-ui=new][data-ui=new][data-theme=dark][data-mode=books]{--acc:#d08a7e!important;--onacc:#1b0d0a!important;--acc2:#d08a7e}:root[data-ui=new][data-ui=new][data-theme=dark][data-mode=books][data-kind=papers]{--acc:#4fb8ad!important;--onacc:#06201d!important;--acc2:#4fb8ad}:root[data-ui=new][data-ui=new][data-theme=dark][data-mode=start]{--acc:#7ea3f0!important;--onacc:#0a1430!important;--acc2:#7ea3f0}
+/* page */
+:root[data-ui=new][data-ui=new]{background:var(--bg)}
+:root[data-ui=new][data-ui=new] body{font-family:var(--cf);font-size:15.5px;background:var(--bg)}
+:root[data-ui=new][data-ui=new] body::before{display:none!important}
+:root[data-ui=new][data-ui=new] h1,:root[data-ui=new][data-ui=new] .stitle,:root[data-ui=new][data-ui=new] .moreH h2,:root[data-ui=new][data-ui=new] #newDlg h2,:root[data-ui=new][data-ui=new] #helpDlg h2,:root[data-ui=new][data-ui=new] .edSide h3,:root[data-ui=new][data-ui=new] legend,:root[data-ui=new][data-ui=new] .pgTabs .btn2,:root[data-ui=new][data-ui=new] .modeCard b{font-family:var(--cf)!important;text-transform:none!important;letter-spacing:0!important;font-variant:normal!important;font-style:normal!important;text-shadow:none!important}
+/* header */
+:root[data-ui=new][data-ui=new] .top{align-items:center;padding:6px 2px 14px;gap:14px}
+:root[data-ui=new][data-ui=new] .top h1{font-size:1.45rem!important;font-weight:750;letter-spacing:-.01em!important;color:var(--fg)}
+:root[data-ui=new][data-ui=new] .top img{transform:none!important;border:0!important;box-shadow:var(--shadow)!important;border-radius:12px!important;width:46px;height:46px}
+:root[data-ui=new][data-ui=new] .topT small{display:block;margin:2px 0 0!important;padding:0!important;background:none!important;border:0!important;color:var(--mut)!important;font-size:.86rem;font-style:normal!important;border-radius:0!important}
+:root[data-ui=new][data-ui=new] .topT small::before{display:none!important}
+:root[data-ui=new][data-ui=new] .topBtns{gap:6px}
+:root[data-ui=new][data-ui=new] .topBtns .btn2,:root[data-ui=new][data-ui=new] .topBtns #themeBtn{font-size:.85rem;padding:7px 12px}
+:root[data-ui=new][data-ui=new] .kofi{background:var(--card)!important;color:var(--fg)!important;border:1px solid var(--line)!important;box-shadow:none!important;border-radius:10px!important;font-weight:600!important;padding:7px 12px;font-size:.85rem}
+:root[data-ui=new][data-ui=new] #uiBtn{background:var(--acc)!important;color:var(--onacc)!important;border-color:transparent!important}
+/* mode tabs: segmented control */
+:root[data-ui=new][data-ui=new] .pgTabs{display:inline-flex;gap:4px;padding:4px;background:var(--card);border:1px solid var(--line);border-radius:14px;margin:0 0 16px;width:100%;max-width:640px}
+:root[data-ui=new][data-ui=new] .pgTabs .btn2{flex:1;border:0!important;background:transparent!important;box-shadow:none!important;border-radius:10px!important;font-size:.95rem!important;font-weight:600;padding:9px 10px!important;color:var(--mut)}
+:root[data-ui=new][data-ui=new] .pgTabs .btn2:hover:not(.on){color:var(--fg)}
+:root[data-ui=new][data-ui=new] .pgTabs .btn2.on{background:var(--surface)!important;color:var(--fg)!important;box-shadow:inset 0 -3px 0 var(--acc),var(--shadow)!important}
+/* buttons */
+:root[data-ui=new][data-ui=new] button{font-family:inherit;text-transform:none!important;letter-spacing:0!important;font-weight:600!important;border:1px solid transparent!important;border-radius:10px!important;box-shadow:none!important;background:var(--acc);color:var(--onacc);transition:background .12s,transform .08s,box-shadow .12s,filter .12s}
+:root[data-ui=new][data-ui=new] button:hover:not(:disabled){transform:none!important;filter:brightness(.96);box-shadow:none!important}
+:root[data-ui=new][data-ui=new] button:active:not(:disabled){transform:scale(.98)!important;box-shadow:none!important}
+:root[data-ui=new][data-ui=new] button:disabled{background:var(--card)!important;color:var(--mut)!important;border:1px solid var(--line)!important;opacity:.7!important}
+:root[data-ui=new][data-ui=new] .btn2,:root[data-ui=new][data-ui=new] .chip{background:var(--surface)!important;color:var(--fg)!important;border:1px solid var(--line)!important;box-shadow:none!important;font-weight:550!important}
+:root[data-ui=new][data-ui=new] .btn2:hover:not(:disabled){background:var(--card)!important;border-color:var(--ink)!important}
+:root[data-ui=new][data-ui=new] .btn2.on,:root[data-ui=new][data-ui=new] .chip.cur,:root[data-ui=new][data-ui=new] #cutDlg .btn2.on,:root[data-ui=new][data-ui=new] .cgB button.on{background:color-mix(in srgb,var(--acc) 22%,var(--surface))!important;color:var(--fg)!important;border-color:var(--acc)!important}
+:root[data-ui=new][data-ui=new] button.link{background:none!important;border:0!important;color:var(--acc2)!important;text-decoration:none!important;font-weight:600!important}
+:root[data-ui=new][data-ui=new] button.link:hover:not(:disabled){background:none!important;text-decoration:underline!important}
+:root[data-ui=new][data-ui=new] button:focus-visible,:root[data-ui=new][data-ui=new] input:focus-visible,:root[data-ui=new][data-ui=new] select:focus-visible,:root[data-ui=new][data-ui=new] textarea:focus-visible,:root[data-ui=new][data-ui=new] summary:focus-visible{outline:3px solid var(--ring)!important;outline-offset:1px!important}
+:root[data-ui=new][data-ui=new] .btn2.sm{padding:5px 10px}
+/* fields */
+:root[data-ui=new][data-ui=new] input[type=text],:root[data-ui=new][data-ui=new] input[type=number],:root[data-ui=new][data-ui=new] input[type=search],:root[data-ui=new][data-ui=new] textarea,:root[data-ui=new][data-ui=new] select,:root[data-ui=new][data-ui=new] .ddBtn,:root[data-ui=new][data-ui=new] .dgWrap{border:1px solid var(--line)!important;border-radius:10px!important;background:var(--field)!important;box-shadow:none!important;color:var(--fg)}
+:root[data-ui=new][data-ui=new] input[type=text]:hover,:root[data-ui=new][data-ui=new] input[type=number]:hover,:root[data-ui=new][data-ui=new] select:hover,:root[data-ui=new][data-ui=new] .ddBtn:hover:not(:disabled){border-color:var(--ink)!important}
+:root[data-ui=new][data-ui=new] .ddBtn:hover:not(:disabled),:root[data-ui=new][data-ui=new] .ddBtn[aria-expanded=true]{background:var(--field)!important;box-shadow:none!important;transform:none!important}
+:root[data-ui=new][data-ui=new] .ddPop{border:1px solid var(--line)!important;border-radius:12px!important;box-shadow:0 12px 32px rgba(10,14,24,.22)!important;background:var(--surface)!important}
+:root[data-ui=new][data-ui=new] .ddOpt.on{background:color-mix(in srgb,var(--acc) 24%,var(--surface))!important;color:var(--fg)!important}:root[data-ui=new][data-ui=new] .ddOpt:hover,:root[data-ui=new][data-ui=new] .ddOpt.hl{background:var(--card)!important}
+:root[data-ui=new][data-ui=new] .ddGrp,:root[data-ui=new][data-ui=new] .dgBr>summary{font-family:var(--cf)!important;letter-spacing:.04em}
+:root[data-ui=new][data-ui=new] input[type=checkbox],:root[data-ui=new][data-ui=new] input[type=radio],:root[data-ui=new][data-ui=new] input[type=range],:root[data-ui=new][data-ui=new] progress{accent-color:var(--acc)}
+:root[data-ui=new][data-ui=new] .f>label,:root[data-ui=new][data-ui=new] .f>span:first-child{font-weight:550}
+:root[data-ui=new][data-ui=new] .chk{padding:3px 0}
+/* choice chips and segmented controls */
+:root[data-ui=new][data-ui=new] .opt span{border:1px solid var(--line)!important;box-shadow:none!important;border-radius:999px!important;background:var(--surface)!important;padding:7px 14px;font-weight:550;transition:background .12s,border-color .12s}
+:root[data-ui=new][data-ui=new] .opt span:hover{border-color:var(--ink)!important}
+:root[data-ui=new][data-ui=new] .opt input:checked+span{background:color-mix(in srgb,var(--acc) 24%,var(--surface))!important;border-color:var(--acc)!important;color:var(--fg)!important;transform:none!important;box-shadow:inset 0 0 0 1px var(--acc)!important}
+:root[data-ui=new][data-ui=new] .opt input:checked+span::before{content:"\2713\00a0";color:var(--acc2);font-weight:800}
+:root[data-ui=new][data-ui=new] .seg{border:1px solid var(--line)!important;border-radius:12px!important;box-shadow:none!important;background:var(--card);padding:3px;gap:2px;overflow:visible}
+:root[data-ui=new][data-ui=new] .seg label+label span{border-left:0!important}
+:root[data-ui=new][data-ui=new] .seg span{border-radius:9px!important}
+:root[data-ui=new][data-ui=new] .seg input:checked+span{background:var(--surface)!important;color:var(--fg)!important;box-shadow:var(--shadow)!important}
+:root[data-ui=new][data-ui=new] #cutDlg .seg{background:transparent;padding:0}
+/* steps and sections as calm cards */
+:root[data-ui=new][data-ui=new] .step,:root[data-ui=new][data-ui=new] details.sec,:root[data-ui=new][data-ui=new] details.fs,:root[data-ui=new][data-ui=new] .help,:root[data-ui=new][data-ui=new] .dockBar,:root[data-ui=new][data-ui=new] #prog,:root[data-ui=new][data-ui=new] .edSide section,:root[data-ui=new][data-ui=new] #newDlg li,:root[data-ui=new][data-ui=new] .bkMore,:root[data-ui=new][data-ui=new] .fmCard,:root[data-ui=new][data-ui=new] .metaCard{border:1px solid var(--line)!important;border-radius:var(--r)!important;box-shadow:var(--shadow)!important;background:var(--surface)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+:root[data-ui=new][data-ui=new] .help{background:var(--card)!important;box-shadow:none!important}
+:root[data-ui=new][data-ui=new] .step{margin:0 0 14px!important;overflow:visible}
+:root[data-ui=new][data-ui=new] .stH{background:transparent!important;color:var(--fg)!important;border-bottom:1px solid var(--line)!important;padding:13px 18px!important;border-radius:var(--r) var(--r) 0 0;box-shadow:none!important}
+:root[data-ui=new][data-ui=new] .stH .stitle{font-size:1.08rem!important;font-weight:700!important;color:var(--fg)!important;text-shadow:none!important}
+:root[data-ui=new][data-ui=new] .stH .ssum{color:var(--mut)!important;background:var(--card);border-radius:999px;padding:2px 10px;font-size:.78rem;max-width:55%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+:root[data-ui=new][data-ui=new] .stH .ssum:empty{display:none}
+:root[data-ui=new][data-ui=new] .num{width:28px!important;height:28px!important;border-radius:50%!important;background:var(--acc)!important;color:var(--onacc)!important;transform:none!important;box-shadow:none!important;border:0!important;font-family:var(--cf)!important;font-size:.9rem!important;font-weight:800;box-shadow:none!important}
+:root[data-ui=new][data-ui=new] .step.isDone .num{background:#1f9d55!important;color:#fff!important;font-size:0!important;line-height:1}
+:root[data-ui=new][data-ui=new] .step.isDone .num::after{content:"\2713";font-size:.95rem;font-weight:800;line-height:1}
+:root[data-ui=new][data-ui=new] .stBody{padding:14px 18px 18px!important}
+:root[data-ui=new][data-ui=new] .info{background:var(--card)!important;color:var(--mut)!important;border:1px solid var(--line)!important;box-shadow:none!important;border-radius:50%!important}
+:root[data-ui=new][data-ui=new] .info[aria-expanded=true]{background:var(--acc)!important;color:var(--onacc)!important;border-color:transparent!important}
+:root[data-ui=new][data-ui=new] .sub2{font-family:var(--cf)!important;font-size:.74rem!important;font-weight:700!important;text-transform:uppercase!important;letter-spacing:.07em!important;color:var(--mut)!important;border-top:1px solid var(--line)!important;margin-top:18px!important;padding-top:12px!important}
+:root[data-ui=new][data-ui=new] .sec .sub2:first-child{border-top:0!important;margin-top:4px!important;padding-top:0!important}
+:root[data-ui=new][data-ui=new] .sub2 .hint{text-transform:none;letter-spacing:0;font-weight:400}
+:root[data-ui=new][data-ui=new] .moreH{border-bottom:0!important;padding:14px 2px 6px!important;align-items:center}
+:root[data-ui=new][data-ui=new] .moreH h2{font-size:1.12rem!important;font-weight:700!important;color:var(--fg)!important}
+:root[data-ui=new][data-ui=new] details.sec{margin:0 0 8px!important;overflow:hidden}
+:root[data-ui=new][data-ui=new] details.sec>summary{background:transparent!important;border-radius:0!important;padding:12px 16px!important;color:var(--fg)!important}
+:root[data-ui=new][data-ui=new] details.sec[open]>summary{border-bottom:1px solid var(--line)!important;border-radius:0!important}
+:root[data-ui=new][data-ui=new] details.sec>summary:hover{background:var(--card)!important}:root[data-ui=new][data-ui=new] details.sec>summary:hover .stitle,:root[data-ui=new][data-ui=new] details.sec>summary:hover .ssum,:root[data-ui=new][data-ui=new] details.sec>summary:hover::after{color:inherit!important}
+:root[data-ui=new][data-ui=new] details.sec .stitle{font-size:1rem!important;font-weight:650!important;color:var(--fg)!important}
+:root[data-ui=new][data-ui=new] details.sec .ssum{color:var(--mut);font-size:.8rem}
+:root[data-ui=new][data-ui=new] .secBody{padding:6px 16px 14px!important}
+:root[data-ui=new][data-ui=new] .tag{border:0!important;background:color-mix(in srgb,var(--acc) 28%,var(--surface))!important;color:var(--fg)!important;border-radius:999px!important}
+:root[data-ui=new][data-ui=new] .tag.ok{background:var(--card)!important;color:var(--mut)!important}
+:root[data-ui=new][data-ui=new] kbd{border:1px solid var(--line)!important;border-bottom-width:2px!important;border-radius:6px;background:var(--card);color:var(--mut);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.72rem}
+/* settings search (New UI only) */
+.moreSearch{display:none}
+:root[data-ui=new][data-ui=new] .moreSearch{display:block;width:100%;margin:6px 0 10px}
+:root[data-ui=new][data-ui=new] .moreSearch input{width:100%;padding:10px 14px 10px 38px;background:var(--field) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%239099a8' stroke-width='2.2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='M20 20l-3.5-3.5'/%3E%3C/svg%3E") no-repeat 12px center}
+:root[data-ui=new][data-ui=new] .moreSearch small{display:block;margin:4px 2px 0;color:var(--mut)}
+:root[data-ui=new][data-ui=new] .srcHide{display:none!important}
+/* drop zones, lists, files */
+:root[data-ui=new][data-ui=new] #drop,:root[data-ui=new][data-ui=new] .bkDrop{border:2px dashed var(--ink)!important;border-radius:16px!important;background:var(--card)!important;padding:30px 16px}
+:root[data-ui=new][data-ui=new] #drop:hover,:root[data-ui=new][data-ui=new] #drop.over,:root[data-ui=new][data-ui=new] .bkDrop:hover{border-color:var(--acc)!important;background:color-mix(in srgb,var(--acc) 12%,var(--surface))!important}
+:root[data-ui=new][data-ui=new] #flist li,:root[data-ui=new][data-ui=new] #bkList li,:root[data-ui=new][data-ui=new] .pgT,:root[data-ui=new][data-ui=new] .rvT{border:1px solid var(--line)!important;border-radius:10px!important;box-shadow:none!important;background:var(--field)}
+:root[data-ui=new][data-ui=new] .pgT.sel,:root[data-ui=new][data-ui=new] .rvT.edt{border-color:var(--acc)!important;box-shadow:0 0 0 2px var(--acc)!important}:root[data-ui=new][data-ui=new] .rvT.flag{border-color:var(--pop)!important}
+:root[data-ui=new][data-ui=new] input[type=file]{border:2px dashed var(--ink)!important;border-radius:12px}
+/* preview device */
+:root[data-ui=new][data-ui=new] .bkDevice{background:#1b1e24;border-radius:22px;box-shadow:0 12px 30px rgba(10,14,24,.28),inset 0 0 0 1px #343a45}
+:root[data-ui=new][data-ui=new] #bkPrev,:root[data-ui=new][data-ui=new] #cvPrev{border:0!important;box-shadow:none!important}
+:root[data-ui=new][data-ui=new] .bkMore{padding:8px 14px 12px!important}
+/* bottom action bar */
+:root[data-ui=new][data-ui=new] #runDock{bottom:12px}
+:root[data-ui=new][data-ui=new] .dockBar{border-radius:16px!important;box-shadow:0 8px 28px rgba(10,14,24,.18),0 1px 2px rgba(10,14,24,.08)!important;padding:10px 14px!important;-webkit-backdrop-filter:blur(10px)!important;backdrop-filter:blur(10px)!important;background:color-mix(in srgb,var(--surface) 92%,transparent)!important}
+:root[data-ui=new][data-ui=new] #go,:root[data-ui=new][data-ui=new] #bkGo{display:inline-flex!important;align-items:center;justify-content:center;width:auto!important;height:auto!important;min-width:150px;padding:12px 30px!important;border-radius:12px!important;background:var(--acc)!important;color:var(--onacc)!important;font-family:var(--cf)!important;font-size:1.02rem!important;font-weight:750!important;letter-spacing:0!important;text-shadow:none!important;filter:none!important;border:0!important;box-shadow:0 2px 8px color-mix(in srgb,var(--acc) 45%,transparent)!important}
+:root[data-ui=new][data-ui=new] #go:hover:not(:disabled),:root[data-ui=new][data-ui=new] #bkGo:hover:not(:disabled){transform:none!important;filter:brightness(.95)!important;box-shadow:0 4px 14px color-mix(in srgb,var(--acc) 50%,transparent)!important}
+:root[data-ui=new][data-ui=new] #go:disabled,:root[data-ui=new][data-ui=new] #bkGo:disabled{background:var(--card)!important;color:var(--mut)!important;box-shadow:none!important;filter:none!important;border:1px solid var(--line)!important}
+:root[data-ui=new][data-ui=new] #go:active:not(:disabled),:root[data-ui=new][data-ui=new] #bkGo:active:not(:disabled){filter:none!important;transform:scale(.98)!important}
+:root[data-ui=new][data-ui=new] #runSummary{color:var(--mut)}
+:root[data-ui=new][data-ui=new] progress{border:0!important;height:10px!important;border-radius:999px!important;background:var(--card)!important;overflow:hidden}
+:root[data-ui=new][data-ui=new] progress::-webkit-progress-bar{background:var(--card)!important;border-radius:999px}
+:root[data-ui=new][data-ui=new] progress::-webkit-progress-value{background:var(--acc)!important;border-radius:999px}
+:root[data-ui=new][data-ui=new] progress::-moz-progress-bar{background:var(--acc)!important;border-radius:999px}
+:root[data-ui=new][data-ui=new] #links a,:root[data-ui=new][data-ui=new] #bkLinks a{border:1px solid var(--line)!important;border-left:4px solid var(--acc)!important;border-radius:10px!important;box-shadow:none!important;background:var(--field)!important;font-family:var(--cf)!important}
+:root[data-ui=new][data-ui=new] #links a:hover,:root[data-ui=new][data-ui=new] #bkLinks a:hover{background:var(--card)!important}
+:root[data-ui=new][data-ui=new] #links:not(:empty){border:1px solid var(--line)!important;box-shadow:0 8px 28px rgba(10,14,24,.18)!important;border-radius:16px!important}
+/* dialogs */
+:root[data-ui=new][data-ui=new] dialog{border:1px solid var(--line)!important;border-radius:20px!important;box-shadow:0 24px 70px rgba(8,12,22,.45)!important;background:var(--surface)!important;color:var(--fg)}
+:root[data-ui=new][data-ui=new] dialog::backdrop{background:rgba(8,12,22,.55)!important;backdrop-filter:blur(3px)}
+:root[data-ui=new][data-ui=new] #modeDlg h2{font-size:1.5rem!important;font-weight:750!important;color:var(--fg)}
+:root[data-ui=new][data-ui=new] .modeGrid{gap:14px!important}
+:root[data-ui=new][data-ui=new] .modeCard{border:1px solid var(--line)!important;border-radius:16px!important;box-shadow:none!important;background:var(--surface)!important;color:var(--fg)!important;padding:26px 16px 22px;transition:transform .12s,box-shadow .12s,border-color .12s}
+:root[data-ui=new][data-ui=new] .modeCard:hover:not(:disabled),:root[data-ui=new][data-ui=new] .modeCard:focus-visible{transform:translateY(-2px)!important;box-shadow:0 10px 26px rgba(10,14,24,.14)!important;border-color:var(--acc)!important}
+:root[data-ui=new][data-ui=new] .modeCard svg{width:56px;height:56px;padding:12px;border-radius:16px;background:color-mix(in srgb,var(--acc) 18%,var(--card));color:var(--acc2)}
+:root[data-ui=new][data-ui=new] .modeCard[data-mode=books] svg{background:color-mix(in srgb,#8f3b32 14%,var(--card));color:#a24a3f}:root[data-ui=new][data-ui=new] .modeCard[data-mode=papers] svg{background:color-mix(in srgb,#0f766e 14%,var(--card));color:#0f766e}:root[data-ui=new][data-ui=new] .modeCard[data-mode=comics] svg{background:color-mix(in srgb,#f2b705 22%,var(--card));color:#a07800}
+:root[data-ui=new][data-ui=new] .modeCard b{font-size:1.15rem!important;font-weight:700!important}
+:root[data-ui=new][data-ui=new] .modeCard span{color:var(--mut)!important;font-weight:400}
+:root[data-ui=new][data-ui=new] .modeCard[data-mode] b{font-family:var(--cf)!important}
+:root[data-ui=new][data-ui=new] .modeCard.last::after{background:var(--acc)!important;color:var(--onacc)!important;border:0!important}
+:root[data-ui=new][data-ui=new] .expTag,:root[data-ui=new][data-ui=new] .exp{border:0!important;background:var(--card);color:var(--mut);opacity:1}
+:root[data-ui=new][data-ui=new] .tabs{background:var(--card)!important;border:1px solid var(--line)!important;border-radius:12px!important;padding:3px!important}
+:root[data-ui=new][data-ui=new] .tabs .btn2{border:0!important;background:transparent!important;border-radius:9px!important}
+:root[data-ui=new][data-ui=new] .tabs .btn2.on{background:var(--surface)!important;box-shadow:var(--shadow)!important}
+:root[data-ui=new][data-ui=new] #helpDlg h2,:root[data-ui=new][data-ui=new] #newDlg h2{color:var(--fg)}:root[data-ui=new][data-ui=new] #helpDlg h3{color:var(--fg)}
+/* editor, grids, cut preview */
+:root[data-ui=new][data-ui=new] .edWrap{background:#1c1f26!important;border:1px solid var(--line)!important;border-radius:14px!important;box-shadow:none!important}
+:root[data-ui=new][data-ui=new] .edSide{gap:10px}
+:root[data-ui=new][data-ui=new] .edSide section{padding:12px 14px!important}
+:root[data-ui=new][data-ui=new] .edSide h3{font-size:.8rem!important;font-weight:700!important;text-transform:uppercase!important;letter-spacing:.07em!important;color:var(--mut)!important}
+:root[data-ui=new][data-ui=new] .edBar{background:var(--card)!important;border-radius:999px!important;border:0!important;height:8px}
+:root[data-ui=new][data-ui=new] .edBar i{background:var(--acc)!important;border-radius:999px}
+:root[data-ui=new][data-ui=new] .chip{border-radius:999px!important;padding:3px 10px}
+:root[data-ui=new][data-ui=new] .rvHead,:root[data-ui=new][data-ui=new] #pgBar{border-color:var(--line)!important}
+:root[data-ui=new][data-ui=new] .rvT .rvW,:root[data-ui=new][data-ui=new] .cgB button{border-radius:8px!important;border-width:1px!important}
+:root[data-ui=new][data-ui=new] .rvT b,:root[data-ui=new][data-ui=new] .pgT b{font-weight:600}
+:root[data-ui=new][data-ui=new] .dgBtn{border-bottom:1px solid var(--line)!important;font-weight:550!important}:root[data-ui=new][data-ui=new] .dgBtn.on{background:color-mix(in srgb,var(--acc) 22%,var(--surface))!important;color:var(--fg)!important}
+:root[data-ui=new][data-ui=new] .edWrap{box-shadow:inset 0 0 0 1px rgba(255,255,255,.04)!important}
+/* books and papers pages: same calm look */
+:root[data-ui=new][data-ui=new][data-mode=books] body{font-family:var(--cf)!important;font-size:15.5px}
+:root[data-ui=new][data-ui=new][data-mode=books] .bkDrop,:root[data-ui=new][data-ui=new][data-mode=books] .bkMore,:root[data-ui=new][data-ui=new][data-mode=books] .seg,:root[data-ui=new][data-ui=new][data-mode=books] .btn2,:root[data-ui=new][data-ui=new][data-mode=books] .ddBtn,:root[data-ui=new][data-ui=new][data-mode=books] .ddPop,:root[data-ui=new][data-ui=new][data-mode=books] .step,:root[data-ui=new][data-ui=new][data-mode=books] details.sec,:root[data-ui=new][data-ui=new][data-mode=books] dialog,:root[data-ui=new][data-ui=new][data-mode=books] input[type=text],:root[data-ui=new][data-ui=new][data-mode=books] input[type=number],:root[data-ui=new][data-ui=new][data-mode=books] textarea{border-radius:var(--r)!important;font-family:var(--cf)!important}
+:root[data-ui=new][data-ui=new][data-mode=books] .stH{box-shadow:none!important;background:transparent!important}
+:root[data-ui=new][data-ui=new][data-mode=books] .stH .stitle,:root[data-ui=new][data-ui=new][data-mode=books] .sub2,:root[data-ui=new][data-ui=new][data-mode=books] .btn2,:root[data-ui=new][data-ui=new][data-mode=books] #bkLinks a{font-variant:normal!important;font-family:var(--cf)!important}
+:root[data-ui=new][data-ui=new][data-mode=books] .num{background:var(--acc)!important;color:var(--onacc)!important;border:0!important}
+:root[data-ui=new][data-ui=new][data-mode=start] .top h1{font-family:var(--cf)!important}
+/* small screens */
+:root[data-ui=new][data-ui=new] #go,:root[data-ui=new][data-ui=new] #bkGo{transform:none!important;rotate:none}
+@media (max-width:720px){
+  :root[data-ui=new][data-ui=new] body{padding:12px 12px 100px}
+  :root[data-ui=new][data-ui=new] .topBtns .btn2,:root[data-ui=new][data-ui=new] .kofi{font-size:.78rem;padding:6px 9px}
+  :root[data-ui=new][data-ui=new] .top{padding-bottom:8px}.top h1{font-size:1.25rem}
+  :root[data-ui=new][data-ui=new] .pgTabs{max-width:none}:root[data-ui=new][data-ui=new] .pgTabs .btn2{font-size:.86rem!important;padding:8px 4px!important}
+  :root[data-ui=new][data-ui=new] .stH{padding:12px 14px!important}:root[data-ui=new][data-ui=new] .stBody{padding:12px 14px 14px!important}
+  :root[data-ui=new][data-ui=new] .dockBar{flex-wrap:wrap;gap:8px}:root[data-ui=new][data-ui=new] #go,:root[data-ui=new][data-ui=new] #bkGo{width:100%!important}
+  :root[data-ui=new][data-ui=new] .bkLeft{background:var(--bg)!important}
+}
+/* ===== New UI workspace: preview stage + tabbed settings panel (desktop), bottom tab bar (phone/tablet) ===== */
+.wsTabs{display:none}
+:root[data-ui=new][data-ui=new] .wsTabs{display:flex}
+:root[data-ui=new][data-ui=new] .wsTabs{gap:2px;padding:6px 8px 0;background:var(--surface);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:6}
+:root[data-ui=new][data-ui=new] .wsTabs button{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 2px 7px!important;background:transparent!important;color:var(--mut)!important;border:0!important;border-bottom:3px solid transparent!important;border-radius:8px 8px 0 0!important;font-size:.72rem;font-weight:600!important;position:relative}
+:root[data-ui=new][data-ui=new] .wsTabs button svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+:root[data-ui=new][data-ui=new] .wsTabs button:hover:not(.on){background:var(--card)!important;color:var(--fg)!important}
+:root[data-ui=new][data-ui=new] .wsTabs button.on{color:var(--fg)!important;border-bottom-color:var(--acc)!important}
+:root[data-ui=new][data-ui=new] .wsTabs button.on svg{stroke:var(--acc2)}
+:root[data-ui=new][data-ui=new] .wsTabs button.done::after{content:"";position:absolute;top:6px;right:calc(50% - 16px);width:7px;height:7px;border-radius:50%;background:#1f9d55}
+:root[data-ui=new][data-ui=new] .wsTabs button:focus-visible{outline-offset:-3px!important}
+/* the tab filter */
+:root[data-ui=new][data-ui=new] [data-ws=on]:not([data-tab=all]) [data-wstab]{display:none!important}
+:root[data-ui=new][data-ui=new] [data-ws=on][data-tab=files] [data-wstab=files],:root[data-ui=new][data-ui=new] [data-ws=on][data-tab=reader] [data-wstab=reader],:root[data-ui=new][data-ui=new] [data-ws=on][data-tab=output] [data-wstab=output],:root[data-ui=new][data-ui=new] [data-ws=on][data-tab=cut] [data-wstab=cut],:root[data-ui=new][data-ui=new] [data-ws=on][data-tab=image] [data-wstab=image],:root[data-ui=new][data-ui=new] [data-ws=on][data-tab=info] [data-wstab=info],:root[data-ui=new][data-ui=new] [data-ws=on][data-tab=layout] [data-wstab=layout],:root[data-ui=new][data-ui=new] [data-ws=on][data-tab=cover] [data-wstab=cover],:root[data-ui=new][data-ui=new] [data-ws=on][data-tab=convert] [data-wstab=convert]{display:block!important}
+:root[data-ui=new][data-ui=new] [data-ws=on] .num{display:none!important}
+:root[data-ui=new][data-ui=new] [data-ws=on] .moreH{display:none!important}
+:root[data-ui=new][data-ui=new] [data-ws=on] .f{grid-template-columns:minmax(0,1fr)!important;gap:4px!important}
+:root[data-ui=new][data-ui=new] [data-ws=on] .f select,:root[data-ui=new][data-ui=new] [data-ws=on] .f input[type=number],:root[data-ui=new][data-ui=new] [data-ws=on] .f input[type=text]{width:100%}
+:root[data-ui=new][data-ui=new] [data-ws=on] .step{border:0!important;border-radius:0!important;box-shadow:none!important;margin:0!important;background:transparent!important}
+:root[data-ui=new][data-ui=new] [data-ws=on] .step>.stH{border-bottom:0!important;padding:14px 18px 0!important;background:transparent!important}
+:root[data-ui=new][data-ui=new] [data-ws=on] .step>.stH .stitle{font-size:1.15rem!important}
+:root[data-ui=new][data-ui=new] [data-ws=on] .stBody{padding:10px 18px 16px!important}
+:root[data-ui=new][data-ui=new] [data-ws=on] details.sec{margin:0 12px 10px!important}
+:root[data-ui=new][data-ui=new] [data-ws=on] .moreSearch{margin:8px 14px 0;width:auto}
+:root[data-ui=new][data-ui=new] [data-ws=on] .moreSearch input{padding-top:8px;padding-bottom:8px}
+:root[data-ui=new][data-ui=new] [data-ws=on] #bkRun .stBody{padding-top:12px}
+/* ----- desktop workspace ----- */
+@media (min-width:901px){
+  :root[data-ui=new][data-ui=new] body{padding:0!important;max-width:none;height:100vh;height:100dvh;overflow:hidden;display:flex;flex-direction:column}
+  :root[data-ui=new][data-ui=new] .flow{max-width:none!important;width:100%;flex:1;min-height:0;display:flex;flex-direction:column;padding:0 14px 0;position:relative}
+  :root[data-ui=new][data-ui=new] .legal,:root[data-ui=new][data-ui=new] #log{display:none!important}
+  :root[data-ui=new][data-ui=new] .top{flex:none;height:58px;padding:0 2px!important;margin:0!important;flex-wrap:nowrap;gap:10px}
+  :root[data-ui=new][data-ui=new] .top img{width:34px;height:34px;border-radius:10px!important}
+  :root[data-ui=new][data-ui=new] .top h1{font-size:1.1rem!important;white-space:nowrap}
+  :root[data-ui=new][data-ui=new] .topT small{display:none!important}
+  :root[data-ui=new][data-ui=new] .topBtns{margin-left:auto;flex-wrap:nowrap;gap:6px}
+  :root[data-ui=new][data-ui=new] .topBtns .btn2{padding:6px 11px!important;font-size:.8rem!important;white-space:nowrap}
+  :root[data-ui=new][data-ui=new] .pgTabs{position:absolute;top:8px;left:232px;transform:none;width:auto;max-width:none;margin:0;z-index:5;padding:3px!important}
+  :root[data-ui=new][data-ui=new] .pgTabs .btn2{white-space:nowrap;padding:6px 14px!important;font-size:.86rem!important;display:inline-flex;align-items:center;gap:6px}
+  :root[data-ui=new][data-ui=new] .bkLeft>.btn2[aria-label='Show or hide the preview'],:root[data-ui=new][data-ui=new] .bkLeft>.btn2:first-child:not(#cvBack){display:none}
+  :root[data-ui=new][data-ui=new] .pgTabs{height:42px;box-sizing:border-box}
+  :root[data-ui=new][data-ui=new] .pgTabs .btn2 small.exp{display:none!important}
+  :root[data-ui=new][data-ui=new] .pgTabs .btn2 small{font-size:.58rem!important;display:inline!important;opacity:.7;text-transform:uppercase}
+  :root[data-ui=new][data-ui=new] #pgComics:not([hidden]),:root[data-ui=new][data-ui=new] #pgBooks:not([hidden]){flex:1;min-height:0;display:block}
+  :root[data-ui=new][data-ui=new] #pgComics .cvLayout,:root[data-ui=new][data-ui=new] #pgBooks .bkLayout{display:grid!important;grid-template-columns:minmax(0,1fr) 440px!important;gap:12px!important;height:calc(100vh - 58px - 96px)!important;height:calc(100dvh - 58px - 96px)!important;min-height:0!important}
+  :root[data-ui=new][data-ui=new] #pgBooks .bkLayout{height:calc(100vh - 58px - 14px)!important;height:calc(100dvh - 58px - 14px)!important}
+  :root[data-ui=new][data-ui=new] .bkLeft{background:#0f1115!important;border:1px solid #232730!important;border-radius:16px;padding:14px!important;gap:10px;justify-content:flex-start;align-items:center;overflow:hidden;margin:0!important;padding-top:14px!important;display:flex;flex-direction:column;min-height:0}
+  :root[data-ui=new][data-ui=new] .bkLeft .bkDevice{background:#1c1f26!important;box-shadow:0 18px 50px rgba(0,0,0,.55),inset 0 0 0 1px #2e333d;flex:0 0 auto;padding:12px!important}
+  :root[data-ui=new][data-ui=new] .bkDevice #cvPrev,:root[data-ui=new][data-ui=new] .bkDevice #bkPrev{max-height:calc(100vh - 450px)!important;max-height:calc(100dvh - 450px)!important;min-height:180px;width:auto!important;height:auto!important;max-width:100%!important}
+  :root[data-ui=new][data-ui=new] .bkLeft .bkPrevBar{width:100%;max-width:520px;justify-content:center;gap:10px}
+  :root[data-ui=new][data-ui=new] .bkLeft #cvN,:root[data-ui=new][data-ui=new] .bkLeft #bkPrevN,:root[data-ui=new][data-ui=new] .bkLeft small,:root[data-ui=new][data-ui=new] .bkLeft label{color:#aab2c0!important}
+  :root[data-ui=new][data-ui=new] .bkLeft .btn2{background:#1c1f26!important;color:#e8ebf0!important;border-color:#2e333d!important}
+  :root[data-ui=new][data-ui=new] .bkLeft .btn2:hover:not(:disabled){background:#262b35!important}
+  :root[data-ui=new][data-ui=new] .bkLeft .bkMore{width:100%;max-width:820px;background:#171a20!important;border:1px solid #2a2f39!important;border-radius:12px!important;box-shadow:none!important;padding:8px 12px!important;display:block!important}
+  :root[data-ui=new][data-ui=new] .bkLeft .bkMore::details-content{display:grid;grid-template-columns:96px 1fr 1fr auto;gap:6px 12px;align-items:end}
+  :root[data-ui=new][data-ui=new] .bkLeft .pvTop{display:none!important}
+  :root[data-ui=new][data-ui=new] .bkLeft .bkMore>summary{display:none}
+  :root[data-ui=new][data-ui=new] .bkLeft .bkMore .f{margin:0!important;min-width:0;display:block!important}
+  :root[data-ui=new][data-ui=new] .bkLeft>.btn2[aria-label],:root[data-ui=new][data-ui=new] .bkLeft .bkGridRow+.btn2{display:none}
+  :root[data-ui=new][data-ui=new] .bkLeft .bkMore small:not(#cvMsg){display:none}
+  :root[data-ui=new][data-ui=new] .bkLeft .bkMore .f label{font-size:.7rem!important;margin-bottom:2px!important;white-space:nowrap}
+  :root[data-ui=new][data-ui=new] .bkLeft .bkMore #cvMsg{grid-column:1/-1;margin:0;font-size:.72rem}
+  :root[data-ui=new][data-ui=new] #stPreview .bkMore>small:last-child{display:none}
+  :root[data-ui=new][data-ui=new] .bkLeft .bkMore select,:root[data-ui=new][data-ui=new] .bkLeft .bkMore input[type=number]{background:#10131a!important;color:#e8ebf0!important;border-color:#2e333d!important;padding:6px 8px!important;font-size:.85rem}
+  :root[data-ui=new][data-ui=new] .bkLeft .bkMore .btn2{padding:6px 12px!important}
+  :root[data-ui=new][data-ui=new] .bkLeft .bkGridRow{margin:0}
+  :root[data-ui=new][data-ui=new] .bkRight{background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);overflow-y:auto!important;padding:0 0 24px!important;margin:0;min-height:0}
+  :root[data-ui=new][data-ui=new] #runDock{position:fixed;left:14px;right:14px;bottom:8px;z-index:30}
+}
+/* ----- phone and tablet: stacked, bottom tab bar ----- */
+@media (max-width:900px){
+  :root[data-ui=new][data-ui=new] .wsTabs{position:fixed;left:0;right:0;bottom:0;top:auto;z-index:40;border-top:1px solid var(--line);border-bottom:0;padding:4px 6px calc(4px + env(safe-area-inset-bottom));box-shadow:0 -6px 20px rgba(10,14,24,.10)}
+  :root[data-ui=new][data-ui=new] .wsTabs button{border-bottom:0!important;border-top:3px solid transparent!important;border-radius:0 0 8px 8px!important;padding:6px 2px 5px!important}
+  :root[data-ui=new][data-ui=new] .wsTabs button.on{border-top-color:var(--acc)!important}
+  :root[data-ui=new][data-ui=new] body{padding-bottom:150px!important}
+  :root[data-ui=new][data-ui=new] #runDock{bottom:62px!important}
+  :root[data-ui=new][data-ui=new] .bkRight{background:var(--surface);border:1px solid var(--line);border-radius:14px;margin-top:8px;padding-bottom:12px!important}
+  :root[data-ui=new][data-ui=new] .bkLeft{background:#0f1115!important;border-radius:14px;padding:8px!important;margin:0 0 8px!important}
+  :root[data-ui=new][data-ui=new] .bkLeft .bkMore{display:none}
+  :root[data-ui=new][data-ui=new] .bkDevice #cvPrev,:root[data-ui=new][data-ui=new] .bkDevice #bkPrev{max-height:30vh!important}
+  :root[data-ui=new][data-ui=new] .wsTabs button{font-size:.66rem}
+}
+
+
+/* ===== Desktop mode: editors and grids open in place of the preview ===== */
+@media (min-width:901px){
+  :root[data-ui=new][data-ui=new] :is(#edDlg,#rvDlg,#cgDlg,#cutDlg,#eqDlg)[open]{position:fixed!important;margin:0!important;left:14px!important;top:58px!important;right:auto!important;bottom:auto!important;width:calc(100vw - 14px - 14px - 12px - 440px)!important;height:calc(100vh - 58px - 96px)!important;height:calc(100dvh - 58px - 96px)!important;max-width:none!important;max-height:none!important;border-radius:16px!important;box-shadow:none!important;overflow:auto;padding:14px!important}
+  :root[data-ui=new][data-ui=new] #bgDlg[open]{position:fixed!important;margin:0!important;left:14px!important;top:58px!important;width:calc(100vw - 14px - 14px - 12px - 440px)!important;height:calc(100vh - 58px - 14px)!important;height:calc(100dvh - 58px - 14px)!important;max-width:none!important;max-height:none!important;border-radius:16px!important;box-shadow:none!important;overflow:auto}
+  :root[data-ui=new][data-ui=new] :is(#edDlg,#rvDlg,#cgDlg,#cutDlg,#eqDlg,#bgDlg)::backdrop{background:rgba(120,128,145,.16)!important;backdrop-filter:none!important}
+  :root[data-ui=new][data-ui=new] :is(#edDlg,#rvDlg,#cgDlg,#cutDlg,#eqDlg,#bgDlg)[open][data-stage]{z-index:20}
+  :root[data-ui=new][data-ui=new] #edDlg[open][data-stage]{z-index:22}
+  :root[data-ui=new][data-ui=new] :is(#edDlg,#rvDlg,#cgDlg,#cutDlg,#eqDlg)[open][data-stage]{background:var(--surface)!important;border:1px solid var(--line)!important}
+}
 </style>
 <script>
 "use strict";
@@ -4338,10 +4605,133 @@ $('edLoadIn').addEventListener('change', async () => {
 });
 $('file').addEventListener('change', edIOShow);
 setInterval(edIOShow, 2000);
+
+/* ---------- Classic / Desktop mode switch, settings search, step ticks ---------- */
+(function(){
+  const root = document.documentElement, btn = document.getElementById('uiBtn');
+  function paint(){ const n = root.dataset.ui === 'new'; btn.textContent = n ? 'Classic look' : 'Desktop mode'; btn.setAttribute('aria-pressed', n ? 'true' : 'false'); const m = document.querySelector('meta[name=theme-color]'); if(m) m.content = n ? '#f4f5f8' : '#f5c518'; }
+  btn.addEventListener('click', () => { root.dataset.ui = root.dataset.ui === 'new' ? 'classic' : 'new'; try{ localStorage.setItem('bcc_ui', root.dataset.ui); }catch(e){} paint(); });
+  paint();
+  // search inside More options: hides rows that do not match and opens the sections that do
+  const inp = document.getElementById('optSearch'), msg = document.getElementById('optSearchMsg');
+  const rows = el => Array.from(el.querySelectorAll('.f, label.chk, .fgrp, small, .sub2, .mgrid>*'));
+  const opened = new Map();
+  inp.addEventListener('input', () => {
+    const q = inp.value.trim().toLowerCase(), secs = Array.from(document.querySelectorAll('#pgComics details.sec'));
+    for(const d of secs){
+      d.classList.remove('srcHide');
+      for(const r of d.querySelectorAll('.srcHide')) r.classList.remove('srcHide');
+      if(!opened.has(d)) opened.set(d, d.open);
+    }
+    if(!q){ for(const d of secs){ d.open = opened.get(d); } opened.clear(); msg.textContent = ''; return; }
+    let total = 0;
+    for(const d of secs){
+      const items = Array.from(d.querySelectorAll('.secBody > .f, .secBody > label.chk, .secBody > .mgrid > *, .secBody label.chk, .secBody .f'));
+      const seen = new Set(); let hit = 0;
+      for(const it of items){ if(seen.has(it)) continue; seen.add(it); const m = it.textContent.toLowerCase().includes(q) || (it.querySelector('input,select') && (it.querySelector('input,select').id || '').toLowerCase().includes(q)); if(m) hit++; else it.classList.add('srcHide'); }
+      const title = d.querySelector('summary .stitle').textContent.toLowerCase().includes(q);
+      if(title){ for(const r of d.querySelectorAll('.srcHide')) r.classList.remove('srcHide'); hit = hit || 1; }
+      for(const sm of d.querySelectorAll('.secBody > small, .secBody .sub2')) if(!title) sm.classList.add('srcHide');
+      total += hit;
+      if(hit){ d.open = true; } else { d.classList.add('srcHide'); d.open = false; }
+    }
+    msg.textContent = total ? `${total} matching setting${total > 1 ? 's' : ''}` : 'No settings match that. Try another word.';
+  });
+  // ticks on finished steps
+  function ticks(){
+    const set = (id, v) => { const e = document.getElementById(id); if(e) e.classList.toggle('isDone', !!v); };
+    try{
+      const has = document.getElementById('file').files.length > 0;
+      set('stFiles', has); set('stDevice', has && !!document.querySelector('#stDevice')); 
+      set('stOutput', has && (['fX','fXtc','fEpub','fCbz','fPdf','fPanelImg'].some(i => document.getElementById(i).checked)));
+      set('stPanels', has);
+      set('bkFiles', document.querySelectorAll('#bkList li').length > 0);
+    }catch(e){}
+  }
+  setInterval(ticks, 1000); ticks();
+})();
+/* ---------- Desktop mode workspace: tabs for the settings panel ---------- */
+(function(){
+  const I = {
+    files:'<svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>',
+    reader:'<svg viewBox="0 0 24 24"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M10.5 18.5h3"/></svg>',
+    output:'<svg viewBox="0 0 24 24"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 19h16"/></svg>',
+    cut:'<svg viewBox="0 0 24 24"><path d="M6 2v14a2 2 0 0 0 2 2h14M2 6h14a2 2 0 0 1 2 2v14"/></svg>',
+    image:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M12 3a9 9 0 0 1 0 18" fill="currentColor" stroke="none" opacity=".35"/></svg>',
+    info:'<svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg>',
+    layout:'<svg viewBox="0 0 24 24"><path d="M5 5h14M5 9h14M5 13h9M5 17h14"/></svg>',
+    cover:'<svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><circle cx="12" cy="10" r="3"/><path d="M8 17h8"/></svg>',
+    convert:'<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>'
+  };
+  const L = {files:'Files',reader:'Reader',output:'Output',cut:'Panels',image:'Image',info:'Info',layout:'Layout',cover:'Cover',convert:'Convert'};
+  function setup(boxId, map, order, first){
+    const box = document.getElementById(boxId); if(!box) return;
+    for(const t in map) for(const sel of map[t]){ const e = box.querySelector(sel) || document.querySelector(sel); if(e) e.setAttribute('data-wstab', t); }
+    const bar = document.createElement('div'); bar.className = 'wsTabs'; bar.setAttribute('role','tablist'); bar.setAttribute('aria-label','Settings');
+    for(const t of order){
+      const b = document.createElement('button'); b.type = 'button'; b.dataset.t = t; b.setAttribute('role','tab');
+      b.innerHTML = I[t] + '<span>' + L[t] + '</span>'; bar.appendChild(b);
+    }
+    box.insertBefore(bar, box.firstChild);
+    box.dataset.ws = 'on';
+    function pick(t, scroll){
+      box.dataset.tab = t; box.dataset.last = t;
+      bar.querySelectorAll('button').forEach(b => { const on = b.dataset.t === t; b.classList.toggle('on', on); b.setAttribute('aria-selected', on ? 'true' : 'false'); });
+      if(scroll !== false) try{ box.scrollTop = 0; }catch(e){}
+      document.querySelectorAll('#'+boxId+' details.sec').forEach(d => { if(d.dataset.wstab === t || d.closest('[data-wstab=' + t + ']')) d.open = true; });
+    }
+    bar.addEventListener('click', e => { const b = e.target.closest('button'); if(b) pick(b.dataset.t); });
+    bar.addEventListener('keydown', e => {
+      if(e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+      const i = order.indexOf(box.dataset.last), n = order[(i + (e.key === 'ArrowRight' ? 1 : order.length - 1)) % order.length];
+      pick(n); bar.querySelector('[data-t=' + n + ']').focus(); e.preventDefault();
+    });
+    box._wsPick = pick; pick(first, false);
+  }
+  setup('cvRight', {
+    files:['#stFiles'], reader:['#stDevice'], output:['#stOutput','#secOutMore','#secDelivery'],
+    cut:['#stPanels','#secPanelSet'], image:['#secQuality'], info:['#metaBox','#cfgBox']
+  }, ['files','reader','output','cut','image','info'], 'files');
+  setup('bkRight', {
+    files:['#bkFiles'], reader:['#bkDevice','#bkPaper'], layout:['#bkLayout'], cover:['#bkCoverSec'], info:['#bkMetaSec'], convert:['#bkRun']
+  }, ['files','reader','layout','cover','info','convert'], 'files');
+  // search shows every tab while a query is typed
+  const inp = document.getElementById('optSearch'), cv = document.getElementById('cvRight');
+  if(inp && cv) inp.addEventListener('input', () => { if(inp.value.trim()) cv.dataset.tab = 'all'; else if(cv._wsPick) cv._wsPick(cv.dataset.last, false); });
+  // the search field itself and the section heading need to stay visible in whichever tab holds the options
+  const ms = document.querySelector('#cvRight .moreSearch'); if(ms) ms.setAttribute('data-wstab', 'output');
+  // jump to the Files tab when files are dropped, and mark tabs with content
+  const f = document.getElementById('file');
+  function marks(){ try{ const b = document.querySelector('#cvRight .wsTabs [data-t=files]'); if(b) b.classList.toggle('done', f.files.length > 0); const k = document.querySelector('#bkRight .wsTabs [data-t=files]'); if(k) k.classList.toggle('done', document.querySelectorAll('#bkList li').length > 0); }catch(e){} }
+  setInterval(marks, 1000); marks();
+})();
+/* ---------- Desktop mode: editors and grids open in place of the preview, and the buttons switch between them ---------- */
+(function(){
+  const IDS = ['edDlg', 'eqDlg', 'cutDlg', 'cgDlg', 'rvDlg', 'bgDlg'], root = document.documentElement;
+  const on = () => root.dataset.ui === 'new' && innerWidth >= 901;
+  const orig = HTMLDialogElement.prototype.showModal;
+  HTMLDialogElement.prototype.showModal = function(){
+    if(!on() || !IDS.includes(this.id)) return orig.apply(this, arguments);
+    const fromGrid = this.id === 'edDlg' && typeof rv !== 'undefined' && rv.back;
+    if(!fromGrid) IDS.forEach(i => { const d = document.getElementById(i); if(d && d !== this && d.open) d.close(); });
+    this.dataset.stage = '1';
+    return this.show();
+  };
+  document.addEventListener('keydown', e => {
+    if(e.key !== 'Escape' || e.defaultPrevented || !on()) return;
+    if(document.querySelector('dialog:modal')) return;
+    const d = IDS.map(i => document.getElementById(i)).find(x => x && x.open && x.dataset.stage);
+    if(!d) return;
+    e.preventDefault();
+    const c = new Event('cancel', {cancelable: true});
+    d.dispatchEvent(c); if(!c.defaultPrevented) d.close();
+  });
+  document.addEventListener('close', e => { if(e.target && e.target.dataset) delete e.target.dataset.stage; }, true);
+})();
 try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persist(); }catch(e){}
 
 /* ---------- what's new pop-up: shown once per version, and from the What's new button ---------- */
-const WN_VER = '2026-11-23b', WN_KEY = 'bcc_wn';
+const WN_VER = '2026-11-24a', WN_KEY = 'bcc_wn';
 function wnSeen(set){
   try{ if(set) localStorage.setItem(WN_KEY, WN_VER); else return localStorage.getItem(WN_KEY) === WN_VER; }catch(e){}
   return false;
@@ -4354,7 +4744,7 @@ window.__wnShow = () => { if(window.__wnPending && !document.querySelector('dial
 setTimeout(window.__wnShow, 600);
 
 /* ---------- device: remember last, profiles, direction test, size estimate ---------- */
-const LASTK = 'bcc_last', LAST_C = ['fPanelImg', 'keepSize', 'blackBg', 'saveEditsWith', 'fX', 'fXtc', 'fEpub', 'fCbz', 'fPdf', 'oPort', 'oLand', 'oMix', 'nmShape', 'mRename', 'keepCover'], LAST_V = ['panelMinW', 'mOrd1', 'mOrd2', 'mOrd3', 'mOrd4', 'pkGrid', 'rotAuto', 'cSat', 'cGamma', 'cQual', 'xRot', 'splitParts', 'zipLayout', 'cin'];
+const LASTK = 'bcc_last', LAST_C = ['splitTall', 'eSharp', 'eContrast', 'parOn', 'fPanelImg', 'keepSize', 'blackBg', 'saveEditsWith', 'fX', 'fXtc', 'fEpub', 'fCbz', 'fPdf', 'oPort', 'oLand', 'oMix', 'nmShape', 'mRename', 'keepCover'], LAST_V = ['panelMinW', 'mOrd1', 'mOrd2', 'mOrd3', 'mOrd4', 'pkGrid', 'rotAuto', 'cSat', 'cGamma', 'cQual', 'xRot', 'splitParts', 'zipLayout', 'cin'];
 function devIn(){ const o = $('preset').options[$('preset').selectedIndex]; return parseFloat(o && o.dataset.in) || parseFloat($('cin').value) || 6; }
 function grpUpdate(keep){   // screens over 5 inches may share up to 6 panels; smaller ones stay at 3
   const big = devIn() > 5, sel = $('maxGroup'), cur = keep || sel.value, vals = big ? [6, 5, 4, 3, 2, 1] : [3, 2, 1];
